@@ -1,0 +1,19 @@
+@font-face{  
+  font-family: 'Goudy';
+  src: url('GoudyStM-webfont.eot')  format('eot'),
+       url('GoudyStM-webfont.woff') format('woff'),
+       url('GoudyStM-webfont.ttf')  format('truetype'),
+       url('GoudyStM-webfont.svg')  format('svg');
+  font-weight: normal;
+  font-style:  normal;
+}
+
+@font-face{  
+  font-family: 'Goudy';
+  src: url('GoudyStM-italic-webfont.eot')  format('eot'),
+       url('GoudyStM-italic-webfont.woff') format('woff'),
+       url('GoudyStM-italic-webfont.ttf')  format('truetype'),
+       url('GoudyStM-italic-webfont.svg')  format('svg');
+  font-weight: normal;
+  font-style:  italic;
+}

@@ -1,0 +1,61 @@
+.grid {
+  margin: 0 0 @baseLineHeight 0;
+}
+
+.row {
+  width: 100%;
+  display: table;
+  border-collapse: collapse;
+}
+
+.row .col { 
+  display: table-cell; 
+  padding: 0 @gutter / 2; 
+  vertical-align: top; 
+}
+
+.row .col:first-child { padding-left:  0; }
+.row .col:last-child  { padding-right: 0; }
+
+// Shortcuts for a 4 column grid
+.row .col-25          { width: 25%; }
+.row .col-50          { width: 50%; }
+.row .col-75          { width: 75%; }
+
+// Definitions for a 12 column grid
+.row .col-1           { width: (100% / 12) * 1;  }
+.row .col-2           { width: (100% / 12) * 2;  }
+.row .col-3           { width: (100% / 12) * 3;  }
+.row .col-4           { width: (100% / 12) * 4;  }
+.row .col-5           { width: (100% / 12) * 5;  }
+.row .col-6           { width: (100% / 12) * 6;  }
+.row .col-7           { width: (100% / 12) * 7;  }
+.row .col-8           { width: (100% / 12) * 8;  }
+.row .col-9           { width: (100% / 12) * 9;  }
+.row .col-10          { width: (100% / 12) * 10; }
+.row .col-11          { width: (100% / 12) * 11; }
+.row .col-12          { width: (100% / 12);      }
+
+
+
+@media screen and (max-width: @mobileWidth) {
+  .row{
+    display: block;
+  }
+  
+  .row .col { 
+    display: block; 
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+  }
+  
+}
+
+.debug .row .col{
+  outline: 1px solid transparent;
+}
+.debug .row .col:hover {
+  -webkit-transition: outline 3s;
+  outline: 1px solid @grayLight;
+}

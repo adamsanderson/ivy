@@ -1,0 +1,94 @@
+@controlBorderColor: @grayLight;
+
+form {
+  margin: 0 0 @baseLineHeight 0;
+}
+
+.help {
+  color: @grayLight;
+}
+
+label {
+  display: block;
+  margin: 0;
+} 
+
+input[type='radio'] + input[type='radio'],
+input[type='checkbox'] + input[type='checkbox']{
+  margin-left: @gutter;
+}
+
+label > input {
+  margin: 0;
+}
+
+input,
+button,
+select, 
+textarea {
+  padding: @baseLineHeight/4 - 1;
+  line-height: @baseLineHeight;
+  margin: @baseLineHeight/4 0;
+  
+  font-size: @baseFontSize;
+  
+  border: 1px solid @controlBorderColor;
+  border-radius: 2px;
+  background: white;
+  color: inherit;
+}
+
+input:focus,
+button:focus,
+select:focus {
+  border-color: @linkColor;
+  outline:none;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 
+                    0 0 8px fade(@linkColor, 40%);
+}
+
+input[type='checkbox']:focus,
+input[type='radio']:focus { 
+  outline: 4px auto @linkColor;
+}
+
+input[disabled], 
+textarea[disabled] {
+  background: transparent;
+  border: none;
+}
+
+textarea {
+  width: 100%;
+  height: @baseLineHeight * 4;
+  box-sizing: border-box;
+}
+
+select{
+  line-height: @baseLineHeight * 1.5;
+  height: @baseLineHeight * 1.5;
+}
+
+// Custom Classes
+.control-group > .inline {
+  display: inline-block;
+}
+
+.control-group > .inline + .inline {
+  margin-left: @gutter;
+}
+
+input.undecorated {
+  font: inherit;
+  padding: inherit;
+  margin: inherit;
+  line-height: inherit;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+input.undecorated:hover,
+input.undecorated:focus {
+  background: rgba(255,255,255,0.5);
+}

@@ -1,0 +1,245 @@
+// BODY
+// ----
+body {
+  font-family: @baseFontFamily;
+  font-size:   @baseFontSize;
+  line-height: @baseLineHeight;
+}
+
+p {
+  margin: 0 0 @baseLineHeight 0;
+}
+p small {
+  font-size: @baseFontSize - 2;
+  color: @grayLight;
+}
+
+a {
+  color: @linkColor;
+}
+
+a:hover {
+  color: @linkColorHover;
+}
+
+.lead {
+  font-weight:  200;
+  font-size:   @baseFontSize   + 6;
+  line-height: @baseLineHeight;
+}
+
+// HEADINGS
+// --------
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: @headerFontFamily;
+  margin: 0;
+  font-weight: bold;
+  color: @grayDark;
+  text-rendering: optimizelegibility; // Fix the character spacing for headings
+  small {
+    font-weight: normal;
+    color: @grayLight;
+  }
+}
+h1 {
+  font-size:   @baseLineHeight * 2 - 2;
+  line-height: @baseLineHeight * 2;
+  margin-top:  @baseLineHeight;
+  small {
+    font-size: @baseFontSize   + 6;
+  }
+}
+h2 {
+  font-size:   @baseLineHeight * 2 - 6;
+  line-height: @baseLineHeight * 2;
+  margin-top:  @baseLineHeight;
+  small {
+    font-size: @baseFontSize   + 4;
+  }
+}
+h3 {
+  font-size:   @baseFontSize   + 6;
+  line-height: @baseLineHeight * 2;
+  margin-top:  @baseLineHeight;
+  small {
+    font-size: @baseFontSize   + 2;
+  }
+}
+h4, h5, h6 {
+  line-height: @baseLineHeight;
+  margin-top:  @baseLineHeight;
+  small {
+    font-size: @baseFontSize;
+  }
+}
+h4 { font-size: @baseFontSize + 4; }
+h5 { font-size: @baseFontSize + 2; }
+h6 { font-size: @baseFontSize + 0;
+     color: @grayLight;
+     text-transform: uppercase;
+}
+
+// LISTS
+// -----
+
+// Unordered and Ordered lists
+ul, ol {
+  padding: 0 0 0 @baseLineHeight;
+  margin:  0 0 @baseLineHeight 0;
+}
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+  margin-bottom: 0;
+}
+ul {
+  list-style: disc;
+}
+ol {
+  list-style: decimal;
+}
+li {
+  line-height: @baseLineHeight;
+}
+ul.unstyled {
+  margin:  0;
+  padding: 0;
+  list-style: none;
+}
+
+// Description Lists
+dl {
+  margin: 0 0 @baseLineHeight 0;
+}
+dt,
+dd {
+  line-height: @baseLineHeight;
+}
+dt {
+  font-weight: bold;
+}
+dd {
+  margin-left: @baseLineHeight / 2;
+}
+
+// ELEMENENTS
+// ----------
+
+// Horizontal rules
+hr {
+  // Offset the border:
+  margin: @baseLineHeight - 2 0;
+  border: 0;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid @white;
+}
+
+// Emphasis
+strong,b {
+  font-weight: bold;
+}
+em {
+  font-style: italic;
+}
+.muted {
+  color: @grayLight;
+}
+
+// Abbreviations and acronyms
+abbr {
+  font-size: 90%;
+  text-transform: uppercase;
+  border-bottom: 1px dotted #ddd;
+  cursor: help;
+}
+
+// Blockquotes
+blockquote {
+  padding: 0 0 0 @baseLineHeight - 5;
+  margin: 0 0 @baseLineHeight 0;
+  border-left: 5px solid @grayLighter;
+}
+blockquote > cite {
+  text-align: right;
+  display: block;
+}
+
+// Misc
+cite {
+  font-style: normal;
+}
+
+// Quotes - suppress quote marks
+q:before,
+q:after,
+blockquote:before, 
+blockquote:after {
+  content: "";
+}
+
+// Addresses
+address {
+  display: block;
+  margin-bottom: @baseLineHeight;
+  line-height: @baseLineHeight;
+  font-style: normal;
+}
+
+// Code / Pre-formatted
+pre,
+code,
+kbd,
+samp {
+  font-family: monospace;
+  font-size: @baseFontSize;
+  line-height: @baseLineHeight
+}
+
+// Keep white space, but wrap appropriately
+pre {
+    margin: 0 0 @baseLineHeight 0;
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+// Prevents sub and sup affecting line-height in all browsers
+// gist.github.com/413930
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+// Similarly, prevent small from affecting the line-height
+small {
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+// Prevent image borders when linked:
+a img {
+  border: 0;
+}
+
+dfn {
+    font-style: italic;
+}
+mark {
+    background: fade(#ff0, 50%);
+    color: @grayDarker;
+}
+
+// HELPERS
+// -------
+.right  { text-align: right; }
+.left   { text-align: left; }
+.center { text-align: center; }
+.shift  { padding: @baseLineHeight/2  0; }
