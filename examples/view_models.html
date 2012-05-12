@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Ivy - Bound JavaScript</title>
+	<meta name="author" content="Adam Sanderson">
+	
+	<link rel="stylesheet" href="../css/site.css" type="text/css" media="screen" charset="utf-8">
+	<style>
+	  .metric {
+	    font-family: cursive;
+      font-size:   36px;
+      line-height: 40px;
+    }
+    .metric-label{
+      opacity: 0.5;
+    }
+  </style>
+	<script src="../src/ivy.js" type="text/javascript" charset="utf-8"></script>
+	<script src="example_source.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body onload='init()'>
+  <h1>View Models</h1>
+  <p>
+    Ivy makes it easy to separate business logic from presentation logic.
+    In this example, we create a Loan object, it knows how to calculate
+    monthly payments, interest, and so on.  The Loan object is
+    entirely unaware of how money is formatted, this is handled by a LoanView
+    object which wraps the Loan's attributes so they can be presented.
+  </p>
+  
+  <hr/>
+  
+  <div class='grid'>
+    <div class='row' id='example-html'>
+      <form class='col col-4'>
+        <h2>Your Loan:</h2>
+        <div class='control-group'>
+          <label>Principal:</label>
+          <input data-bind='value: principal keyup'>
+        </div>
+        <div class='control-group'>
+          <label>Interest Rate:</label>
+          <input data-bind='value: rate keyup'>
+        </div>
+        <div class='control-group'>
+          <label>Duration:</label>
+          <select data-bind='value: duration'>
+            <option value='360'>30 years</option>
+            <option value='180'>15 years</option>
+            <option value='60'>5 years</option>
+          </select>
+        </div>
+      </form>
+      
+      <div class='col col-8'>
+        <h2>Payment Details:</h2>
+        <div class='metric'>
+          <span class='metric-value' data-bind='text: payment'>$320,000</span> 
+          <span class='metric-label'> per month</span>
+        </div>
+        <div class='metric'>
+          <span class='metric-value' data-bind='text: totalPayment'>$320,000</span> 
+          <span class='metric-label'> total payment</span>
+        </div>
+        <div class='metric'>
+          <span class='metric-value' data-bind='text: totalInterest'>$20,000</span> 
+          <span class='metric-label'> interest</span>
+        </div>
+      </div>
+    </div>
+    <hr/>
+    <div class='row' id='example-source'>
+      <div class='col col-6'>
+        <h2>HTML</h2>
+        <pre><code data-bind='text: html'></code></pre>
+      </div>
+      
+      <div class='col col-6'>
+        <h2>JavaScript</h2>
+        <pre><code data-bind='text: js'></code></pre>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function init(){
+      initExample();
+      Ivy.bindDom('example-source', new ExampleSource('example-html',initExample));
+    }
+    
+    function initExample(){
+      function Loan(){
+        // These attributes are all bound to inputs:
+        this.principal = Ivy.attr(200000, Number);
+        this.rate      = Ivy.attr(5.25, Number);
+        this.duration  = Ivy.attr(360, Number);
+        
+        // These functions are all bound the current object.  
+        // Ivy inspects the parameters, and finds the function for you.
+        this.payment = Ivy.fnWith(this, function(principal, rate, duration){
+          var monthlyRate = rate / 100 / 12;
+          return monthlyRate * principal / (1 - Math.pow(1 + monthlyRate, -duration));
+        });
+        
+        this.totalPayment = Ivy.fnWith(this, function(duration, payment){
+          return duration * payment;
+        });
+        
+        this.totalInterest = Ivy.fnWith(this, function(totalPayment, principal){
+          return totalPayment - principal;
+        });
+      }
+      
+      // Format values as money, ie: 2500 <==> $2,500
+      var moneyFormat = {
+        get: function(num){
+          if (!isFinite(num)) return "N/A";
+
+          var num = Math.round(num).toString(),
+              str = '';
+
+          for(var i=0, len=num.length; i < len; i++){
+            if (i > 0 && (len - i) % 3 === 0) str += ',';
+            str += num[i];
+          }
+
+          return '$'+str;
+        },
+        set: function(str){
+          return +(str.replace(/[^\d\.]/g,''));
+        }
+      };
+
+      // Format values as percents, ie: 5.25 <==> 5.25%
+      var percentFormat = {
+        get: function(num){
+          return num + "%";
+        },
+        set: function(str){
+          var num = Math.abs(str.replace(/[^\d\.]/g,''));
+          return num > 100 ? 100 : num;
+        }
+      };
+      
+      function LoanView(loan){
+        this.principal     = Ivy.wrap(loan.principal,     moneyFormat);
+        this.payment       = Ivy.wrap(loan.payment,       moneyFormat);
+        this.totalPayment  = Ivy.wrap(loan.totalPayment,  moneyFormat);
+        this.totalInterest = Ivy.wrap(loan.totalInterest, moneyFormat);
+        this.rate          = Ivy.wrap(loan.rate,          percentFormat);
+        this.duration      = loan.duration;
+      }
+      
+      Ivy.bindDom('example-html', new LoanView(new Loan()));
+    }
+    
+  </script>
+</body>
+</html>
