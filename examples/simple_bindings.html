@@ -26,6 +26,7 @@
 	  }
 	</style>
 	<script src="../src/ivy.js" type="text/javascript" charset="utf-8"></script>
+	<script src="example_source.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body onload='init()'>
   <h1>Simple Data Binding</h1>
@@ -82,26 +83,6 @@
         last:  Ivy.attr('Lorum')
       });
     }
-    
-    function ExampleSource(elementId, jsFunction){
-      var html = document.getElementById(elementId).innerHTML;
-      var js   = jsFunction.toString();
-      
-      html = html.replace(/\s*class="[^"]+"/mg,'');
-      
-      this.html = this.trimSource(html);
-      this.js   = this.trimSource(js);
-    }
-    
-    ExampleSource.prototype.trimSource = function(str){
-      var lines  = str.split('\n').slice(1,-1);
-      var indent = lines[0].match(/^\s+/)[0];
-      
-      for(var i=0, len=lines.length; i < len; i++){
-        lines[i] = lines[i].replace(indent,'');
-      }
-      return lines.join('\n');
-    };
     
   </script>
 </body>
