@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Ivy - Bound JavaScript</title>
+	<meta name="author" content="Adam Sanderson">
+	
+	<link rel="stylesheet" href="../css/site.css" type="text/css" media="screen" charset="utf-8">
+	<style>
+	  .name-tag {
+	    width: 280px;
+      border: 10px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 40px;
+      box-shadow: -4px 4px 4px #ccc;
+      -webkit-transform: rotate(-5deg);
+	  }
+	  .name-tag > .name {
+	    font-family: cursive;
+	    font-size: 18px;
+	    line-height: 20px;
+	    height: 20px;
+	    border-bottom: 1px solid #333;
+	  }
+	</style>
+	<script src="../src/ivy.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body onload='init()'>
+  <h1>Simple Data Binding</h1>
+  <p>
+    Ivy makes it easy to bind values to the DOM.
+  </p>
+  
+  <div class='grid'>
+    <div class='row' id='example-html'>
+      <form class='col col-4'>
+        <div class='control-group'>
+          <label>First Name:</label>
+          <input data-bind='value: first keyup'>
+        </div>
+        <div class='control-group'>
+          <label>Last Name:</label>
+          <input data-bind='value: last keyup'>
+        </div>
+      </form>
+      
+      <div class='col col-8'>
+        <div class='name-tag'>
+          <h2>Hi, my name is:</h2>
+          <div class='name'>
+            <span data-bind='text: first'></span>
+            <span data-bind='text: last'></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class='row' id='example-source'>
+      <div class='col col-6'>
+        <h2>HTML</h2>
+        <pre><code data-bind='text: html'></code></pre>
+      </div>
+      
+      <div class='col col-6'>
+        <h2>JavaScript</h2>
+        <pre><code data-bind='text: js'></code></pre>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function init(){
+      initExample();
+      Ivy.bindDom('example-source', new ExampleSource('example-html',initExample));
+    }
+    
+    function initExample(){
+      Ivy.bindDom('example-html', {
+        first: Ivy.attr('Samuel'),
+        last:  Ivy.attr('Lorum')
+      });
+    }
+    
+    function ExampleSource(elementId, jsFunction){
+      var html = document.getElementById(elementId).innerHTML;
+      var js   = jsFunction.toString();
+      
+      html = html.replace(/\s*class="[^"]+"/mg,'');
+      
+      this.html = this.trimSource(html);
+      this.js   = this.trimSource(js);
+    }
+    
+    ExampleSource.prototype.trimSource = function(str){
+      var lines  = str.split('\n').slice(1,-1);
+      var indent = lines[0].match(/^\s+/)[0];
+      
+      for(var i=0, len=lines.length; i < len; i++){
+        lines[i] = lines[i].replace(indent,'');
+      }
+      return lines.join('\n');
+    };
+    
+  </script>
+</body>
+</html>

@@ -296,7 +296,11 @@ Ivy.bindDom = function(el, context){
   var el = el || document.body,
       context = context || window,
       bindings;
-
+  
+  if (typeof el === 'string'){
+    el = document.getElementById(el);
+  }
+  
   if (el.nodeType === Node.ELEMENT_NODE){
     bindings = Ivy.getBindings(el);
     if (bindings){
