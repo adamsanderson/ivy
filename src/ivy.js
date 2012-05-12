@@ -98,6 +98,19 @@ Ivy.fn = function(){
   return attr;
 };
 
+Ivy.fnWith = function(context, fn){
+  var names = Ivy.util.argumentNames(fn),
+      args  = [];
+  
+  for(var i=0, len=names.length; i < len; i++){
+    args.push(context[names[i]]);
+  }
+  
+  args.push(fn);
+  
+  return Ivy.fn.apply(this, args);
+};
+
 // ----------------------------------------------------------------------------
 Ivy.array = function ObservableArray(array){
   if (!(this instanceof Ivy.array)) return new Ivy.array(array);
@@ -392,4 +405,10 @@ Ivy.util.detachChildren = function(el){
 };
 Ivy.util.copy = function(src){
   return JSON.parse(JSON.stringify(src));
+};
+// From prototype.js
+Ivy.util.argumentNames = function(fn){
+  var names = fn.toString().match(/^[\s\(]*function[^(]*\(([^\)]*)\)/)[1]
+    .replace(/\s+/g, '').split(',');
+  return names.length == 1 && !names[0] ? [] : names;
 };
