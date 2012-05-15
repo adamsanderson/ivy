@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Ivy - Bound JavaScript</title>
+	<meta name="author" content="Adam Sanderson">
+	
+	<link rel="stylesheet" href="../css/site.css" type="text/css" media="screen" charset="utf-8">
+	<style>
+	  .quadratic {
+      font-size: 20px;
+      line-height: 40px;
+	  }
+	  .lhs {
+	    width: 340px;
+	    float: left;
+	  }
+	  .rhs {
+	    line-height: 80px;
+	    margin-left: 360px;
+	  }
+	  .discriminant {
+	    border-top: 1px solid #000;
+	  }
+	  .numerator {
+	    border-bottom: 1px solid #000;
+	  }
+	  .numerator, .denomenator{
+	    text-align: center;
+	  }
+	  .quadratic input {
+	    font-size: inherit;
+      width: 2em;
+      padding: 0;
+	    margin: 4px 4px;
+	    border: none;
+	    background: #eee;
+	    text-align: center;
+	  }
+	</style>
+	<script src="../src/ivy.js" type="text/javascript" charset="utf-8"></script>
+	<script src="example_source.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body onload='init()'>
+  <h1>Simple Data Binding</h1>
+  <p>
+    Functions can be bound as well as attributes.  Simply tell Ivy what values your function
+    needs, and you can use it like an attribute.
+  </p>
+  
+  <hr/>
+  
+  <div class='quadratic' id='example-html'>
+    <div class='lhs'>
+      <div class='numerator'>
+        -<input data-bind='value: b keyup'/> ± 
+        √<span class='discriminant'> 
+          <input data-bind='value: b keyup'/><sup>2</sup> 
+          - 4 * <input data-bind='value: a keyup'/> * <input data-bind='value: c keyup'/>
+         </span>
+      </div>
+      <div class='denomenator'>
+        2 * <input data-bind='value: a keyup'/>
+      </div>
+    </div>
+    <div class='rhs'>
+      =
+      <span data-bind='text: x1'></span> and <span data-bind='text: x2'></span>
+       
+    </div>
+  </div>
+  
+  <hr/>
+    
+    <div class='row' id='example-source'>
+      <div class='col col-6'>
+        <h2>HTML</h2>
+        <pre><code data-bind='text: html'></code></pre>
+      </div>
+      
+      <div class='col col-6'>
+        <h2>JavaScript</h2>
+        <pre><code data-bind='text: js'></code></pre>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function init(){
+      initExample();
+      Ivy.bindDom('example-source', new ExampleSource('example-html',initExample));
+    }
+    
+    function initExample(){
+      function QuadraticSolver(){
+        this.a = Ivy.attr(4,Number);
+        this.b = Ivy.attr(2,Number);
+        this.c = Ivy.attr(-6,Number);
+
+        this.discriminant = Ivy.fnWith(this, function(a,b,c){
+          var delta = Math.pow(b,2) - 4 * a * c;
+          return Math.sqrt(delta);
+        });
+        this.x1 = Ivy.fnWith(this, function(a,b,discriminant){
+          return ((-b + discriminant) / 2 * a).toFixed(3);
+        });
+        this.x2 = Ivy.fnWith(this, function(a,b,discriminant){
+          return ((-b - discriminant) / 2 * a).toFixed(3);
+        });
+      }
+      
+      Ivy.bindDom('example-html', new QuadraticSolver);
+    }
+    
+  </script>
+</body>
+</html>
