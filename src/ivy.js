@@ -199,7 +199,7 @@ Ivy.bindAttrToValue = function(el, attr, domEvent){
         
       delayedCallback = function(event){
         updateEl(attr.valueOf());
-        el.removeEventListener(delayedCallback);
+        el.removeEventListener('blur',delayedCallback);
         delayedCallback = null;
       };
       el.addEventListener('blur', delayedCallback);
