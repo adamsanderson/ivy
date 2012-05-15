@@ -31,7 +31,7 @@ function ExampleSource(elementId, jsFunction){
 // lines, and then re-indents the code.
 ExampleSource.prototype.trimSource = function(str){
   var lines  = str.split('\n').slice(1,-1);
-  var indent = lines[0].match(/^\s+/)[0];
+  var indent = lines[0].match(/^\s*/)[0];
   
   for(var i=0, len=lines.length; i < len; i++){
     lines[i] = lines[i].replace(indent,'');

@@ -237,7 +237,10 @@ Ivy.bindAttrToChecked = function(el, attr, domEvent){
 
 Ivy.bindAttrToText = function(el, attr){
   Ivy.bindAttrEvent(attr, 'change', updateEl);
-  function updateEl(value){ el.innerText = value; }
+  function updateEl(value){ 
+    el.innerHTML = ''; 
+    el.appendChild(document.createTextNode(value));
+  }
 };
 
 Ivy.bindAttrToStyle = function(el, attr, style){
