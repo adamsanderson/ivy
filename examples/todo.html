@@ -24,13 +24,16 @@
   <hr/>
   
   <div id='example-html'>
-    <form action="#">
-      <input placeholder='I need to...' type='text'/>
+    <form action="#" data-bind='with: active'>
+      <input placeholder='I need to...' type='text' data-bind='value: name'/>
       <input type='submit' value='Add'/>
     </form>
     <ul class='todo-list'>
       <li data-bind='each: list'>
-        <label><input type='checkbox'> <span data-bind='text: name'>Task Name</span> </label>
+        <label>
+          <input type='checkbox' data-bind='checked: isDone'>
+          <span data-bind='text: name'>Task Name</span>
+        </label>
       </li>
     </ul>
     <div>
@@ -61,7 +64,7 @@
     
     function initExample(){
       function TodoList(){
-        this.active = Ivy.attr(new Todo());
+        this.active = Ivy.attr(new Todo(''));
         this.list   = Ivy.array([new Todo('Finish todo example')]);
         
         this.remainingCount = Ivy.fnWith(this, function(list){

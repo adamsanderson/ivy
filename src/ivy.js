@@ -287,7 +287,7 @@ Ivy.bindAttrToWith = function(el, attr){
   function updateEl(val){
     el.innerHTML = '';
     var childNode = fragment.cloneNode(true);
-    Ivy.bindDom(childNode, attr);
+    Ivy.bindDom(childNode, val);
     el.appendChild(childNode);
   }
 };
