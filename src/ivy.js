@@ -186,8 +186,10 @@ Ivy.wrap.prototype.set = function(value){
 
 //-----------------------------------------------------------------------------
 
-Ivy.bindAttrToValue = function(el, attr, domEvent){
-  var delayedCallback;
+Ivy.bindAttrToValue = function(el, attrName, domEvent){
+  var attr = this.getAttribute(attrName),
+      delayedCallback;
+      
   domEvent = domEvent || 'change';
   
   Ivy.bindAttrEvent(attr, 'change', updateEl);
@@ -214,8 +216,9 @@ Ivy.bindAttrToValue = function(el, attr, domEvent){
   }
 };
 
-Ivy.bindAttrToChecked = function(el, attr, domEvent){
-  var isRadio = el.type === 'radio';
+Ivy.bindAttrToChecked = function(el, attrName, domEvent){
+  var attr = this.getAttribute(attrName),
+      isRadio = el.type === 'radio';
   
   domEvent = domEvent || 'change';
   
@@ -235,7 +238,9 @@ Ivy.bindAttrToChecked = function(el, attr, domEvent){
   }
 };
 
-Ivy.bindAttrToText = function(el, attr){
+Ivy.bindAttrToText = function(el, attrName){
+  var attr = this.getAttribute(attrName);
+  
   Ivy.bindAttrEvent(attr, 'change', updateEl);
   function updateEl(value){ 
     el.innerHTML = ''; 
@@ -243,13 +248,16 @@ Ivy.bindAttrToText = function(el, attr){
   }
 };
 
-Ivy.bindAttrToStyle = function(el, attr, style){
+Ivy.bindAttrToStyle = function(el, attrName, style){
+  var attr = this.getAttribute(attrName);
+  
   Ivy.bindAttrEvent(attr, 'change', updateEl);
   function updateEl(value){ el.style[style] = value; }
 };
 
-Ivy.bindAttrToDomAttr = function(el, attr, domAttr){
-  var booleanPropery = Ivy.bindAttrToDomAttr.booleanProperties[domAttr];
+Ivy.bindAttrToDomAttr = function(el, attrName, domAttr){
+  var attr = this.getAttribute(attrName),
+      booleanPropery = Ivy.bindAttrToDomAttr.booleanProperties[domAttr];
   
   Ivy.bindAttrEvent(attr, 'change', updateEl);
   function updateEl(value){
@@ -264,8 +272,10 @@ Ivy.bindAttrToDomAttr.booleanProperties = {
   'disabled': true
 };
 
-Ivy.bindAttrToEach = function(el, attr){
-  var fragment = Ivy.util.detachChildren(el);
+Ivy.bindAttrToEach = function(el, attrName){
+  var attr = this.getAttribute(attrName),
+      fragment = Ivy.util.detachChildren(el);
+      
   el.__managed = true; // this is a managed node
   Ivy.bindAttrEvent(attr, 'change', updateEl);
   
@@ -279,8 +289,10 @@ Ivy.bindAttrToEach = function(el, attr){
   }
 };
 
-Ivy.bindAttrToWith = function(el, attr){
-  var fragment = Ivy.util.detachChildren(el);
+Ivy.bindAttrToWith = function(el, attrName){
+  var attr = this.getAttribute(attrName),
+      fragment = Ivy.util.detachChildren(el);
+      
   el.__managed = true; // this is a managed node
   Ivy.bindAttrEvent(attr, 'change', updateEl);
   
@@ -292,8 +304,10 @@ Ivy.bindAttrToWith = function(el, attr){
   }
 };
 
-Ivy.bindAttrToShow = function(el, attr){
-  var originalDisplayStyle = el.style.display;
+Ivy.bindAttrToShow = function(el, attrName){
+  var attr = this.getAttribute(attrName),
+      originalDisplayStyle = el.style.display;
+      
   Ivy.bindAttrEvent(attr, 'change', updateEl);
   
   function updateEl(val){
@@ -318,10 +332,10 @@ Ivy.bindDom = function(el, context){
   }
   
   if (el.nodeType === Node.ELEMENT_NODE){
-    bindings = Ivy.getBindings(el);
+    bindings = Ivy.getBindings(el,context);
     if (bindings){
       for(var i=0, len=bindings.length; i < len; i++){
-        Ivy.bindElement(el, bindings[i], context);
+        Ivy.bindElement(el, bindings[i]);
       }
     }
   }
@@ -334,7 +348,7 @@ Ivy.bindDom = function(el, context){
   }
 };
 
-Ivy.getBindings = function(el){
+Ivy.getBindings = function(el, context){
   var bindText = el.getAttribute('data-bind'),
       bindingRules = [],
       bindings;
@@ -344,7 +358,7 @@ Ivy.getBindings = function(el){
   
   for(var i=0, len=bindings.length; i < len; i++){
     if (bindings[i].match(/^\s*$/)) continue; // ignore whitespace only rules
-    bindingRules.push(new Ivy.BindingRule(bindings[i]));
+    bindingRules.push(new Ivy.BindingRule(bindings[i], context));
   }
   
   return bindingRules;
@@ -361,37 +375,35 @@ Ivy.bindings = {
   'with':     Ivy.bindAttrToWith
 };
 
-Ivy.bindElement = function(el, bindingRule, context){
-  var name    = bindingRule.name,
-      attr    = bindingRule.getAttribute(context),
-      options = [el,attr].concat(bindingRule.options),
+Ivy.bindElement = function(el, bindingRule){
+  var name = bindingRule.name,
+      args = [el].concat(bindingRule.options),
       bindingFn;
 
   bindingFn = Ivy.bindings[name];
   if (!bindingFn){ 
     console.warn('Unkown binding: ', name, bindingRule);
   } else {
-    bindingFn.apply(context,options);
+    bindingFn.apply(bindingRule,args);
   }
 };
 
-Ivy.BindingRule = function(str){
+Ivy.BindingRule = function(str, context){
   var options = str.trim().split(/\s+/),
-      name = options.shift(),
-      attrName = options.shift();
+      name = options.shift();
   
   if (!name.charAt(name.length - 1) === ':'){
     throw new Error("Invalid syntax for binding name.\n\t"+str);
   }
   
   this.name     = name.slice(0,-1);
-  this.attrName = attrName;
   this.options  = options;
+  this.context  = context;
 };
 
-Ivy.BindingRule.prototype.getAttribute = function(context){
-  if(this.attrName === '.') return context;
-  return context[this.attrName];
+Ivy.BindingRule.prototype.getAttribute = function(name){
+  if(name === '.') return this.context;
+  return this.context[name];
 };
 
 // ----------------------------------------------------------------------------

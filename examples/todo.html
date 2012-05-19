@@ -24,9 +24,9 @@
   <hr/>
   
   <div id='example-html'>
-    <form action="#" data-bind='with: active'>
+    <form action="#" data-bind='with: active; event: submit addTask'>
       <input placeholder='I need to...' type='text' data-bind='value: name'/>
-      <input type='submit' value='Add'/>
+      <input type='submit' value='Add' />
     </form>
     <ul class='todo-list'>
       <li data-bind='each: list'>
