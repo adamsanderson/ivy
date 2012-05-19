@@ -28,8 +28,8 @@
       <input placeholder='I need to...' type='text' data-bind='value: name'/>
       <input type='submit' value='Add' />
     </form>
-    <ul class='todo-list'>
-      <li data-bind='each: list'>
+    <ul class='todo-list' data-bind='each: list'>
+      <li>
         <label>
           <input type='checkbox' data-bind='checked: isDone'>
           <span data-bind='text: name'>Task Name</span>
@@ -64,7 +64,7 @@
     
     function initExample(){
       function TodoList(){
-        this.active = Ivy.attr(new Todo(''));
+        this.active = Ivy.attr(new Todo);
         this.list   = Ivy.array([new Todo('Finish todo example')]);
         
         this.remainingCount = Ivy.fnWith(this, function(list){
@@ -80,12 +80,13 @@
       }
       
       TodoList.prototype.addTask = function(){
+        console.log(this);
         this.list.unshift(this.active.valueOf());
         this.active.set(new Todo);
       };
       
       function Todo(name){
-        this.name   = Ivy.attr(name);
+        this.name   = Ivy.attr(name || '');
         this.isDone = Ivy.attr(false, Boolean);
       }
       

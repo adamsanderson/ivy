@@ -139,9 +139,21 @@ Ivy.array.prototype.push = function(item){
   this.emit('change', this.get(), item);
 };
 
+Ivy.array.prototype.unshift = function(item){
+  this.value.unshift(item);
+  this.emit('change', this.get(), item);
+};
+
 Ivy.array.prototype.pop = function(){
   var item = this.value.pop();
   this.emit('change', this.get(), item);
+  return item;
+};
+
+Ivy.array.prototype.shift = function(){
+  var item = this.value.shift();
+  this.emit('change', this.get(), item);
+  return item;
 };
 
 Ivy.array.prototype.length = function(){
@@ -192,7 +204,7 @@ Ivy.bindAttrToValue = function(el, attrName, domEvent){
       
   domEvent = domEvent || 'change';
   
-  Ivy.bindAttrEvent(attr, 'change', updateEl);
+  Ivy.watchAttr(attr, 'change', updateEl);
   if (attr.set){ el.addEventListener(domEvent, updateAttr); }
 
   function updateEl(value){ 
@@ -222,7 +234,7 @@ Ivy.bindAttrToChecked = function(el, attrName, domEvent){
   
   domEvent = domEvent || 'change';
   
-  Ivy.bindAttrEvent(attr, 'change', updateEl);
+  Ivy.watchAttr(attr, 'change', updateEl);
   if (attr.set){ el.addEventListener(domEvent, updateAttr); }
 
   function updateEl(value){
@@ -241,7 +253,7 @@ Ivy.bindAttrToChecked = function(el, attrName, domEvent){
 Ivy.bindAttrToText = function(el, attrName){
   var attr = this.getAttribute(attrName);
   
-  Ivy.bindAttrEvent(attr, 'change', updateEl);
+  Ivy.watchAttr(attr, 'change', updateEl);
   function updateEl(value){ 
     el.innerHTML = ''; 
     el.appendChild(document.createTextNode(value));
@@ -251,7 +263,7 @@ Ivy.bindAttrToText = function(el, attrName){
 Ivy.bindAttrToStyle = function(el, attrName, style){
   var attr = this.getAttribute(attrName);
   
-  Ivy.bindAttrEvent(attr, 'change', updateEl);
+  Ivy.watchAttr(attr, 'change', updateEl);
   function updateEl(value){ el.style[style] = value; }
 };
 
@@ -259,7 +271,7 @@ Ivy.bindAttrToDomAttr = function(el, attrName, domAttr){
   var attr = this.getAttribute(attrName),
       booleanPropery = Ivy.bindAttrToDomAttr.booleanProperties[domAttr];
   
-  Ivy.bindAttrEvent(attr, 'change', updateEl);
+  Ivy.watchAttr(attr, 'change', updateEl);
   function updateEl(value){
     if (booleanPropery){
       !!value ? el.setAttribute(domAttr, domAttr) : el.removeAttribute(domAttr);
@@ -277,7 +289,7 @@ Ivy.bindAttrToEach = function(el, attrName){
       fragment = Ivy.util.detachChildren(el);
       
   el.__managed = true; // this is a managed node
-  Ivy.bindAttrEvent(attr, 'change', updateEl);
+  Ivy.watchAttr(attr, 'change', updateEl);
   
   function updateEl(val){
     el.innerHTML = '';
@@ -294,7 +306,7 @@ Ivy.bindAttrToWith = function(el, attrName){
       fragment = Ivy.util.detachChildren(el);
       
   el.__managed = true; // this is a managed node
-  Ivy.bindAttrEvent(attr, 'change', updateEl);
+  Ivy.watchAttr(attr, 'change', updateEl);
   
   function updateEl(val){
     el.innerHTML = '';
@@ -308,14 +320,24 @@ Ivy.bindAttrToShow = function(el, attrName){
   var attr = this.getAttribute(attrName),
       originalDisplayStyle = el.style.display;
       
-  Ivy.bindAttrEvent(attr, 'change', updateEl);
+  Ivy.watchAttr(attr, 'change', updateEl);
   
   function updateEl(val){
     el.style.display = val ? originalDisplayStyle : 'none';
   }
 };
 
-Ivy.bindAttrEvent = function(attr, event, callback){
+Ivy.bindFnToEvent = function(el, event, fnName){
+  var fn = this.getAttribute(fnName),
+      receiver = this.context, // should be relative to fnName
+      subject  = this.context; // should be a 2nd param
+  
+  el.addEventListener(event, function(){
+    fn.call(receiver, subject);
+  });
+};
+
+Ivy.watchAttr = function(attr, event, callback){
   if (attr.on){
     attr.on(event, callback);
   }
@@ -372,7 +394,8 @@ Ivy.bindings = {
   'attr':     Ivy.bindAttrToDomAttr,
   'each':     Ivy.bindAttrToEach,
   'show':     Ivy.bindAttrToShow,
-  'with':     Ivy.bindAttrToWith
+  'with':     Ivy.bindAttrToWith,
+  'event':    Ivy.bindFnToEvent
 };
 
 Ivy.bindElement = function(el, bindingRule){
