@@ -266,7 +266,7 @@ Ivy.bindAttrToText = function(el, attrName){
   
   Ivy.watchAttr(attr, 'change', updateEl);
   function updateEl(value){ 
-    el.innerHTML = ''; 
+    Ivy.util.clearChildren(el);
     el.appendChild(document.createTextNode(value));
   }
 };
@@ -304,7 +304,7 @@ Ivy.bindAttrToEach = function(el, attrName){
   Ivy.watchAttr(attr, 'change', updateEl);
   
   function updateEl(val){
-    el.innerHTML = '';
+    Ivy.util.clearChildren(el);
     for(var i=0, len=val.length; i < len; i++){
       var childNode = fragment.cloneNode(true);
       Ivy.bindDom(childNode, val[i], context);
@@ -322,8 +322,8 @@ Ivy.bindAttrToWith = function(el, attrName){
   Ivy.watchAttr(attr, 'change', updateEl);
   
   function updateEl(val){
-    el.innerHTML = '';
     var childNode = fragment.cloneNode(true);
+    Ivy.util.clearChildren(el);
     Ivy.bindDom(childNode, val, context);
     el.appendChild(childNode);
   }
@@ -464,6 +464,11 @@ Ivy.util.detachChildren = function(el){
   }
   
   return df;
+};
+Ivy.util.clearChildren = function(el){
+  while( el.hasChildNodes() ){
+    el.removeChild( el.firstChild );
+  }
 };
 Ivy.util.copy = function(src){
   return JSON.parse(JSON.stringify(src));
