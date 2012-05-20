@@ -156,6 +156,17 @@ Ivy.array.prototype.shift = function(){
   return item;
 };
 
+Ivy.array.prototype.remove = function(item){
+  var index = this.value.indexOf(item);
+  return this.removeIndex(index);
+};
+
+Ivy.array.prototype.removeIndex = function(index){
+  var item = this.value.splice(index,1)[0];
+  this.emit('change', this.get(), item);
+  return item;
+};
+
 Ivy.array.prototype.length = function(){
   return this.value.length;
 };
@@ -433,7 +444,6 @@ Ivy.BindingRule = function(str, context){
 
 Ivy.BindingRule.prototype.atPath = function(path, context){
   context = context || this.context;
-  console.log(path, context);
   if (path === '.' || path === ''){ 
     return context;
   } else if (path.indexOf('../') === 0){

@@ -86,7 +86,7 @@
       };
       
       TodoList.prototype.deleteTodo = function(todo){
-        console.log('delete',todo);
+        this.list.remove(todo);
       };
       
       function Todo(name){
