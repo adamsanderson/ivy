@@ -24,7 +24,7 @@
   <hr/>
   
   <div id='example-html'>
-    <form action="#" data-bind='with: active; event: submit addTask'>
+    <form action="#" data-bind='with: active; event: submit addTodo'>
       <input placeholder='I need to...' type='text' data-bind='value: name'/>
       <input type='submit' value='Add' />
     </form>
@@ -33,7 +33,8 @@
         <label>
           <input type='checkbox' data-bind='checked: isDone'>
           <span data-bind='text: name'>Task Name</span>
-        </label>
+          <a data-bind='event: click ../deleteTodo'>(X)</a>
+        </label> 
       </li>
     </ul>
     <div>
@@ -79,10 +80,13 @@
         });
       }
       
-      TodoList.prototype.addTask = function(){
-        console.log(this);
+      TodoList.prototype.addTodo = function(){
         this.list.unshift(this.active.valueOf());
         this.active.set(new Todo);
+      };
+      
+      TodoList.prototype.deleteTodo = function(todo){
+        console.log('delete',todo);
       };
       
       function Todo(name){
