@@ -297,6 +297,17 @@ Ivy.bindAttrToDomAttr.booleanProperties = {
   'disabled': true
 };
 
+Ivy.bindAttrToFocused = function(el, attrName){
+  var attr = this.atPath(attrName);
+
+  Ivy.watchAttr(attr, 'change', updateEl);  
+  function updateEl(value){
+    if (value){ 
+      setTimeout(function(){ el.focus(); });
+    }
+  }
+};
+
 Ivy.bindAttrToEach = function(el, attrName){
   var attr = this.atPath(attrName),
       fragment = Ivy.util.detachChildren(el),
@@ -425,6 +436,7 @@ Ivy.bindings = {
   'each':     Ivy.bindAttrToEach,
   'show':     Ivy.bindAttrToShow,
   'with':     Ivy.bindAttrToWith,
+  'focused':  Ivy.bindAttrToFocused,
   'on':       Ivy.bindFnToEvent
 };
 

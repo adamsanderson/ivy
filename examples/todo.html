@@ -25,7 +25,7 @@
   
   <div id='example-html'>
     <form action="#" data-bind='with: active; on: submit addTodo'>
-      <input placeholder='I need to...' type='text' data-bind='value: name;'/>
+      <input placeholder='I need to...' type='text' data-bind='value: name; focused: ../isEditing'/>
       <input type='submit' value='Add' />
     </form>
     <ul class='todo-list' data-bind='each: list'>
@@ -65,6 +65,7 @@
     
     function initExample(){
       function TodoList(){
+        this.isEditing = Ivy.attr(true);
         this.active = Ivy.attr(new Todo);
         this.list   = Ivy.array([new Todo('Finish todo example')]);
         
@@ -83,6 +84,7 @@
       TodoList.prototype.addTodo = function(){
         this.list.unshift(this.active.valueOf());
         this.active.set(new Todo);
+        this.isEditing = Ivy.attr(true);
       };
       
       TodoList.prototype.deleteTodo = function(todo){
