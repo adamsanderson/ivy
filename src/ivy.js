@@ -162,6 +162,8 @@ Ivy.array.prototype.remove = function(item){
 };
 
 Ivy.array.prototype.removeIndex = function(index){
+  if (index === -1) return;
+  
   var item = this.value.splice(index,1)[0];
   this.emit('change', this.get(), item);
   return item;
@@ -311,6 +313,7 @@ Ivy.bindAttrToEach = function(el, attrName){
       el.appendChild(childNode);
     }
   }
+  
 };
 
 Ivy.bindAttrToWith = function(el, attrName){
@@ -343,7 +346,11 @@ Ivy.bindAttrToShow = function(el, attrName){
 Ivy.bindFnToEvent = function(el, eventName, fnPath){
   var fn = this.atPath(fnPath),
       receiver = this.atPath(fnPath.split('/').slice(0,-1).join('/'));
-      subject  = this.context; // should be a 2nd param
+      subject  = this.context; // should be a 2nd param at some point
+
+  if (subject['ivy:proto']){ 
+    subject = subject['ivy:proto'];
+  }
   
   el.addEventListener(eventName, function(event){
     fn.call(receiver, subject);
@@ -414,7 +421,7 @@ Ivy.bindings = {
   'each':     Ivy.bindAttrToEach,
   'show':     Ivy.bindAttrToShow,
   'with':     Ivy.bindAttrToWith,
-  'event':    Ivy.bindFnToEvent
+  'on':       Ivy.bindFnToEvent
 };
 
 Ivy.bindElement = function(el, bindingRule){
@@ -480,9 +487,12 @@ Ivy.util.argumentNames = function(fn){
     .replace(/\s+/g, '').split(',');
   return names.length == 1 && !names[0] ? [] : names;
 };
-// From Crockford
-Ivy.util.beget = function(o){
+// From Crockford -- modified to include the prototype for environments 
+// that don't support `__proto__` or `getPrototypeOf`.
+Ivy.util.beget = function(prototype){
   var F = function() {};
-  F.prototype = o;
-  return new F();
+  F.prototype = prototype;
+  var object = new F();
+  object['ivy:proto'] = prototype;
+  return object;
 };

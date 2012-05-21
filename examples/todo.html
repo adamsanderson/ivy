@@ -24,8 +24,8 @@
   <hr/>
   
   <div id='example-html'>
-    <form action="#" data-bind='with: active; event: submit addTodo'>
-      <input placeholder='I need to...' type='text' data-bind='value: name'/>
+    <form action="#" data-bind='with: active; on: submit addTodo'>
+      <input placeholder='I need to...' type='text' data-bind='value: name;'/>
       <input type='submit' value='Add' />
     </form>
     <ul class='todo-list' data-bind='each: list'>
@@ -33,7 +33,7 @@
         <label>
           <input type='checkbox' data-bind='checked: isDone'>
           <span data-bind='text: name'>Task Name</span>
-          <a data-bind='event: click ../deleteTodo'>(X)</a>
+          <a data-bind='on: click ../deleteTodo'>(X)</a>
         </label> 
       </li>
     </ul>
