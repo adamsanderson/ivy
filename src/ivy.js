@@ -352,10 +352,14 @@ Ivy.bindFnToEvent = function(el, eventName, fnPath){
     subject = subject['ivy:proto'];
   }
   
-  el.addEventListener(eventName, function(event){
-    fn.call(receiver, subject);
-    event.preventDefault();
-  });
+  el.addEventListener(eventName, makeListener(receiver,subject));
+  
+  function makeListener(receiver, subject){
+    return function(event){
+      fn.call(receiver, subject);
+      event.preventDefault();
+    };
+  }
 };
 
 Ivy.watchAttr = function(attr, event, callback){
