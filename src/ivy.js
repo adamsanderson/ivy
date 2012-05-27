@@ -122,25 +122,17 @@ Ivy.array = function ObservableArray(array){
 Ivy.array.prototype = Ivy.attr();
 
 Ivy.array.prototype.set = function(index, item){
-  // TODO: emit `remove` for each existing and `add` for each new
-  if (arguments.length === 1) return Ivy.attr.prototype.set.call(this, index);
-
+  if (arguments.length === 1) return this.replace(items);
+  
+  var oldValue = this.value[index];
   this.value[index] = item;
-  this.emit('change', this.get());
+  this.emit('change', this.get(), 
+    new Ivy.ChangeSet()
+      .remove(index, [oldValue])
+      .add(index, [value])
+  );
   
   return this;
-};
-
-Ivy.array.prototype.onEach = function(event, getter, callback){
-  this.on('add', function(event, item){
-    var attribute = getter(event);
-    attribute.on(event, callback);
-  });
-  
-  this.on('remove', function(event, item){
-    var attribute = getter(event);
-    attribute.off(event, callback);
-  });
 };
 
 Ivy.array.prototype.get = function(index){
@@ -148,29 +140,40 @@ Ivy.array.prototype.get = function(index){
 };
 
 Ivy.array.prototype.push = function(item){
+  var index = this.length;
   this.value.push(item);
-  this.emit('add', item);
-  this.emit('change', this.get(), item);
+  this.emit('change', this.get(), new Ivy.ChangeSet().add(index, [item]) );
 };
 
 Ivy.array.prototype.unshift = function(item){
   this.value.unshift(item);
-  this.emit('add', item);
-  this.emit('change', this.get(), item);
+  this.emit('change', this.get(), new Ivy.ChangeSet().add(0, [item]) );
 };
 
 Ivy.array.prototype.pop = function(){
+  var index = this.length;
   var item = this.value.pop();
-  this.emit('remove', item);
-  this.emit('change', this.get(), item);
+  this.emit('change', this.get(), new Ivy.ChangeSet().remove(index, [item]) );
   return item;
 };
 
 Ivy.array.prototype.shift = function(){
   var item = this.value.shift();
-  this.emit('remove', item);
-  this.emit('change', this.get(), item);
+  this.emit('change', this.get(), new Ivy.ChangeSet().remove(0, [item]));
   return item;
+};
+
+Ivy.array.prototype.replace = function(items){
+  var oldValues = this.value;
+  this.value = items;
+  
+  this.emit('change', this.get(), 
+    new Ivy.ChangeSet()
+      .remove(0, oldValues)
+      .add(0, items)
+  );
+  
+  return items;
 };
 
 Ivy.array.prototype.remove = function(item){
@@ -182,13 +185,48 @@ Ivy.array.prototype.removeIndex = function(index){
   if (index === -1) return;
   
   var item = this.value.splice(index,1)[0];
-  if (item) this.emit('remove', item);
-  this.emit('change', this.get(), item);
+  if (item){
+    this.emit('change', this.get(), new Ivy.ChangeSet().remove(index, [item]));
+  }
   return item;
+};
+
+Ivy.array.prototype.onEach = function(event, callback, getter){
+  var changeSet;
+  
+  this.on('change', function(newArray, changes){
+    for(var i=0; i < changes.length; i++){
+      changeSet = changes[i];
+      updateListeners(changeSet.operation, changeSet.items);
+    }
+  });
+  
+  updateListeners('add', this.value);
+  function updateListeners(op, items){
+    for(var i=0; i < items.length; i++){
+      var attr = getter ? getter(items[i]) : items[i];
+      if (!attr) continue;
+      
+      op === 'add' ? 
+        attr.on(event, callback) : 
+        attr.off(event, callback);
+    }
+  }
 };
 
 Ivy.array.prototype.length = function(){
   return this.value.length;
+};
+
+Ivy.ChangeSet = function(){};
+Ivy.ChangeSet.prototype = [];
+Ivy.ChangeSet.prototype.add = function(index, items){
+  this.push({operation: 'add',index: index, items: items});
+  return this;
+};
+Ivy.ChangeSet.prototype.remove = function(index, items){
+  this.push({operation: 'remove',index: index, items: items});
+  return this;
 };
 
 // ----------------------------------------------------------------------------
@@ -529,4 +567,8 @@ Ivy.util.beget = function(prototype){
   var object = new F();
   object['ivy:proto'] = prototype;
   return object;
+};
+
+Ivy.util.bind = function(fn,context){
+  return function(){ fn.call(context, arguments); };
 };

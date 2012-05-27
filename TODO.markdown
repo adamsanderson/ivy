@@ -11,41 +11,17 @@ TODOs
 
 Child Events
 ------------
-In the todo example we need to know when a todo has changed, we could either leave it to the application to manager,
+In the todo example we need to know when a todo has changed, we could either leave it to the application to manage,
 or make the array support listening to children.
 
-   todoList.onChild('change', function(){ ... });
-  
-A Todo however is currently modeled as a normal object with two observable attributes, and the count is really only interested
-in Todo.isDone changing.
-
-Maybe a better approach is to add onAdd and onRemove hooks:
-
-  todoList.on('add', function(){ ... })
-  todoList.on('remove', function(){ ... })
-  
-Then you could do:
-
-  todoList.on('add', function(todo){ todo.isDone.on('change', recalculate) });
-  todoList.on('remove', function(todo){ todo.isDone.off('change', recalculate) });
-  
-Used sparingly, this could be a decent pattern.
-
-This could actually be collapsed down to a smaller concept if two functions were provided, one for getting
+This could actually just be two functions were provided, one for getting
 the attribute to bind to, and another for the handler:
 
   todoList.onEach('change',
     function(todo){ return todo.isDone },
     recalculate);
   
-Which for the simple case could just use the context syntax / lookup:
-
-  todoList.onEach('change', 'isDone', recalculate);
-  
-Which happens to be another path to the first approach.
-
-The `add` and `remove` events would also make rendering arrays more efficient, at the expense of tracking whether it needs to
-listen to a subsequent `change` event...
+By making `change` events track when items are added and removed, we can hook the appropriate events.
 
 Batched Updates
 ---------------
