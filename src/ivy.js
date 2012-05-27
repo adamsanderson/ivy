@@ -180,6 +180,16 @@ Ivy.array.prototype.remove = function(item){
   return this.removeIndex(index);
 };
 
+Ivy.array.prototype.removeEach = function(fn){
+  var i = this.value.length;
+  
+  while (i--){
+    if (fn(this.value[i])){
+      this.removeIndex(i);
+    }
+  }
+};
+
 Ivy.array.prototype.removeIndex = function(index){
   if (index === -1) return;
   

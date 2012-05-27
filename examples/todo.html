@@ -98,12 +98,9 @@
       };
       
       TodoList.prototype.clearDone = function(){
-        var i = this.list.length();
-        while (i--){
-          if (this.list.get(i).isDone.get()){
-            this.list.removeIndex(i);
-          }
-        }
+        this.list.removeEach(function(todo){
+          return todo.isDone.get();
+        });
       };
       
       TodoList.prototype.updateRemaining = function(){
