@@ -337,13 +337,6 @@ Ivy.bindAttrToText = function(el, attrName){
   }
 };
 
-Ivy.bindAttrToStyle = function(el, attrName, style){
-  var attr = this.atPath(attrName);
-  
-  Ivy.watchAttr(attr, 'change', updateEl);
-  function updateEl(value){ el.style[style] = value; }
-};
-
 Ivy.bindAttrToDomAttr = function(el, attrName, domAttr){
   var attr = this.atPath(attrName),
       booleanPropery = Ivy.bindAttrToDomAttr.booleanProperties[domAttr];
@@ -495,7 +488,6 @@ Ivy.bindings = {
   'value':    Ivy.bindAttrToValue,
   'checked':  Ivy.bindAttrToChecked,
   'text':     Ivy.bindAttrToText,
-  'style':    Ivy.bindAttrToStyle,
   'attr':     Ivy.bindAttrToDomAttr,
   'each':     Ivy.bindAttrToEach,
   'show':     Ivy.bindAttrToShow,
