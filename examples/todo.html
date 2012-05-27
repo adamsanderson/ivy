@@ -11,6 +11,14 @@
 	  #example-html {
 	    min-height: 256px;
 	  }
+	  
+	  .todo-done {
+	    text-decoration: line-through;
+	  }
+	  
+	  .todo-pending {
+	    
+	  }
 	</style>
 	<script src="../src/ivy.js" type="text/javascript" charset="utf-8"></script>
 	<script src="example_source.js" type="text/javascript" charset="utf-8"></script>
@@ -28,11 +36,11 @@
       <input placeholder='I need to...' type='text' data-bind='value: name; focused: ../isEditing'/>
       <input type='submit' value='Add' />
     </form>
-    <ul class='todo-list' data-bind='each: list'>
+    <ul data-bind='each: list'>
       <li>
         <label>
           <input type='checkbox' data-bind='checked: isDone'>
-          <span data-bind='text: name'>Task Name</span>
+          <span data-bind='text: name; class: isDone todo-done'>Task Name</span>
           <a data-bind='on: click ../deleteTodo'>(X)</a>
         </label> 
       </li>

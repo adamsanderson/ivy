@@ -337,6 +337,27 @@ Ivy.bindAttrToText = function(el, attrName){
   }
 };
 
+Ivy.bindAttrToClassName = function(el, attrName, trueClass, falseClass){
+  var attr = this.atPath(attrName);
+  
+  Ivy.watchAttr(attr, 'change', updateEl);
+  function updateEl(value){
+    var oldClasses  = el.className.split(/\s+/),
+        newClasses  = [],
+        addClass    = value.valueOf() ? trueClass : falseClass,
+        removeClass = value.valueOf() ? falseClass : trueClass,
+        seenAdd;
+    
+    for (var i=0, len = oldClasses.length, cls; i< len; i++){
+      cls = oldClasses[i];
+      seenAdd |= (cls === addClass);
+      if (cls != removeClass) newClasses.push(cls);
+    }
+    if (!seenAdd) newClasses.push(addClass);
+    el.className = newClasses.join(' ');
+  }
+};
+
 Ivy.bindAttrToDomAttr = function(el, attrName, domAttr){
   var attr = this.atPath(attrName),
       booleanPropery = Ivy.bindAttrToDomAttr.booleanProperties[domAttr];
@@ -489,6 +510,7 @@ Ivy.bindings = {
   'checked':  Ivy.bindAttrToChecked,
   'text':     Ivy.bindAttrToText,
   'attr':     Ivy.bindAttrToDomAttr,
+  'class':    Ivy.bindAttrToClassName,
   'each':     Ivy.bindAttrToEach,
   'show':     Ivy.bindAttrToShow,
   'with':     Ivy.bindAttrToWith,
