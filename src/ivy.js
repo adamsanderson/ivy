@@ -72,11 +72,10 @@ Ivy.attr.prototype.emit = function(event){
   return this;
 };
 
-Ivy.attr.prototype.valueOf = function(){
-  return this.get();
-};
-
-Ivy.attr.prototype.toJSON = function(){
+// Both `valueOf` and `toJSON` just call `get` which allows you to use Ivy.attr
+// like a normal value much of the time.
+Ivy.attr.prototype.valueOf =
+Ivy.attr.prototype.toJSON  = function(){
   return this.get();
 };
 
@@ -207,9 +206,8 @@ Ivy.array.prototype.onEach = function(event, callback, getter){
       var attr = getter ? getter(items[i]) : items[i];
       if (!attr) continue;
       
-      op === 'add' ? 
-        attr.on(event, callback) : 
-        attr.off(event, callback);
+      // Turn on or off listeners as items are added or removed
+      attr[op === 'add' ? 'on' : 'off'](event, callback);
     }
   }
 };
@@ -365,7 +363,7 @@ Ivy.bindAttrToFocused = function(el, attrName){
 };
 
 Ivy.bindAttrToEach = function(el, attrName){
-  var attr = this.atPath(attrName),
+  var attr     = this.atPath(attrName),
       fragment = Ivy.util.detachChildren(el),
       context  = this.context;
       
