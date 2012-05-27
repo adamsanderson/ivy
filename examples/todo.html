@@ -39,6 +39,7 @@
     </ul>
     <div>
       <span data-bind='text: remaining'>N</span> left
+      <a data-bind='show: hasDone; on: click clearDone'>(Clear Done)</span>
     </div>
   </div>
   
@@ -70,12 +71,20 @@
         this.list   = Ivy.array([new Todo('Finish todo example')]);
         
         this.remaining = Ivy.attr();
-        var updateCount = Ivy.util.bind(this.updateCount, this);
-        this.list.on('change', updateCount);
-        this.list.onEach('change', updateCount,
+        var updateRemaining = Ivy.util.bind(this.updateRemaining, this);
+        this.list.on('change', updateRemaining);
+        this.list.onEach('change', updateRemaining,
           function(todo){ return todo.isDone; } 
         );
-        updateCount();
+        updateRemaining();
+        
+        this.remainingText = Ivy.fnWith(this, function(remaining){
+          return remaining + ' ' + (remaining === 1 ? "thing" : "things");
+        });
+        
+        this.hasDone = Ivy.fnWith(this, function(remaining, list){
+          return remaining < list.length();
+        });
       }
       
       TodoList.prototype.addTodo = function(){
@@ -88,16 +97,25 @@
         this.list.remove(todo);
       };
       
-      TodoList.prototype.updateCount = function(){;
+      TodoList.prototype.clearDone = function(){
+        var i = this.list.length();
+        while (i--){
+          if (this.list.get(i).isDone.get()){
+            this.list.removeIndex(i);
+          }
+        }
+      };
+      
+      TodoList.prototype.updateRemaining = function(){
         var array = this.list.get(),
             count = 0;
             
         for (var i=0, len=array.length; i < len; i++){
           if (!array[i].isDone.get()) count += 1;
         }
-        this.remaining.set(count + ' ' + (count === 1 ? "thing" : "things"));
+        this.remaining.set(count);
       };
-            
+                  
       function Todo(name){
         this.name   = Ivy.attr(name || '');
         this.isDone = Ivy.attr(false, Boolean);

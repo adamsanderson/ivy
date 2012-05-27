@@ -7,21 +7,7 @@ TODOs
 * Batched DOM Updates -- Would it help performance to batch updates? IE: delay updating the DOM until a setTimeout can gather multiple updates?
 * Batched change dispatching -- If I'm going to add 30 items to a table, maybe it's better to accumulate changes and then react?
 * Child Paths -- Binding to child attributes requires some extra callbacks on the intermediate children.
-
-
-Child Events
-------------
-In the todo example we need to know when a todo has changed, we could either leave it to the application to manage,
-or make the array support listening to children.
-
-This could actually just be two functions were provided, one for getting
-the attribute to bind to, and another for the handler:
-
-  todoList.onEach('change',
-    function(todo){ return todo.isDone },
-    recalculate);
-  
-By making `change` events track when items are added and removed, we can hook the appropriate events.
+* Implement Map as a function returning an attr
 
 Batched Updates
 ---------------
@@ -35,3 +21,11 @@ the next available tick.  All future attributes would get appended to a list for
 
 Adding 10 items to an array would issue a single `change` event, and expensive functions could avoid 
 recomputing repeatedly in a tight loop.
+
+An even simpler issue is that if you have a bound function `Ivy.fn(a,b)`, and both `a` and `b` are changed at
+once, you'll still recompute twice.
+
+Map
+---
+Using a function that operates on an array of values like the done state of items in a todo list is tedious.
+This then generalizes to `reduce`, `pluck`, etc.
