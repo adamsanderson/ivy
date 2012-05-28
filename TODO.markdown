@@ -1,5 +1,17 @@
-TODOs
-=====
+Before Release
+==============
+Before releasing I need to:
+
+* Finish Documentation
+  * Write the README -- One short example, a general explanation, and an overview of what's missing, because this
+    is very much still a work in progress.
+  * Some decent navigation
+  * API docs
+* Write Some Real Tests -- Most of this has been experimentation up until now, bonus points if it ties into the docs.
+
+General TODO:
+=============
+Below are an unordered list of ideas that should be addressed and assessed sometime:
 
 * Contexts -- How should they be managed?  The current prototype method seems sloppy.
 * Bind Each -- Currently wastefully re-renders the entire list every time.
@@ -8,6 +20,9 @@ TODOs
 * Child Paths -- Binding to child attributes requires some extra callbacks on the intermediate children.
 * Implement Map as a function returning an attr
 * Bind Element classes to an attribute
+
+Notes
+=====
 
 Batched Updates
 ---------------
@@ -30,21 +45,19 @@ Map
 Using a function that operates on an array of values like the done state of items in a todo list is tedious.
 This then generalizes to `reduce`, `pluck`, etc.
 
-Class Binding
--------------
-A class binding could either look like:
+Principles
+----------
+* Muddy domains make for muddy code.
+* Tedious code is no fun to write.
 
-    <div data-bind='class: isDone done-item pending-item'>
-    
-With the second and optionally third arguments being the class that is applied, or it could just use the results of the first attribute:
+Client side applications tend to cut across too many concerns.  Untangling those domains makes writing code less
+tedious, and a lot more clear. In general, I think it's a good practice to make sure that the layers are clear:
 
-    <div data-bind='class: isDone'>
-    
-The second option is simpler to code, but you end up with css classes in your code, which bridges too many layers:
+    CSS <--> HTML <--> (ViewModel? Presenter?) <--> Model <--> Server
 
-    CSS  <--> HTML
-    HTML <--> View
+Your CSS should be written with the HTML in mind.  The HTML is structured such that the CSS can be applied cleanly, and 
+is aware of the ViewModel (Presenter?).  The Presenter must know about the underlying models, but the CSS should be of no concern.
+The Model most likely knows little of the ViewModel, but may provide convenience methods for it, it does however know about the
+server.
 
-So, the first option maintains this.  So how do we handle this?
-
-Approach: Tokenize the element's `class` attribute, iterate over the items, and remove the `false` case if we see it, add the `true` case unless it's seen.
+Tedious code, is quite simply boring.
