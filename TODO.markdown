@@ -18,6 +18,7 @@ Below are an unordered list of ideas that should be addressed and assessed somet
 * Child Paths -- Binding to child attributes requires some extra callbacks on the intermediate children.
 * Implement Map as a function returning an attr
 * Bind Element classes to an attribute
+* Special case binding TextNodes -- Instead of requiring a lot of spans, we can split text nodes up, and interpolate values
 
 Notes
 =====

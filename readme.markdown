@@ -1,6 +1,10 @@
 Ivy.js
 ======
-Ivy ties JavaScript objects to the DOM, allowing you to focus on the relationships of your data.
+Ivy ties JavaScript objects to the DOM, allowing you to focus on the 
+relationships of your data.  
+
+Using Ivy
+---------
 Define attributes with `Ivy.attr`, and then bind them in HTML using a `data-bind` attribute:
 
     <p>
@@ -57,15 +61,36 @@ a model to a specific part of your HTML, pass Ivy an element or its id:
       Ivy.bindDom( {name: Ivy.attr('Mr. Monkey'), id: 32}, 'user-greeting');
     </script>
 
+Why Ivy
+-------
+Ivy's design cleanly separates your HTML and JavaScript.  Ivy's bindings ensure that 
+the information about where and how your data is displayed stays in the HTML.  Your
+JavaScript does not need to keep references to the DOM since that's Ivy's job.  This
+separation lets each layer of your application focus on its immediate concern.
+
+Writing event handling and DOM manipulation code is tedious, Ivy does most of 
+this for you.  Now you can spend your time fiddling around with something more 
+interesting.
+
+Ivy is small.  You can use as little or as much as you like.
+
+Why Not Ivy
+-----------
+Do you really need data binding?  If your website is mostly static content, you 
+probably don't need Ivy.  In this case jQuery, or perhaps the Twitter Bootstrap's
+widgets would be a better fit.  If you just need to render HTML on the client,
+then a library like Mustache would suffice.
+
 Caveats
 -------
 This is very much a work in progress and there's a lot to do.  On the other 
 hand, it works well enough to greatly simplify a lot of client side code.
 
-Major issues at the moment:
+Issues at the moment:
 
 * Changing bound arrays redraws the whole array
 * Events are not debounced, so Ivy does more work than it needs to
+* Because Ivy binds to DOM Elements, your HTML can get verbose
 
 Attributions
 ------------
