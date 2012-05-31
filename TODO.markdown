@@ -3,8 +3,6 @@ Before Release
 Before releasing I need to:
 
 * Finish Documentation
-  * Write the README -- One short example, a general explanation, and an overview of what's missing, because this
-    is very much still a work in progress.
   * Some decent navigation
   * API docs
 * Write Some Real Tests -- Most of this has been experimentation up until now, bonus points if it ties into the docs.
