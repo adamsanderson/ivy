@@ -11,6 +11,7 @@ General TODO:
 =============
 Below are an unordered list of ideas that should be addressed and assessed sometime:
 
+* Automate generate the website
 * Contexts -- How should they be managed?  The current prototype method seems sloppy.
 * Bind Each -- Currently wastefully re-renders the entire list every time.
 * Batched DOM Updates -- Would it help performance to batch updates? IE: delay updating the DOM until a setTimeout can gather multiple updates?

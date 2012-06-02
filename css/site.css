@@ -671,3 +671,7 @@ body {
   margin: 0 auto;
   width: 960px;
 }
+pre {
+  border-left: 10px solid #eeeeee;
+  padding-left: 10px;
+}

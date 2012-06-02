@@ -9,12 +9,149 @@
 	<link rel="stylesheet" href="css/site.css" type="text/css" media="screen" charset="utf-8">
 </head>
 <body>
-  <h1>Ivy</h1>
-  <p>
-    Ivy is a data binding library for JavaScript which frees you from the drudgery of meticulously
-    managing application state and events.
-  </p>
-  
-  
+
+<div class='grid row'>
+<div class='col col-75'>
+
+<h1>Ivy.js</h1>
+<p>Ivy ties JavaScript objects to the DOM, allowing you to focus on the 
+relationships of your data.  
+
+</p>
+<h2>Using Ivy</h2>
+<p>Define attributes with <code>Ivy.attr</code>, and then bind them in HTML using a <code>data-bind</code> attribute:
+
+</p>
+<pre><code>&lt;p&gt;
+  Hello &lt;span data-bind=&#39;text: name&#39;&gt;&lt;/span&gt;!
+&lt;/p&gt;
+&lt;input data-bind=&#39;value: name keyup&#39;/&gt;
+
+&lt;script&gt;
+  Ivy.bindDom({name: Ivy.attr(&#39;World&#39;)});
+&lt;/script&gt;</code></pre>
+<p>Ivy will fill in &quot;World&quot; both in the span, and in the input.  If you change the input, the span
+will also change.  You don&#39;t need to write event listeners, or update the HTML, Ivy does that for
+you.
+
+</p>
+<p>You can also bind complex objects and functions:
+
+</p>
+<pre><code>&lt;div&gt;
+  &lt;label&gt;Price: $&lt;input data-bind=&#39;value: price&#39;/&gt;&lt;/label&gt;
+  &lt;label&gt;Tax: &lt;input data-bind=&#39;value: tax&#39;/&gt;%&lt;/label&gt;
+&lt;/div&gt;
+&lt;p&gt;Amount after tax is: $&lt;span data-bind=&#39;total&#39;&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;script&gt;
+  function Calculator(price){
+    this.price = Ivy.attr(price);
+    this.tax   = Ivy.attr(10);
+    this.total = Ivy.fnWith(this, function(price, tax){
+      return (price * (100+tax) / 100).toFixed(2);
+    });
+  }
+
+  Ivy.bindDom( new Calculator(20.00) );
+&lt;/script&gt;</code></pre>
+<p>Ivy plays nicely with others, and stays out of the way when it&#39;s not needed.
+In many cases you can treat the value encapsulated by an <code>Ivy.attr</code> like a normal object:
+
+</p>
+<pre><code>Ivy.attr(3) + Ivy.attr(4); //=&gt; 7
+
+var point = {x: Ivy.attr(2.0), y: Ivy.attr(4.6)};
+JSON.stringify(point); //=&gt; &quot;{x: 2.0, y: 4.6}&quot;</code></pre>
+<p>You can use Ivy as much, or as little as you like.
+If a value like a user&#39;s id will never change, then don&#39;t wrap it.  If you only want to bind
+a model to a specific part of your HTML, pass Ivy an element or its id:
+
+</p>
+<pre><code>&lt;h1 id=&#39;user-greeting&#39;&gt;
+  Greetings &lt;span data-bind=&#39;text: name&#39;&gt; &lt;/span&gt; 
+  (&lt;span data-bind=&#39;text: id&#39;&gt;)
+&lt;/h1&gt;
+
+&lt;script&gt;
+  Ivy.bindDom( {name: Ivy.attr(&#39;Mr. Monkey&#39;), id: 32}, &#39;user-greeting&#39;);
+&lt;/script&gt;</code></pre>
+<h2>Why Ivy</h2>
+<p>Ivy&#39;s design cleanly separates your HTML and JavaScript.  Ivy&#39;s bindings ensure that 
+the information about where and how your data is displayed stays in the HTML.  Your
+JavaScript does not need to keep references to the DOM since that&#39;s Ivy&#39;s job.  This
+separation lets each layer of your application focus on its immediate concern.
+
+</p>
+<p>Writing event handling and DOM manipulation code is tedious, Ivy does most of 
+this for you.  Now you can spend your time fiddling around with something more 
+interesting.
+
+</p>
+<p>Ivy is small.  You can use as little or as much as you like.
+
+</p>
+<h2>Why Not Ivy</h2>
+<p>Do you really need data binding?  If your website is mostly static content, you 
+probably don&#39;t need Ivy.  In this case jQuery, or perhaps the Twitter Bootstrap&#39;s
+widgets would be a better fit.  If you just need to render HTML on the client,
+then a library like Mustache would suffice.
+
+</p>
+<h2>Caveats</h2>
+<p>This is very much a work in progress and there&#39;s a lot to do.  On the other 
+hand, it works well enough to greatly simplify a lot of client side code.
+
+</p>
+<p>Issues at the moment:
+
+</p>
+<ul>
+<li>Changing bound arrays redraws the whole array</li>
+<li>Events are not debounced, so Ivy does more work than it needs to</li>
+<li>Because Ivy binds to DOM Elements, your HTML can get verbose</li>
+</ul>
+<h2>Attributions</h2>
+<p>This library was inspired largely by the work of <a href="https://github.com/SteveSanderson">Steve Sanderson</a> (<em>no relation!</em>)
+on <a href="https://github.com/SteveSanderson/knockout">Knockout</a>, and the <a href="https://github.com/Shopify">Shopify</a> 
+team&#39;s <a href="https://github.com/Shopify/batman">Batman.js</a>.  The event emitter code was cribbed from
+<a href="https://github.com/visionmedia">TJ Holowaychuk</a>&#39;s various projects.
+
+</p>
+<p>Ivy is written by <a href="https://github.com/adamsanderson">Adam Sanderson</a> with the full support of 
+<a href="http://monkeyandcrow.com">Monkey and Crow</a>, two imaginary friends who let me play around with stuff.</p>
+
+</div>
+<div class='col col-25'>
+  <h3>Documentation</h3>
+  <ul>
+    <li>
+      <a href="api.html">API</a>
+    </li>
+  </ul>
+  <h3>Examples</h3>
+  <ul>
+    <li>
+      <a href="examples/simple_bindings.html">Simple Bindings</a>
+    </li>
+    <li>
+      <a href="examples/function_bindings.html">Function Bindings</a>
+    </li>
+    <li>
+      <a href="examples/todo.html">TODO List</a>
+    </li>
+    <li>
+      <a href="examples/view_models.html">View Models</a>
+    </li>
+  </ul>
+</div>
+</div>
+
+<script src="assets/js/google-code-prettify/prettify.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" href="assets/js/google-code-prettify/prettify.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<script>
+  window.prettyPrint();
+</script>
+
 </body>
 </html>
