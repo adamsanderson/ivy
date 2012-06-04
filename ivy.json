@@ -1,0 +1,780 @@
+[
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "value",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "Function"
+        ],
+        "name": "parseFn",
+        "description": "An optional function for parsing a value when set."
+      }
+    ],
+    "description": {
+      "full": "<p>Creates an attribute. Attributes are the core of Ivy, they are observable<br />through the <code>on</code> listener.  Ivy attributes implement both <code>valueOf</code> and<br /><code>toJSON</code>, so they can usually be used like JavaScript primitives.</p>\n\n<pre><code>var a = Ivy.attr(4),\n    b = Ivy.attr(5);\n\nconsole.log(a+b); //=&gt; 9\n</code></pre>",
+      "summary": "<p>Creates an attribute. Attributes are the core of Ivy, they are observable<br />through the <code>on</code> listener.  Ivy attributes implement both <code>valueOf</code> and<br /><code>toJSON</code>, so they can usually be used like JavaScript primitives.</p>",
+      "body": "<pre><code>var a = Ivy.attr(4),\n    b = Ivy.attr(5);\n\nconsole.log(a+b); //=&gt; 9\n</code></pre>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.attr = function ObservableAttr(value, parseFn){\n  if (!(this instanceof Ivy.attr)) return new Ivy.attr(value, parseFn);\n    \n  this.value = value;\n  this.parseFn = parseFn;\n  this.callbacks = {};\n  this._id = Ivy._id++;\n};",
+    "ctx": {
+      "type": "method",
+      "receiver": "Ivy",
+      "name": "attr",
+      "string": "Ivy.attr()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "value",
+        "description": ""
+      },
+      {
+        "type": "emits",
+        "string": "\"change\" with value"
+      }
+    ],
+    "description": {
+      "full": "<p>Sets the internal value of the attribute.</p>",
+      "summary": "<p>Sets the internal value of the attribute.</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.attr.prototype.set = function(value){\n  value = this.parseFn ? this.parseFn(value) : value;\n  \n  if (this.value === value) return this;\n\n  this.value = value;\n  this.emit('change', this.get());\n  \n  return this;\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.attr",
+      "name": "set",
+      "string": "Ivy.attr.prototype.set()"
+    }
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>Gets the internal value of the attribute.</p>",
+      "summary": "<p>Gets the internal value of the attribute.</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "Ivy.attr.prototype.get = function(){\n  return this.value;\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.attr",
+      "name": "get",
+      "string": "Ivy.attr.prototype.get()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "event",
+        "description": "to listen for."
+      },
+      {
+        "type": "param",
+        "types": [
+          "Function(newValue)"
+        ],
+        "name": "fn",
+        "description": ""
+      }
+    ],
+    "description": {
+      "full": "<p>Adds a listener to the attribute.</p>\n\n<pre><code>var a = Ivy.attr(4);\na.on('change', function(value){ console.log('New value is', value); });\na.set(5); //=&gt; 'New value is 5'\n</code></pre>",
+      "summary": "<p>Adds a listener to the attribute.</p>",
+      "body": "<pre><code>var a = Ivy.attr(4);\na.on('change', function(value){ console.log('New value is', value); });\na.set(5); //=&gt; 'New value is 5'\n</code></pre>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.attr.prototype.on = function(event, fn){\n  (this.callbacks[event] = this.callbacks[event] || [])\n    .push(fn);\n  return this;\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.attr",
+      "name": "on",
+      "string": "Ivy.attr.prototype.on()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "event",
+        "description": "to remove listeners from"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Function"
+        ],
+        "name": "fn",
+        "description": "to remove"
+      }
+    ],
+    "description": {
+      "full": "<p>When given only an event type, stops all listeners for that event.<br />If a callback is given, that callback will be removed.</p>",
+      "summary": "<p>When given only an event type, stops all listeners for that event.<br />If a callback is given, that callback will be removed.</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.attr.prototype.off = function(event, fn){\n  var callbacks = this.callbacks[event];\n\n  if (!callbacks) return this;\n\n  if (arguments.length === 1){\n    // remove all handlers\n    delete this.callbacks[event];\n  } else {\n    // remove specific handler\n    var i = callbacks.indexOf(fn);\n    callbacks.splice(i, 1);\n  }\n\n  return this;\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.attr",
+      "name": "off",
+      "string": "Ivy.attr.prototype.off()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "event",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "Object..."
+        ],
+        "name": "Additional",
+        "description": "objects to be passed to listeners."
+      }
+    ],
+    "description": {
+      "full": "<p>Emits a named event.</p>",
+      "summary": "<p>Emits a named event.</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.attr.prototype.emit = function(event){\n  var args = [].slice.call(arguments, 1);\n  var callbacks = this.callbacks[event];\n  \n  if (callbacks){\n    var callers = Ivy._callers[event] = Ivy._callers[event] || {};\n    if (callers[this._id]){ \n      return console.warn(\"Cycle detected on\", this._id);\n    } else {\n      callers[this._id] = 1;\n    }\n    \n    for (var i = 0, len = callbacks.length; i < len; ++i){\n      callbacks[i].apply(this, args);\n    }\n    \n    delete callers[this._id];\n  }\n\n  return this;\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.attr",
+      "name": "emit",
+      "string": "Ivy.attr.prototype.emit()"
+    }
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p><code>valueOf</code> will return the attribute's internal value, this is useful when<br />doing simple operations on attributes:</p>\n\n<p>Ivy.attr(4) + Ivy.attr(5); //=> 9<br />   Ivy.attr('Hello') + ' World'; //=> 'Hello World'</p>\n\n<h2>Be careful when testing boolean conditions</h2>\n\n<p>Ivy.attr(false) ? 'true' : 'false' //=> 'true'</p>",
+      "summary": "<p><code>valueOf</code> will return the attribute's internal value, this is useful when<br />doing simple operations on attributes:</p>",
+      "body": "<p>Ivy.attr(4) + Ivy.attr(5); //=> 9<br />   Ivy.attr('Hello') + ' World'; //=> 'Hello World'</p>\n\n<h2>Be careful when testing boolean conditions</h2>\n\n<p>Ivy.attr(false) ? 'true' : 'false' //=> 'true'</p>"
+    },
+    "ignore": false,
+    "code": "Ivy.attr.prototype.valueOf = function(){ \n  return this.get(); \n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.attr",
+      "name": "valueOf",
+      "string": "Ivy.attr.prototype.valueOf()"
+    }
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p><code>toJSON</code> will be called before <code>JSON.stringify</code> is called.  This lets you<br />easily serialize Ivy attributes:</p>\n\n<p>var point = {x: Ivy.attr(3), y: Ivy.attr(7)};<br />   console.log(JSON.stringify(point)); //=> {\"x\":3,\"y\":7}</p>",
+      "summary": "<p><code>toJSON</code> will be called before <code>JSON.stringify</code> is called.  This lets you<br />easily serialize Ivy attributes:</p>",
+      "body": "<p>var point = {x: Ivy.attr(3), y: Ivy.attr(7)};<br />   console.log(JSON.stringify(point)); //=> {\"x\":3,\"y\":7}</p>"
+    },
+    "ignore": false,
+    "code": "Ivy.attr.prototype.toJSON = function(){ \n  return this.get(); \n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.attr",
+      "name": "toJSON",
+      "string": "Ivy.attr.prototype.toJSON()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object..."
+        ],
+        "name": "arguments",
+        "description": "for the function"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Function"
+        ],
+        "name": "fn",
+        "description": "to be computed"
+      },
+      {
+        "type": "returns",
+        "string": "an attribute that will update with the function's result."
+      }
+    ],
+    "description": {
+      "full": "<p>Creates an computed attribute that is bound to its arguments. If an argument<br />changes, the function will be recomputed.</p>\n\n<p>var price   = Ivy.attr(15),<br />       tax     = Ivy.attr(0.1),<br />       withTax = Ivy.fn(price, tax, function(p,t){<br />         return p * (1 + t);<br />       });</p>\n\n<p>withTax.get(); //=> 16.5<br />   tax.set(0.05);<br />   withTax.get(); //=> 15.75</p>",
+      "summary": "<p>Creates an computed attribute that is bound to its arguments. If an argument<br />changes, the function will be recomputed.</p>",
+      "body": "<p>var price   = Ivy.attr(15),<br />       tax     = Ivy.attr(0.1),<br />       withTax = Ivy.fn(price, tax, function(p,t){<br />         return p * (1 + t);<br />       });</p>\n\n<p>withTax.get(); //=> 16.5<br />   tax.set(0.05);<br />   withTax.get(); //=> 15.75</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.fn = function(){\n  var args = Array.prototype.slice.call(arguments),\n      fn   = args.pop(),\n      attr = Ivy.attr();\n  \n  function compute(){\n    attr.set( fn.apply(attr, args) );\n  }\n  \n  for(var i=0; i < args.length; i++){ \n    args[i].on('change', compute); \n  }\n  compute();\n  \n  return attr;\n};",
+    "ctx": {
+      "type": "method",
+      "receiver": "Ivy",
+      "name": "fn",
+      "string": "Ivy.fn()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "context",
+        "description": "to bind arguments against."
+      },
+      {
+        "type": "param",
+        "types": [
+          "Function"
+        ],
+        "name": "fn",
+        "description": "to be computed."
+      },
+      {
+        "type": "returns",
+        "string": "an attribute that will update with the function's result."
+      }
+    ],
+    "description": {
+      "full": "<p>Like <code>Ivy.fn</code>, this creates a bound attribute, but the function binds<br />to the variables named in the function.</p>\n\n<p>function Purchase(price){<br />     this.price = Ivy.attr(price);<br />     this.tax   = Ivy.attr(0.1);<br />     this.withTax = Ivy.fnWith(this, function(price, tax){<br />       return price * (1 + tax);<br />     });<br />   }</p>\n\n<p>var purchase = new Purchase(15);<br />   purchase.withTax.get(); //=> 16.5<br />   purchase.tax.set(0.5);<br />   purchase.withTax.get(); //=> 15.75</p>\n\n<p>When working with complex objects, this is often simpler than using<br /><code>Ivy.fn</code>.</p>",
+      "summary": "<p>Like <code>Ivy.fn</code>, this creates a bound attribute, but the function binds<br />to the variables named in the function.</p>",
+      "body": "<p>function Purchase(price){<br />     this.price = Ivy.attr(price);<br />     this.tax   = Ivy.attr(0.1);<br />     this.withTax = Ivy.fnWith(this, function(price, tax){<br />       return price * (1 + tax);<br />     });<br />   }</p>\n\n<p>var purchase = new Purchase(15);<br />   purchase.withTax.get(); //=> 16.5<br />   purchase.tax.set(0.5);<br />   purchase.withTax.get(); //=> 15.75</p>\n\n<p>When working with complex objects, this is often simpler than using<br /><code>Ivy.fn</code>.</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.fnWith = function(context, fn){\n  var names = Ivy.util.argumentNames(fn),\n      args  = [];\n  \n  for(var i=0, len=names.length; i < len; i++){\n    args.push(context[names[i]]);\n  }\n  \n  args.push(fn);\n  \n  return Ivy.fn.apply(this, args);\n};",
+    "ctx": {
+      "type": "method",
+      "receiver": "Ivy",
+      "name": "fnWith",
+      "string": "Ivy.fnWith()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "[Object]"
+        ],
+        "name": "array",
+        "description": "to be used for the attribute."
+      }
+    ],
+    "description": {
+      "full": "<p>An <code>Ivy.array</code> supports emits events like a normal attribute, but has<br />special methods for adding and removing array elements.</p>\n\n<p>var array = Ivy.array([2,3,4]);<br />   array.get(1); //=> 3<br />   array.get(); //=> [2,3,4]</p>",
+      "summary": "<p>An <code>Ivy.array</code> supports emits events like a normal attribute, but has<br />special methods for adding and removing array elements.</p>",
+      "body": "<p>var array = Ivy.array([2,3,4]);<br />   array.get(1); //=> 3<br />   array.get(); //=> [2,3,4]</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array = function ObservableArray(array){\n  if (!(this instanceof Ivy.array)) return new Ivy.array(array);\n\n  this.value = array || [];\n  this.callbacks = {};\n  this._id = Ivy._id++;\n};\nIvy.array.prototype = Ivy.attr();",
+    "ctx": {
+      "type": "method",
+      "receiver": "Ivy",
+      "name": "array",
+      "string": "Ivy.array()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Number"
+        ],
+        "name": "|",
+        "description": "Array} index to set, or new array"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "item",
+        "description": "to set at `index`"
+      },
+      {
+        "type": "emits",
+        "string": "\"change\" with new array"
+      }
+    ],
+    "description": {
+      "full": "<p>Set either the entire array to a new value, or a specific<br />array element;</p>\n\n<p>var array = Ivy.array();<br />   array.set([2,3,4]);<br />   array.set(1, \"Hello\");<br />   array.get(); //=> [2,\"Hello\",4]</p>",
+      "summary": "<p>Set either the entire array to a new value, or a specific<br />array element;</p>",
+      "body": "<p>var array = Ivy.array();<br />   array.set([2,3,4]);<br />   array.set(1, \"Hello\");<br />   array.get(); //=> [2,\"Hello\",4]</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array.prototype.set = function(index, item){\n  if (arguments.length === 1) return this.replace(items);\n  \n  var oldValue = this.value[index];\n  this.value[index] = item;\n  this.emit('change', this.get(), \n    new Ivy.ChangeSet()\n      .remove(index, [oldValue])\n      .add(index, [value])\n  );\n  \n  return this;\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "set",
+      "string": "Ivy.array.prototype.set()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Number"
+        ],
+        "name": "index",
+        "description": "of item to get"
+      }
+    ],
+    "description": {
+      "full": "<p>Gets either the array or an item at the given index.</p>",
+      "summary": "<p>Gets either the array or an item at the given index.</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array.prototype.get = function(index){\n  return (arguments.length === 0) ? this.value : this.value[index];\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "get",
+      "string": "Ivy.array.prototype.get()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "item",
+        "description": ""
+      },
+      {
+        "type": "emits",
+        "string": "\"change\" with new array"
+      }
+    ],
+    "description": {
+      "full": "<p>Pushes an item onto the end of the array.</p>\n\n<p>var array = Ivy.array([1,2,3]);<br />   array.push(4);<br />   array.get(); //=> [1,2,3,4]</p>",
+      "summary": "<p>Pushes an item onto the end of the array.</p>",
+      "body": "<p>var array = Ivy.array([1,2,3]);<br />   array.push(4);<br />   array.get(); //=> [1,2,3,4]</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array.prototype.push = function(item){\n  var index = this.length;\n  this.value.push(item);\n  this.emit('change', this.get(), new Ivy.ChangeSet().add(index, [item]) );\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "push",
+      "string": "Ivy.array.prototype.push()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "item",
+        "description": ""
+      },
+      {
+        "type": "emits",
+        "string": "\"change\" with new array"
+      }
+    ],
+    "description": {
+      "full": "<p>Pushes an item onto the front of the array.</p>\n\n<p>var array = Ivy.array([1,2,3]);<br />   array.unshift(4);<br />   array.get(); //=> [4,1,2,3]</p>",
+      "summary": "<p>Pushes an item onto the front of the array.</p>",
+      "body": "<p>var array = Ivy.array([1,2,3]);<br />   array.unshift(4);<br />   array.get(); //=> [4,1,2,3]</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array.prototype.unshift = function(item){\n  this.value.unshift(item);\n  this.emit('change', this.get(), new Ivy.ChangeSet().add(0, [item]) );\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "unshift",
+      "string": "Ivy.array.prototype.unshift()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "item",
+        "description": ""
+      },
+      {
+        "type": "emits",
+        "string": "\"change\" with new array"
+      }
+    ],
+    "description": {
+      "full": "<p>Pops an item off the end of the array.</p>\n\n<p>var array = Ivy.array([1,2,3]);<br />   array.pop(); //=> 3<br />   array.get(); //=> [1,2]</p>",
+      "summary": "<p>Pops an item off the end of the array.</p>",
+      "body": "<p>var array = Ivy.array([1,2,3]);<br />   array.pop(); //=> 3<br />   array.get(); //=> [1,2]</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array.prototype.pop = function(){\n  var index = this.length;\n  var item = this.value.pop();\n  this.emit('change', this.get(), new Ivy.ChangeSet().remove(index, [item]) );\n  return item;\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "pop",
+      "string": "Ivy.array.prototype.pop()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "item",
+        "description": ""
+      },
+      {
+        "type": "emits",
+        "string": "\"change\" with new array"
+      }
+    ],
+    "description": {
+      "full": "<p>Shifts an item off the front of the array.</p>\n\n<p>var array = Ivy.array([1,2,3]);<br />   array.shift(); //=> 1<br />   array.get(); //=> [2,3]</p>",
+      "summary": "<p>Shifts an item off the front of the array.</p>",
+      "body": "<p>var array = Ivy.array([1,2,3]);<br />   array.shift(); //=> 1<br />   array.get(); //=> [2,3]</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array.prototype.shift = function(){\n  var item = this.value.shift();\n  this.emit('change', this.get(), new Ivy.ChangeSet().remove(0, [item]));\n  return item;\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "shift",
+      "string": "Ivy.array.prototype.shift()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Array"
+        ],
+        "name": "items",
+        "description": ""
+      },
+      {
+        "type": "emits",
+        "string": "\"change\" with new array"
+      }
+    ],
+    "description": {
+      "full": "<p>Replaces the array contents with a new array.</p>\n\n<p>var array = Ivy.array([1,2,3]);<br />   array.replace([4,5,6]);<br />   array.get(); //=> [4,5,6]</p>",
+      "summary": "<p>Replaces the array contents with a new array.</p>",
+      "body": "<p>var array = Ivy.array([1,2,3]);<br />   array.replace([4,5,6]);<br />   array.get(); //=> [4,5,6]</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array.prototype.replace = function(items){\n  var oldValues = this.value;\n  this.value = items;\n  \n  this.emit('change', this.get(), \n    new Ivy.ChangeSet()\n      .remove(0, oldValues)\n      .add(0, items)\n  );\n  \n  return items;\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "replace",
+      "string": "Ivy.array.prototype.replace()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "item",
+        "description": ""
+      },
+      {
+        "type": "emits",
+        "string": "\"change\" with new array"
+      }
+    ],
+    "description": {
+      "full": "<p>Removes an item from the array.</p>\n\n<p>var array = Ivy.array([\"a\", \"b\", \"c\"]);<br />   array.remove(\"b\");<br />   array.get(); //=> [\"a\", \"c\"]</p>",
+      "summary": "<p>Removes an item from the array.</p>",
+      "body": "<p>var array = Ivy.array([\"a\", \"b\", \"c\"]);<br />   array.remove(\"b\");<br />   array.get(); //=> [\"a\", \"c\"]</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array.prototype.remove = function(item){\n  var index = this.value.indexOf(item);\n  return this.removeIndex(index);\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "remove",
+      "string": "Ivy.array.prototype.remove()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Function(Object)"
+        ],
+        "name": "predicate",
+        "description": "function"
+      },
+      {
+        "type": "emits",
+        "string": "\"change\" with new array"
+      }
+    ],
+    "description": {
+      "full": "<p>Removes any item from the array that matches the function.</p>\n\n<p>var array = Ivy.array([1,2,3,4,5]);<br />   array.removeEach(function(i){ return i % 2; });<br />   array.get(); //=> [1,3,5]</p>",
+      "summary": "<p>Removes any item from the array that matches the function.</p>",
+      "body": "<p>var array = Ivy.array([1,2,3,4,5]);<br />   array.removeEach(function(i){ return i % 2; });<br />   array.get(); //=> [1,3,5]</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array.prototype.removeEach = function(fn){\n  var i = this.value.length;\n  \n  while (i--){\n    if (fn(this.value[i])){\n      this.removeIndex(i);\n    }\n  }\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "removeEach",
+      "string": "Ivy.array.prototype.removeEach()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "index",
+        "description": ""
+      },
+      {
+        "type": "emits",
+        "string": "\"change\" with new array"
+      }
+    ],
+    "description": {
+      "full": "<p>Removes an item at a given index.</p>\n\n<p>var array = Ivy.array([\"a\", \"b\", \"c\"]);<br />   array.removeIndex(1);<br />   array.get(); //=> [\"a\", \"c\"]</p>",
+      "summary": "<p>Removes an item at a given index.</p>",
+      "body": "<p>var array = Ivy.array([\"a\", \"b\", \"c\"]);<br />   array.removeIndex(1);<br />   array.get(); //=> [\"a\", \"c\"]</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array.prototype.removeIndex = function(index){\n  if (index === -1) return;\n  \n  var item = this.value.splice(index,1)[0];\n  if (item){\n    this.emit('change', this.get(), new Ivy.ChangeSet().remove(index, [item]));\n  }\n  return item;\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "removeIndex",
+      "string": "Ivy.array.prototype.removeIndex()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "event",
+        "description": "to listen to"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Function(Object)"
+        ],
+        "name": "callback",
+        "description": "for events"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Function"
+        ],
+        "name": "optional",
+        "description": "getter for retrieving the attribute"
+      },
+      {
+        "type": "",
+        "string": ""
+      },
+      {
+        "type": "emits",
+        "string": "\"change\" with new array"
+      }
+    ],
+    "description": {
+      "full": "<p>Registers a listener on each array item as items are added,<br />and unregisters listeners when items are removed from the array.</p>\n\n<p>function Todo(name){<br />     this.name = Ivy.attr(name);<br />     this.isDone = Ivy.attr(false);<br />   }</p>\n\n<p>var todos = Ivy.array();<br />   todos.onEach('change', function(isDone){<br />     console.log('Done state is now', isDone)<br />   }, function(todo){ return todo.isDone });</p>\n\n<p>todos.push(new Todo('Do something great!'));<br />   todos.get(0).isDone.set(true); //=> 'Done state changed'</p>",
+      "summary": "<p>Registers a listener on each array item as items are added,<br />and unregisters listeners when items are removed from the array.</p>",
+      "body": "<p>function Todo(name){<br />     this.name = Ivy.attr(name);<br />     this.isDone = Ivy.attr(false);<br />   }</p>\n\n<p>var todos = Ivy.array();<br />   todos.onEach('change', function(isDone){<br />     console.log('Done state is now', isDone)<br />   }, function(todo){ return todo.isDone });</p>\n\n<p>todos.push(new Todo('Do something great!'));<br />   todos.get(0).isDone.set(true); //=> 'Done state changed'</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.array.prototype.onEach = function(event, callback, getter){\n  var changeSet;\n  \n  this.on('change', function(newArray, changes){\n    for(var i=0; i < changes.length; i++){\n      changeSet = changes[i];\n      updateListeners(changeSet.operation, changeSet.items);\n    }\n  });\n  \n  updateListeners('add', this.value);\n  function updateListeners(op, items){\n    for(var i=0; i < items.length; i++){\n      var attr = getter ? getter(items[i]) : items[i];\n      if (!attr) continue;\n      \n      // Turn on or off listeners as items are added or removed\n      attr[op === 'add' ? 'on' : 'off'](event, callback);\n    }\n  }\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "onEach",
+      "string": "Ivy.array.prototype.onEach()"
+    }
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>Returns the length of the internal array.</p>",
+      "summary": "<p>Returns the length of the internal array.</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "Ivy.array.prototype.length = function(){\n  return this.value.length;\n};\n\nIvy.ChangeSet = function(){};\nIvy.ChangeSet.prototype = [];\nIvy.ChangeSet.prototype.add = function(index, items){\n  this.push({operation: 'add',index: index, items: items});\n  return this;\n};\nIvy.ChangeSet.prototype.remove = function(index, items){\n  this.push({operation: 'remove',index: index, items: items});\n  return this;\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.array",
+      "name": "length",
+      "string": "Ivy.array.prototype.length()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Ivy.attr"
+        ],
+        "name": "attribute",
+        "description": "to be wrapped"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "wrapper",
+        "description": "to be applied to the attribute"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Function"
+        ],
+        "name": "wrapper.get",
+        "description": "custom getter for formatting the attribute"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Function"
+        ],
+        "name": "wrapper.set",
+        "description": "custom setter for parsing the attribute"
+      }
+    ],
+    "description": {
+      "full": "<p>Wrap an existing attribute with custom getters and setters.<br />The original attribute can still be accessed as normal.</p>\n\n<p>var percent = Ivy.attr(0.1);<br />   var wrapped = Ivy.wrap(percent, {<br />     get: function(num){ return (num * 10) + '%'; },<br />     set: function(val){ return parseFloat(val) / 10; }<br />   });</p>\n\n<p>wrapped.get(); //=> \"10%\"<br />   wrapped.set(\"17%\");<br />   percent.get(); //=> 0.17</p>",
+      "summary": "<p>Wrap an existing attribute with custom getters and setters.<br />The original attribute can still be accessed as normal.</p>",
+      "body": "<p>var percent = Ivy.attr(0.1);<br />   var wrapped = Ivy.wrap(percent, {<br />     get: function(num){ return (num * 10) + '%'; },<br />     set: function(val){ return parseFloat(val) / 10; }<br />   });</p>\n\n<p>wrapped.get(); //=> \"10%\"<br />   wrapped.set(\"17%\");<br />   percent.get(); //=> 0.17</p>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.wrap = function WrappedAttr(attr, wrapper){\n  if (!(this instanceof Ivy.wrap)) return new Ivy.wrap(attr, wrapper);\n  \n  if (typeof wrapper === 'function'){\n    wrapper = {get: wrapper};\n  }\n  wrapper.get = wrapper.get || function(v){ return v;};\n  wrapper.set = wrapper.set || function(v){ return v;};\n  \n  this.attr      = attr;\n  this.wrapper   = wrapper;\n  this.callbacks = {};\n  this._id       = Ivy._id++;\n  \n  // Proxy events for 'change'\n  var self = this;\n  this.attr.on('change', function(value){\n    value = self.wrapper.get(value);\n    self.emit.call(self, 'change', value);\n  });\n};\nIvy.wrap.prototype = Ivy.attr();",
+    "ctx": {
+      "type": "method",
+      "receiver": "Ivy",
+      "name": "wrap",
+      "string": "Ivy.wrap()"
+    }
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>Gets the internal attribute's value, then passes it through the getter<br />defined with <code>Ivy.wrap</code></p>",
+      "summary": "<p>Gets the internal attribute's value, then passes it through the getter<br />defined with <code>Ivy.wrap</code></p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "Ivy.wrap.prototype.get = function(){\n  var value = this.attr.get();\n  return this.wrapper.get(value);\n};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.wrap",
+      "name": "get",
+      "string": "Ivy.wrap.prototype.get()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "value",
+        "description": ""
+      }
+    ],
+    "description": {
+      "full": "<p>Passes the value through the setter, then sets the internal attribute's value.</p>",
+      "summary": "<p>Passes the value through the setter, then sets the internal attribute's value.</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "Ivy.wrap.prototype.set = function(value){\n  value = this.wrapper.set(value);\n  this.attr.set(value);\n  return this;\n};\n\n//-----------------------------------------------------------------------------\n\nIvy.bindAttrToValue = function(el, attrName, domEvent){\n  var attr = this.atPath(attrName),\n      delayedCallback;\n      \n  domEvent = domEvent || 'change';\n  \n  Ivy.watchAttr(attr, 'change', updateEl);\n  if (attr.set){ el.addEventListener(domEvent, updateAttr); }\n\n  function updateEl(value){ \n    if (document.activeElement === el){\n      if (delayedCallback) return;\n        \n      delayedCallback = function(event){\n        updateEl(attr.valueOf());\n        el.removeEventListener('blur',delayedCallback);\n        delayedCallback = null;\n      };\n      el.addEventListener('blur', delayedCallback);\n      \n    } else {\n      el.value = value;\n    }\n  }\n  \n  function updateAttr(){\n    attr.set(el.value);\n  }\n};\n\nIvy.bindAttrToChecked = function(el, attrName, domEvent){\n  var attr = this.atPath(attrName),\n      isRadio = el.type === 'radio';\n  \n  domEvent = domEvent || 'change';\n  \n  Ivy.watchAttr(attr, 'change', updateEl);\n  if (attr.set){ el.addEventListener(domEvent, updateAttr); }\n\n  function updateEl(value){\n    el.checked = isRadio ? (value == el.value) : (!!value);\n  }\n  \n  function updateAttr(){\n    if (isRadio){\n      if (el.checked) attr.set(el.value);\n    } else {\n      attr.set(!!el.checked);\n    }\n  }\n};\n\nIvy.bindAttrToText = function(el, attrName){\n  var attr = this.atPath(attrName);\n  \n  Ivy.watchAttr(attr, 'change', updateEl);\n  function updateEl(value){ \n    Ivy.util.clearChildren(el);\n    el.appendChild(document.createTextNode(value));\n  }\n};\n\nIvy.bindAttrToClassName = function(el, attrName, trueClass, falseClass){\n  var attr = this.atPath(attrName);\n  \n  Ivy.watchAttr(attr, 'change', updateEl);\n  function updateEl(value){\n    var oldClasses  = el.className.split(/\\s+/),\n        newClasses  = [],\n        addClass    = value.valueOf() ? trueClass : falseClass,\n        removeClass = value.valueOf() ? falseClass : trueClass,\n        seenAdd;\n    \n    for (var i=0, len = oldClasses.length, cls; i< len; i++){\n      cls = oldClasses[i];\n      seenAdd |= (cls === addClass);\n      if (cls != removeClass) newClasses.push(cls);\n    }\n    if (!seenAdd) newClasses.push(addClass);\n    el.className = newClasses.join(' ');\n  }\n};\n\nIvy.bindAttrToDomAttr = function(el, attrName, domAttr){\n  var attr = this.atPath(attrName),\n      booleanPropery = Ivy.bindAttrToDomAttr.booleanProperties[domAttr];\n  \n  Ivy.watchAttr(attr, 'change', updateEl);\n  function updateEl(value){\n    if (booleanPropery){\n      !!value ? el.setAttribute(domAttr, domAttr) : el.removeAttribute(domAttr);\n    } else {\n      el.setAttribute(domAttr, value); \n    }\n  }\n};\nIvy.bindAttrToDomAttr.booleanProperties = {\n  'disabled': true\n};\n\nIvy.bindAttrToFocused = function(el, attrName){\n  var attr = this.atPath(attrName);\n\n  Ivy.watchAttr(attr, 'change', updateEl);  \n  function updateEl(value){\n    if (value){ \n      setTimeout(function(){ el.focus(); });\n    }\n  }\n};\n\nIvy.bindAttrToEach = function(el, attrName){\n  var attr     = this.atPath(attrName),\n      fragment = Ivy.util.detachChildren(el),\n      context  = this.context;\n      \n  el.__managed = true; // this is a managed node\n  Ivy.watchAttr(attr, 'change', updateEl);\n  \n  function updateEl(val){\n    Ivy.util.clearChildren(el);\n    for(var i=0, len=val.length; i < len; i++){\n      var childNode = fragment.cloneNode(true);\n      Ivy.bindDom(childNode, val[i], context);\n      el.appendChild(childNode);\n    }\n  }\n  \n};\n\nIvy.bindAttrToWith = function(el, attrName){\n  var attr     = this.atPath(attrName),\n      fragment = Ivy.util.detachChildren(el),\n      context  = this.context;\n      \n  el.__managed = true; // this is a managed node\n  Ivy.watchAttr(attr, 'change', updateEl);\n  \n  function updateEl(val){\n    var childNode = fragment.cloneNode(true);\n    Ivy.util.clearChildren(el);\n    Ivy.bindDom(childNode, val, context);\n    el.appendChild(childNode);\n  }\n};\n\nIvy.bindAttrToShow = function(el, attrName){\n  var attr = this.atPath(attrName),\n      originalDisplayStyle = el.style.display;\n      \n  Ivy.watchAttr(attr, 'change', updateEl);\n  \n  function updateEl(val){\n    el.style.display = val ? originalDisplayStyle : 'none';\n  }\n};\n\nIvy.bindFnToEvent = function(el, eventName, fnPath){\n  var fn = this.atPath(fnPath),\n      receiver = this.atPath(fnPath.split('/').slice(0,-1).join('/'));\n      subject  = this.context; // should be a 2nd param at some point\n\n  if (subject['ivy:proto']){ \n    subject = subject['ivy:proto'];\n  }\n  \n  el.addEventListener(eventName, makeListener(receiver,subject));\n  \n  function makeListener(receiver, subject){\n    return function(event){\n      fn.call(receiver, subject);\n      event.preventDefault();\n    };\n  }\n};\n\nIvy.watchAttr = function(attr, event, callback){\n  if (attr.on){\n    attr.on(event, callback);\n  }\n  callback(attr.valueOf());\n};\n\nIvy.bindDom = function(el, context, parent){\n  var el = el || document.body,\n      context = context || window,\n      bindings;\n  \n  if (typeof el === 'string'){\n    el = document.getElementById(el);\n  }\n  \n  if (parent){\n    context = Ivy.util.beget(context);\n    context['..'] = parent;\n  }\n  \n  if (el.nodeType === Node.ELEMENT_NODE){\n    bindings = Ivy.getBindings(el,context);\n    if (bindings){\n      for(var i=0, len=bindings.length; i < len; i++){\n        Ivy.bindElement(el, bindings[i]);\n      }\n    }\n  }\n  \n  // Only descend if this node has not been the root of any bindings already:\n  if (el.__managed) return;\n  \n  for(var i=0, children = el.children || el.childNodes, len=children.length; i < len; i++){\n    Ivy.bindDom(children[i], context);\n  }\n};\n\nIvy.getBindings = function(el, context){\n  var bindText = el.getAttribute('data-bind'),\n      bindingRules = [],\n      bindings;\n  \n  if (!bindText) return null;\n  bindings = bindText.trim().split(/\\s*;\\s*/);\n  \n  for(var i=0, len=bindings.length; i < len; i++){\n    if (bindings[i].match(/^\\s*$/)) continue; // ignore whitespace only rules\n    bindingRules.push(new Ivy.BindingRule(bindings[i], context));\n  }\n  \n  return bindingRules;\n};\n\nIvy.bindings = {\n  'value':    Ivy.bindAttrToValue,\n  'checked':  Ivy.bindAttrToChecked,\n  'text':     Ivy.bindAttrToText,\n  'attr':     Ivy.bindAttrToDomAttr,\n  'class':    Ivy.bindAttrToClassName,\n  'each':     Ivy.bindAttrToEach,\n  'show':     Ivy.bindAttrToShow,\n  'with':     Ivy.bindAttrToWith,\n  'focused':  Ivy.bindAttrToFocused,\n  'on':       Ivy.bindFnToEvent\n};\n\nIvy.bindElement = function(el, bindingRule){\n  var name = bindingRule.name,\n      args = [el].concat(bindingRule.options),\n      bindingFn;\n\n  bindingFn = Ivy.bindings[name];\n  if (!bindingFn){ \n    console.warn('Unkown binding: ', name, bindingRule);\n  } else {\n    bindingFn.apply(bindingRule,args);\n  }\n};\n\nIvy.BindingRule = function(str, context){\n  var options = str.trim().split(/\\s+/),\n      name = options.shift();\n  \n  if (!name.charAt(name.length - 1) === ':'){\n    throw new Error(\"Invalid syntax for binding name.\\n\\t\"+str);\n  }\n  \n  this.name     = name.slice(0,-1);\n  this.options  = options;\n  this.context  = context;\n};\n\nIvy.BindingRule.prototype.atPath = function(path, context){\n  context = context || this.context;\n  if (path === '.' || path === ''){ \n    return context;\n  } else if (path.indexOf('../') === 0){\n    return this.atPath(path.slice(3), context['..']);\n  } else {\n    return context[path];\n  }\n};\n\n// ----------------------------------------------------------------------------\nIvy.util = {};\nIvy.util.detachChildren = function(el){\n  var df = document.createDocumentFragment(),\n      children = [].slice.apply(el.children); // Convert from NodeList to Array\n  \n  for (var i=0, len=children.length, child; i < len; i++){\n    df.appendChild(el.removeChild(children[i]));\n  }\n  \n  return df;\n};\nIvy.util.clearChildren = function(el){\n  while( el.hasChildNodes() ){\n    el.removeChild( el.firstChild );\n  }\n};\nIvy.util.copy = function(src){\n  return JSON.parse(JSON.stringify(src));\n};\n// From prototype.js\nIvy.util.argumentNames = function(fn){\n  var names = fn.toString().match(/^[\\s\\(]*function[^(]*\\(([^\\)]*)\\)/)[1]\n    .replace(/\\s+/g, '').split(',');\n  return names.length == 1 && !names[0] ? [] : names;\n};\n// From Crockford -- modified to include the prototype for environments \n// that don't support `__proto__` or `getPrototypeOf`.\nIvy.util.beget = function(prototype){\n  var F = function() {};\n  F.prototype = prototype;\n  var object = new F();\n  object['ivy:proto'] = prototype;\n  return object;\n};\n\nIvy.util.bind = function(fn,context){\n  return function(){ fn.call(context, arguments); };\n};\n\n// Tracking for shared Ivy state:\nIvy._id = 1;\nIvy._callers = {};",
+    "ctx": {
+      "type": "method",
+      "constructor": "Ivy.wrap",
+      "name": "set",
+      "string": "Ivy.wrap.prototype.set()"
+    }
+  }
+]
