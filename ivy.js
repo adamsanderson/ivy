@@ -425,7 +425,7 @@ Ivy.ChangeSet.prototype.remove = function(index, items){
  * @param {Function} wrapper.set custom setter for parsing the attribute
  */
 function IvyWrap(attr, wrapper){
-  if (!(this instanceof Ivy.wrap)) return new Ivy.wrap(attr, wrapper);
+  if (!(this instanceof IvyWrap)) return new IvyWrap(attr, wrapper);
   
   if (typeof wrapper === 'function'){
     wrapper = {get: wrapper};
@@ -445,7 +445,7 @@ function IvyWrap(attr, wrapper){
     self.emit.call(self, 'change', value);
   });
 };
-IvyWrap.prototype = IvyAttr;
+IvyWrap.prototype = new IvyAttr;
 
 /**
  * Gets the internal attribute's value, then passes it through the getter
@@ -549,7 +549,7 @@ Ivy.bindAttrToValue = function(el, attrName, domEvent){
   Ivy.watchAttr(attr, 'change', updateEl);
   if (attr.set){ el.addEventListener(domEvent, updateAttr); }
 
-  function updateEl(value){ 
+  function updateEl(value){
     if (document.activeElement === el){
       if (delayedCallback) return;
         
