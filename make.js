@@ -1,13 +1,13 @@
 var fs = require("fs"),
-    marked = require("marked"),
-    Mustache = require("mustache"),
-    dox = require("dox"),
-    ducks = require("./ducks");
+    marked = require("marked"),      // npm: marked
+    Mustache = require("mustache"),  // npm: mustache
+    less = require('less'),          // npm: less
+    ducks = require("./lib/ducks");
 
 /* 
-  Builds documentation.
+  Builds documentation
   - index.html -- from readme.markdown
-  - api.html -- from dox output
+  - api.html -- from ducks output
   
 */
 
@@ -31,6 +31,7 @@ fs.readFile("readme.markdown", function (err, readme) {
 
 // Generate api.html:
 fs.readFile("ivy.js", function (err, jsSrc) {
+  if (err) throw err;
   
   var functions = ducks.parseComments(jsSrc.toString());
   for (var i=0; i < functions.length; i++){
@@ -38,6 +39,24 @@ fs.readFile("ivy.js", function (err, jsSrc) {
   }
   
   renderTemplate("templates/api.html", 'api.html', {functions: functions});
+});
+
+// Generate CSS:
+fs.readFile("css/site.less", function (err, lessSrc) {
+  if (err) throw err;
+  
+  var parser = new less.Parser({
+    filename: 'site.less',
+    paths: ['css']
+  });
+
+  parser.parse(lessSrc.toString(), function (err, tree) {
+      if (err) throw err;
+      
+      fs.writeFile('css/site.css', tree.toCSS({compress: true}), function(err){
+        if (err) throw err;
+      });
+  });
 });
 
 /**
