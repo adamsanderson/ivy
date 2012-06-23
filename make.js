@@ -1,7 +1,8 @@
 var fs = require("fs"),
     marked = require("marked"),
     Mustache = require("mustache"),
-    dox = require("dox");
+    dox = require("dox"),
+    ducks = require("./ducks");
 
 /* 
   Builds documentation.
@@ -30,10 +31,13 @@ fs.readFile("readme.markdown", function (err, readme) {
 
 // Generate api.html:
 fs.readFile("ivy.js", function (err, jsSrc) {
-  var data = dox.parseComments(jsSrc.toString());  
-  fs.writeFile("ivy.json", JSON.stringify(data, null, '  '));
   
-  renderTemplate("templates/api.html", 'api.html', data);
+  var functions = ducks.parseComments(jsSrc.toString());
+  for (var i=0; i < functions.length; i++){
+    functions[i].commentHtml = marked(functions[i].comment);
+  }
+  
+  renderTemplate("templates/api.html", 'api.html', {functions: functions});
 });
 
 /**
