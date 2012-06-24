@@ -539,6 +539,7 @@ Ivy.fnWith = function(context, fn){
 };
 
 //-----------------------------------------------------------------------------
+// Ivy Binding Support
 
 Ivy.bindAttrToValue = function(el, attrName, domEvent){
   var attr = this.atPath(attrName),
@@ -716,6 +717,19 @@ Ivy.bindFnToEvent = function(el, eventName, fnPath){
   }
 };
 
+Ivy.bindings = {
+  'value':    Ivy.bindAttrToValue,
+  'checked':  Ivy.bindAttrToChecked,
+  'text':     Ivy.bindAttrToText,
+  'attr':     Ivy.bindAttrToDomAttr,
+  'class':    Ivy.bindAttrToClassName,
+  'show':     Ivy.bindAttrToShow,
+  'focused':  Ivy.bindAttrToFocused,
+  'each':     Ivy.bindAttrToEach,
+  'with':     Ivy.bindAttrToWith,
+  'on':       Ivy.bindFnToEvent
+};
+
 Ivy.watchAttr = function(attr, event, callback){
   if (attr.on){
     attr.on(event, callback);
@@ -770,19 +784,6 @@ Ivy.getBindings = function(el, context){
   return bindingRules;
 };
 
-Ivy.bindings = {
-  'value':    Ivy.bindAttrToValue,
-  'checked':  Ivy.bindAttrToChecked,
-  'text':     Ivy.bindAttrToText,
-  'attr':     Ivy.bindAttrToDomAttr,
-  'class':    Ivy.bindAttrToClassName,
-  'each':     Ivy.bindAttrToEach,
-  'show':     Ivy.bindAttrToShow,
-  'with':     Ivy.bindAttrToWith,
-  'focused':  Ivy.bindAttrToFocused,
-  'on':       Ivy.bindFnToEvent
-};
-
 Ivy.bindElement = function(el, bindingRule){
   var name = bindingRule.name,
       args = [el].concat(bindingRule.options),
@@ -821,6 +822,7 @@ Ivy.BindingRule.prototype.atPath = function(path, context){
 };
 
 // ----------------------------------------------------------------------------
+
 Ivy.util = {};
 Ivy.util.detachChildren = function(el){
   var df = document.createDocumentFragment(),

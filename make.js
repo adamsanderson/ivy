@@ -23,10 +23,21 @@ fs.readFile("readme.markdown", function (err, readme) {
   if (err) throw err;
   
   var data = {
-    readme: marked(readme.toString())
+    content: marked(readme.toString())
   };
   
-  renderTemplate("templates/index.html", 'index.html', data);
+  renderTemplate("templates/content.html", 'index.html', data);
+});
+
+// Generate bindings.html:
+fs.readFile("bindings.markdown", function (err, readme) {
+  if (err) throw err;
+  
+  var data = {
+    content: marked(readme.toString())
+  };
+  
+  renderTemplate("templates/content.html", 'bindings.html', data);
 });
 
 // Generate api.html:

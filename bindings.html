@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Ivy - Bound JavaScript</title>
+	<meta name="author" content="Adam Sanderson">
+	
+	<link rel="stylesheet" href="css/site.css" type="text/css" media="screen" charset="utf-8">
+	<link rel="stylesheet" href="lib/highlight/github.css">
+  <script src="lib/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div class='grid row'>
+  <div class='col col-75'>
+  <h1>Ivy Bindings</h1>
+<p>Ivy will bind your data model to the DOM.  Changes made to Ivy attributes will update the DOM,
+and user input will update your data model.  Ivy&#39;s bindings are declared in your HTML using the
+<code>data-bind</code> attribute.
+
+</p>
+<pre><code>&lt;input data-bind=&#39;value: name keyup; class: isValid valid invalid&#39;/&gt;</code></pre>
+<p>Take a look at the examples to see these bindings in action.
+
+</p>
+<h2>value: attrName [event = &#39;change&#39;];</h2>
+<p>The <code>value</code> binding will bind an input&#39;s value with an Ivy attribute.  Use this to let your users
+edit forms.
+
+</p>
+<pre><code>&lt;!-- Bind name to the input&#39;s keyup event --&gt;
+&lt;input data-bind=&#39;value: name keyup;&#39;/&gt;
+&lt;script&gt;
+  Ivy.bindDom({name: Ivy.attr(&#39;Marvin&#39;)});
+&lt;/script&gt;</code></pre>
+<p>The event parameter is optional, and can be used to specify which form event Ivy should use.
+<code>keyup</code> is good for changes that should be evaluated immediately, and the default <code>change</code> 
+event works well when the data needs to be validated.
+
+</p>
+<h2>checked: attrName [event = &#39;change&#39;];</h2>
+<p>Bind a checkbox, or group of radio buttons, with the <code>checked</code> binding.  When binding a checkbox
+the bound attribute will be a boolean value.  When binding radio buttons, the bound value will be
+value of the selected radio button.
+
+</p>
+<pre><code>&lt;!-- Bind size to the radio buttons, and express to a checkbox --&gt;
+
+&lt;input type=&#39;radio&#39; data-bind=&#39;checked: size&#39; value=&#39;small&#39;/&gt; Small
+&lt;input type=&#39;radio&#39; data-bind=&#39;checked: size&#39; value=&#39;medium&#39;/&gt; Medium
+&lt;input type=&#39;radio&#39; data-bind=&#39;checked: size&#39; value=&#39;large&#39;/&gt; Large
+
+&lt;input type=&#39;checkbox&#39; data-bind=&#39;checked: express&#39;/&gt; Express Delivery
+
+
+&lt;script&gt;
+  Ivy.bindDom({size: Ivy.attr(&#39;medium&#39;), express: Ivy.attr(true)});
+&lt;/script&gt;</code></pre>
+<h2>text: attrName;</h2>
+<p>Use the <code>text</code> binding to display text from your data model.
+
+</p>
+<pre><code>&lt;!-- Bind the name --&gt;
+&lt;div&gt;
+  Hello &lt;span data-bind=&#39;text: name;&#39;&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;script&gt;
+  Ivy.bindDom({name: Ivy.attr(&#39;World&#39;)});
+&lt;/script&gt;</code></pre>
+<p>The <code>text</code> always creates a DOM text node, so its value will always be escaped.
+
+</p>
+<h2>attr: attrName domAttribute;</h2>
+<p>The <code>attr</code> binding will bind an Ivy attribute to a DOM element&#39;s attribute.
+
+</p>
+<pre><code>&lt;!-- Bind the isLocked attribute to the DOM attribute disabled --&gt;
+&lt;input data-bind=&#39;attr: isLocked disabled;&#39;/&gt;</code></pre>
+<p>This can be applied to any DOM attribute, however the <code>disabled</code> attribute
+is the most common use case.
+
+</p>
+<h2>class: attrName trueClass [falseClass];</h2>
+<p>The <code>class</code> binding will toggle the <code>trueClass</code> and <code>falseClass</code> on
+and off if <code>attrName</code> is true.
+
+</p>
+<pre><code>&lt;!-- Bind isValid to the input&#39;s class --&gt;
+&lt;input data-bind=&#39;class: isValid valid invalid&#39;/&gt;</code></pre>
+<p>In this example, when <code>isValid</code> evaluates to true, the input will have
+the class <code>valid</code>, when false, <code>invalid</code>.  The <code>falseClass</code> is not
+required, but is often useful.
+
+</p>
+<h2>show: attrName;</h2>
+<p>To show or hide an element, use the <code>show</code> binding.  When its attribute evaluates to
+true, the element will be displayed, otherwise it will be hidden.
+
+</p>
+<pre><code>&lt;!-- Bind isValid to the input&#39;s class --&gt;
+&lt;a data-bind=&#39;show: promotionApplies&#39;&gt;
+  Click here for more details!
+&lt;/a&gt;</code></pre>
+<h2>focussed: attrName;</h2>
+<p>To control the page&#39;s focus, use the <code>focussed</code> binding.
+
+</p>
+<pre><code>&lt;!-- Set focus to this element: --&gt;
+&lt;input data-bind=&#39;class: isEditing&#39;/&gt;
+&lt;script&gt;
+  Ivy.bindDom({isEditing: Ivy.attr(true)});
+&lt;/script&gt;</code></pre>
+<p>Unlike other bindings, this does not synchronize back to the Ivy attribute
+when the focus changes.
+
+</p>
+<h2>each: attrName;</h2>
+<p>Use <code>each</code> to bind to Ivy arrays.  As items are added or removed from the array,
+they will be added or removed from the page.
+
+</p>
+<pre><code>&lt;!-- Bind the array cats --&gt;
+&lt;ul data-bind=&#39;each: cats&#39;&gt;
+  &lt;li data-bind=&#39;text: .&#39;&gt;
+&lt;/ul&gt;
+&lt;script&gt;
+  var cats = [&quot;Felix&quot;, &quot;Nyan&quot;, &quot;Horace&quot;];
+  Ivy.bindDom({cats: Ivy.array(cats)});
+&lt;/script&gt;</code></pre>
+<p>In the example above, three <code>li</code> elements will appear on the page, and they will
+have the context of the array items Felix, Nyan, and Horace. Notice that the <code>text</code>
+binding references the current item with a period.  If the array instead contained 
+nested data such as <code>{name: &quot;Felix&quot;, age: 5}</code>, then the <code>text</code> binding would be: 
+<code>&lt;li data-bind=&#39;text: name&#39;&gt;</code>.
+
+</p>
+<h2>with: attrName;</h2>
+<p>When dealing with nested data, use <code>with</code> to control the context.
+
+</p>
+<pre><code>&lt;!-- Bind the name attribute --&gt;
+&lt;h1 data-bind=&#39;text: name&#39;&gt;&lt;/h1&gt;
+
+&lt;!-- Change the context to profession  --&gt;
+&lt;div data-bind=&#39;with: profession&#39;&gt;
+  &lt;span data-bind=&#39;text: title&#39;&gt;&lt;/span&gt;
+  (&lt;span data-bind=&#39;text: yearsExperience&#39;&gt;&lt;/span&gt;)
+&lt;/div&gt;
+
+&lt;script&gt;
+  var person = {
+    name: Ivy.attr(&#39;Mortimer&#39;),
+    profession: {
+      title: &#39;Chief Tester&#39;,
+      yearsExperience: 3
+    }
+  }
+&lt;/script&gt;</code></pre>
+<p>You can nest multiple <code>with</code> bindings to descend down a deep object hierarchy.
+
+</p>
+<h2>on: eventName callbackName</h2>
+<p>Use the <code>on</code> binding to let people interact with your objects.  In the example
+below we create a simple editable list of pets with a function that will add a new pet:
+
+</p>
+<pre><code>&lt;!-- Bind to the click event to addPet --&gt;
+&lt;a data-bind=&#39;on: click addPet&#39;&gt;Add Pet&lt;/a&gt;
+&lt;ul data-bind=&#39;each: cats&#39;&gt;
+  &lt;li&gt;
+    &lt;input data-bind=&#39;value: name&#39;/&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script&gt;
+  function PetList(pets){
+    this.pets = Ivy.array(pets);
+    this.addPet = function(){
+      this.pets.push({name: Ivy.attr(&quot;&quot;)});
+    };
+  }
+
+  var petList = new PetList([
+    {name: Ivy.attr(&quot;Felix&quot;)},
+    {name: Ivy.attr(&quot;Nyan&quot;) }
+  ]);
+  Ivy.bindDom(petList);
+&lt;/script&gt;</code></pre>
+<p>Notice that unlike most bindings, the first argument is an event such as <code>click</code>, and the
+second is function to call when a user triggers the event.  The callback will be passed the
+current context as well.</p>
+
+  </div>
+  <div class='col col-25'>
+    <h3>Documentation</h3>
+    <ul>
+      <li>
+        <a href="api.html">Object API</a>
+      </li>
+      <li>
+        <a href="bindings.html">Bindings</a>
+      </li>
+    </ul>
+    <h3>Examples</h3>
+    <ul>
+      <li>
+        <a href="examples/simple_bindings.html">Simple Bindings</a>
+      </li>
+      <li>
+        <a href="examples/function_bindings.html">Function Bindings</a>
+      </li>
+      <li>
+        <a href="examples/todo.html">TODO List</a>
+      </li>
+      <li>
+        <a href="examples/view_models.html">View Models</a>
+      </li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
