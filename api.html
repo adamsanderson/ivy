@@ -40,91 +40,6 @@
 </head>
 <body>
 <div class='grid row'>
-  <div class='col col-3'>
-    <h4>
-      Attribute API
-    </h4>
-    <ul class='toc'>
-          <li>
-          <a href='#IvyAttr' class='toc-constructor' title='IvyAttr(value, parseFn)'>IvyAttr</a>
-      </li>
-          <li>
-          <a href='#IvyAttr.prototype.set' class='toc-method' title='IvyAttr.prototype.set(value)'>set</a>
-      </li>
-          <li>
-          <a href='#IvyAttr.prototype.get' class='toc-method' title='IvyAttr.prototype.get()'>get</a>
-      </li>
-          <li>
-          <a href='#IvyAttr.prototype.on' class='toc-method' title='IvyAttr.prototype.on(event, fn)'>on</a>
-      </li>
-          <li>
-          <a href='#IvyAttr.prototype.off' class='toc-method' title='IvyAttr.prototype.off(event, fn)'>off</a>
-      </li>
-          <li>
-          <a href='#IvyAttr.prototype.emit' class='toc-method' title='IvyAttr.prototype.emit(event)'>emit</a>
-      </li>
-          <li>
-          <a href='#IvyAttr.prototype.valueOf' class='toc-method' title='IvyAttr.prototype.valueOf()'>valueOf</a>
-      </li>
-          <li>
-          <a href='#IvyAttr.prototype.toJSON' class='toc-method' title='IvyAttr.prototype.toJSON()'>toJSON</a>
-      </li>
-          <li>
-          <a href='#IvyArray' class='toc-constructor' title='IvyArray(array)'>IvyArray</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.set' class='toc-method' title='IvyArray.prototype.set(index, item)'>set</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.get' class='toc-method' title='IvyArray.prototype.get(index)'>get</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.push' class='toc-method' title='IvyArray.prototype.push(item)'>push</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.unshift' class='toc-method' title='IvyArray.prototype.unshift(item)'>unshift</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.pop' class='toc-method' title='IvyArray.prototype.pop()'>pop</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.shift' class='toc-method' title='IvyArray.prototype.shift()'>shift</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.replace' class='toc-method' title='IvyArray.prototype.replace(items)'>replace</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.remove' class='toc-method' title='IvyArray.prototype.remove(item)'>remove</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.removeEach' class='toc-method' title='IvyArray.prototype.removeEach(fn)'>removeEach</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.removeIndex' class='toc-method' title='IvyArray.prototype.removeIndex(index)'>removeIndex</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.onEach' class='toc-method' title='IvyArray.prototype.onEach(event, callback, getter)'>onEach</a>
-      </li>
-          <li>
-          <a href='#IvyArray.prototype.length' class='toc-method' title='IvyArray.prototype.length()'>length</a>
-      </li>
-          <li>
-          <a href='#IvyWrap' class='toc-constructor' title='IvyWrap(attr, wrapper)'>IvyWrap</a>
-      </li>
-          <li>
-          <a href='#IvyWrap.prototype.get' class='toc-method' title='IvyWrap.prototype.get()'>get</a>
-      </li>
-          <li>
-          <a href='#IvyWrap.prototype.set' class='toc-method' title='IvyWrap.prototype.set(value)'>set</a>
-      </li>
-          <li>
-          <a href='#Ivy.fn' class='toc-function' title='Ivy.fn()'>fn</a>
-      </li>
-          <li>
-          <a href='#Ivy.fnWith' class='toc-function' title='Ivy.fnWith(context, fn)'>fnWith</a>
-      </li>
-    </ul>
-  </div>
   <div class='col col-9'>
     <h1>
       Ivy
@@ -478,6 +393,119 @@ purchase.withTax.get(); //=&gt; 15.75</code></pre>
 @returns an attribute that will update with the function&#39;s result.</p>
     </div>
     </div>
+  <div class='col col-3'>
+    <h3>
+      Attribute API
+    </h3>
+    <ul class='toc'>
+          <li>
+          <a href='#IvyAttr' class='toc-constructor' title='IvyAttr(value, parseFn)'>IvyAttr</a>
+      </li>
+          <li>
+          <a href='#IvyAttr.prototype.set' class='toc-method' title='IvyAttr.prototype.set(value)'>set</a>
+      </li>
+          <li>
+          <a href='#IvyAttr.prototype.get' class='toc-method' title='IvyAttr.prototype.get()'>get</a>
+      </li>
+          <li>
+          <a href='#IvyAttr.prototype.on' class='toc-method' title='IvyAttr.prototype.on(event, fn)'>on</a>
+      </li>
+          <li>
+          <a href='#IvyAttr.prototype.off' class='toc-method' title='IvyAttr.prototype.off(event, fn)'>off</a>
+      </li>
+          <li>
+          <a href='#IvyAttr.prototype.emit' class='toc-method' title='IvyAttr.prototype.emit(event)'>emit</a>
+      </li>
+          <li>
+          <a href='#IvyAttr.prototype.valueOf' class='toc-method' title='IvyAttr.prototype.valueOf()'>valueOf</a>
+      </li>
+          <li>
+          <a href='#IvyAttr.prototype.toJSON' class='toc-method' title='IvyAttr.prototype.toJSON()'>toJSON</a>
+      </li>
+          <li>
+          <a href='#IvyArray' class='toc-constructor' title='IvyArray(array)'>IvyArray</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.set' class='toc-method' title='IvyArray.prototype.set(index, item)'>set</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.get' class='toc-method' title='IvyArray.prototype.get(index)'>get</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.push' class='toc-method' title='IvyArray.prototype.push(item)'>push</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.unshift' class='toc-method' title='IvyArray.prototype.unshift(item)'>unshift</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.pop' class='toc-method' title='IvyArray.prototype.pop()'>pop</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.shift' class='toc-method' title='IvyArray.prototype.shift()'>shift</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.replace' class='toc-method' title='IvyArray.prototype.replace(items)'>replace</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.remove' class='toc-method' title='IvyArray.prototype.remove(item)'>remove</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.removeEach' class='toc-method' title='IvyArray.prototype.removeEach(fn)'>removeEach</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.removeIndex' class='toc-method' title='IvyArray.prototype.removeIndex(index)'>removeIndex</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.onEach' class='toc-method' title='IvyArray.prototype.onEach(event, callback, getter)'>onEach</a>
+      </li>
+          <li>
+          <a href='#IvyArray.prototype.length' class='toc-method' title='IvyArray.prototype.length()'>length</a>
+      </li>
+          <li>
+          <a href='#IvyWrap' class='toc-constructor' title='IvyWrap(attr, wrapper)'>IvyWrap</a>
+      </li>
+          <li>
+          <a href='#IvyWrap.prototype.get' class='toc-method' title='IvyWrap.prototype.get()'>get</a>
+      </li>
+          <li>
+          <a href='#IvyWrap.prototype.set' class='toc-method' title='IvyWrap.prototype.set(value)'>set</a>
+      </li>
+          <li>
+          <a href='#Ivy.fn' class='toc-function' title='Ivy.fn()'>fn</a>
+      </li>
+          <li>
+          <a href='#Ivy.fnWith' class='toc-function' title='Ivy.fnWith(context, fn)'>fnWith</a>
+      </li>
+    </ul>
+    
+    <h3>Documentation</h3>
+<ul>
+  <li>
+    <a href="index.html">Overview</a>
+  </li>
+  <li>
+    <a href="api.html">Object API</a>
+  </li>
+  <li>
+    <a href="bindings.html">Bindings</a>
+  </li>
+</ul>
+<h3>Examples</h3>
+<ul>
+  <li>
+    <a href="examples/simple_bindings.html">Simple Bindings</a>
+  </li>
+  <li>
+    <a href="examples/function_bindings.html">Function Bindings</a>
+  </li>
+  <li>
+    <a href="examples/todo.html">TODO List</a>
+  </li>
+  <li>
+    <a href="examples/view_models.html">View Models</a>
+  </li>
+</ul>
+  </div>
 </div>
 </body>
 </html>

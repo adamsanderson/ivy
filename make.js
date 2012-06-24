@@ -18,69 +18,82 @@ marked.setOptions({
   sanitize: false
 });
 
-// Generate index.html:
-fs.readFile("readme.markdown", function (err, readme) {
-  if (err) throw err;
-  
-  var data = {
-    content: marked(readme.toString())
-  };
-  
-  renderTemplate("templates/content.html", 'index.html', data);
+fs.readFile("templates/_navigation.html", function (err, html) {
+  var partials = {navigation: html.toString()};
+  renderSiteHtml(partials);
 });
 
-// Generate bindings.html:
-fs.readFile("bindings.markdown", function (err, readme) {
-  if (err) throw err;
-  
-  var data = {
-    content: marked(readme.toString())
-  };
-  
-  renderTemplate("templates/content.html", 'bindings.html', data);
-});
-
-// Generate api.html:
-fs.readFile("ivy.js", function (err, jsSrc) {
-  if (err) throw err;
-  
-  var functions = ducks.parseComments(jsSrc.toString());
-  for (var i=0; i < functions.length; i++){
-    functions[i].commentHtml = marked(functions[i].comment);
-  }
-  
-  renderTemplate("templates/api.html", 'api.html', {functions: functions});
-});
-
-// Generate CSS:
-fs.readFile("css/site.less", function (err, lessSrc) {
-  if (err) throw err;
-  
-  var parser = new less.Parser({
-    filename: 'site.less',
-    paths: ['css']
-  });
-
-  parser.parse(lessSrc.toString(), function (err, tree) {
-      if (err) throw err;
-      
-      fs.writeFile('css/site.css', tree.toCSS({compress: true}), function(err){
-        if (err) throw err;
-      });
-  });
-});
+renderSiteCss();
 
 /**
- *  Renders markdown templates to the outputPath path with the given data, and
- *  optional partials.
+  Render the documentation pages
  */
-function renderTemplate(templatePath, outputPath, data, partials){
-  fs.readFile(templatePath, function(err, template){
+function renderSiteHtml(partials){
+  // Generate index.html:
+  fs.readFile("readme.markdown", function (err, readme) {
     if (err) throw err;
-    
-    var html = Mustache.to_html(template.toString(), data, partials);
-    fs.writeFile(outputPath, html, function(err){
+
+    var data = {
+      content: marked(readme.toString())
+    };
+
+    renderTemplate("templates/content.html", 'index.html', data);
+  });
+
+  // Generate bindings.html:
+  fs.readFile("bindings.markdown", function (err, readme) {
+    if (err) throw err;
+
+    var data = {
+      content: marked(readme.toString())
+    };
+
+    renderTemplate("templates/content.html", 'bindings.html', data);
+  });
+
+  // Generate api.html:
+  fs.readFile("ivy.js", function (err, jsSrc) {
+    if (err) throw err;
+
+    var functions = ducks.parseComments(jsSrc.toString());
+    for (var i=0; i < functions.length; i++){
+      functions[i].commentHtml = marked(functions[i].comment);
+    }
+
+    renderTemplate("templates/api.html", 'api.html', {functions: functions});
+  });
+  
+  /**
+   *  Renders markdown templates to the outputPath path with the given data, and
+   *  optional partials.
+   */
+  function renderTemplate(templatePath, outputPath, data){
+    fs.readFile(templatePath, function(err, template){
       if (err) throw err;
+
+      var html = Mustache.to_html(template.toString(), data, partials);
+      fs.writeFile(outputPath, html, function(err){
+        if (err) throw err;
+      });
+    });
+  }
+}
+
+function renderSiteCss(){
+  fs.readFile("css/site.less", function (err, lessSrc) {
+    if (err) throw err;
+
+    var parser = new less.Parser({
+      filename: 'site.less',
+      paths: ['css']
+    });
+
+    parser.parse(lessSrc.toString(), function (err, tree) {
+        if (err) throw err;
+
+        fs.writeFile('css/site.css', tree.toCSS({compress: true}), function(err){
+          if (err) throw err;
+        });
     });
   });
 }

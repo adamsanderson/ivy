@@ -32,8 +32,7 @@
     }
     .fn-signature a:target {
       background: #FFC;
-    }
-    
+    }  
   </style>
 	<link rel="stylesheet" href="lib/highlight/github.css">
   <script src="lib/highlight/highlight.pack.js"></script>
@@ -42,18 +41,6 @@
 <body>
 
 <div class='grid row'>
-  <div class='col col-3'>
-    <h4>
-      Attribute API
-    </h4>
-    <ul class='toc'>
-    {{#functions}}
-      <li>
-          <a href='#{{name}}' class='toc-{{type}}' title='{{signature}}'>{{shortName}}</a>
-      </li>
-    {{/functions}}
-    </ul>
-  </div>
   <div class='col col-9'>
     <h1>
       Ivy
@@ -68,7 +55,20 @@
       {{{commentHtml}}}
     </div>
     {{/functions}}
+  </div>
+  <div class='col col-3'>
+    <h3>
+      Object API
+    </h3>
+    <ul class='toc'>
+    {{#functions}}
+      <li>
+          <a href='#{{name}}' class='toc-{{type}}' title='{{signature}}'>{{shortName}}</a>
+      </li>
+    {{/functions}}
+    </ul>
     
+    {{> navigation}}
   </div>
 </div>
 
