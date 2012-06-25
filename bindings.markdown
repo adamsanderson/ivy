@@ -127,7 +127,8 @@ In the example above, three `li` elements will appear on the page, and they will
 have the context of the array items Felix, Nyan, and Horace. Notice that the `text`
 binding references the current item with a period.  If the array instead contained 
 nested data such as `{name: "Felix", age: 5}`, then the `text` binding would be: 
-`<li data-bind='text: name'>`.
+`<li data-bind='text: name'>`.  If you need to access an attribute from a parent 
+context, you can use a relative path such as `../name`.
   
 with: attrName;
 ---------------
