@@ -131,7 +131,8 @@ they will be added or removed from the page.
 have the context of the array items Felix, Nyan, and Horace. Notice that the <code>text</code>
 binding references the current item with a period.  If the array instead contained 
 nested data such as <code>{name: &quot;Felix&quot;, age: 5}</code>, then the <code>text</code> binding would be: 
-<code>&lt;li data-bind=&#39;text: name&#39;&gt;</code>.
+<code>&lt;li data-bind=&#39;text: name&#39;&gt;</code>.  If you need to access an attribute from a parent 
+context, you can use a relative path such as <code>../name</code>.
 
 </p>
 <h2>with: attrName;</h2>

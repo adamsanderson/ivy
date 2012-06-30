@@ -31,8 +31,7 @@
     }
     .fn-signature a:target {
       background: #FFC;
-    }
-    
+    }  
   </style>
 	<link rel="stylesheet" href="lib/highlight/github.css">
   <script src="lib/highlight/highlight.pack.js"></script>
@@ -57,18 +56,17 @@ through the <code>on</code> listener.  Ivy attributes implement both <code>value
 <pre><code>var a = Ivy.attr(4),
     b = Ivy.attr(5);
 console.log(a+b); //=&gt; 9</code></pre>
-<p>@param {Object} value
-@param {Function} parseFn An optional function for parsing a value when set.</p>
+<p>An optional <code>parseFn</code> may be passed in to help parse values:
+</p>
+<pre><code> var c = Ivy.attr(&quot;7&quot;, Number)
+ c.valueOf(); //=&gt; 7</code></pre>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyAttr.prototype.set' href='#IvyAttr.prototype.set'>IvyAttr.prototype.set(value)</a>
       </h4>
       
-      <p>Sets the internal value of the attribute.
-</p>
-<p>@param {Object} value
-@emits &quot;change&quot; with value</p>
+      <p>Sets the internal value of the attribute.</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
@@ -82,34 +80,28 @@ console.log(a+b); //=&gt; 9</code></pre>
         <a name='IvyAttr.prototype.on' href='#IvyAttr.prototype.on'>IvyAttr.prototype.on(event, fn)</a>
       </h4>
       
-      <p>Adds a listener to the attribute.
+      <p>Adds a listener <code>fn</code> to the attribute that will trigger on <code>event</code>.
+The most common event is <code>change</code>.
 </p>
 <pre><code>var a = Ivy.attr(4);
 a.on(&#39;change&#39;, function(value){ console.log(&#39;New value is&#39;, value); });
 a.set(5); //=&gt; &#39;New value is 5&#39;</code></pre>
-<p>@param {String} event to listen for.
-@param {Function(newValue)} fn</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyAttr.prototype.off' href='#IvyAttr.prototype.off'>IvyAttr.prototype.off(event, fn)</a>
       </h4>
       
-      <p>When given only an event type, stops all listeners for that event.
-If a callback is given, that callback will be removed.
-</p>
-<p>@param {String} event to remove listeners from
-@param {Function} fn to remove</p>
+      <p>When given only an <code>event</code> type, stops all listeners for that event.
+If <code>fn</code> is given, only that callback will be removed.</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyAttr.prototype.emit' href='#IvyAttr.prototype.emit'>IvyAttr.prototype.emit(event)</a>
       </h4>
       
-      <p>Emits a named event.
-</p>
-<p>@param {String} event
-@param {Object...} Additional objects to be passed to listeners.</p>
+      <p>Emits a named <code>event</code>. Any additional arguements will be passed
+to the listeners.</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
@@ -148,143 +140,124 @@ special methods for adding and removing array elements.
 <pre><code>var array = Ivy.array([2,3,4]);
 array.get(1); //=&gt; 3
 array.get(); //=&gt; [2,3,4]</code></pre>
-<p>@param {[Object]} array to be used for the attribute.</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyArray.prototype.set' href='#IvyArray.prototype.set'>IvyArray.prototype.set(index, item)</a>
       </h4>
       
-      <p>Set either the entire array to a new value, or a specific
-array element;
+      <p>Sets either the entire array to a new value, or a specific
+array element:
 </p>
 <pre><code>var array = Ivy.array();
 array.set([2,3,4]);
 array.set(1, &quot;Hello&quot;);
 array.get(); //=&gt; [2,&quot;Hello&quot;,4]</code></pre>
-<p>@param {Number | Array} index to set, or new array
-@param {Object} item to set at <code>index</code>
-@emits &quot;change&quot; with new array</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyArray.prototype.get' href='#IvyArray.prototype.get'>IvyArray.prototype.get(index)</a>
       </h4>
       
-      <p>Gets either the array or an item at the given index.
-@param {Number} index of item to get</p>
+      <p>Gets either the array or an item at the given <code>index</code>.</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyArray.prototype.push' href='#IvyArray.prototype.push'>IvyArray.prototype.push(item)</a>
       </h4>
       
-      <p>Pushes an item onto the end of the array.
+      <p>Pushes an <code>item</code> onto the end of the array.
 </p>
 <pre><code>var array = Ivy.array([1,2,3]);
 array.push(4);
 array.get(); //=&gt; [1,2,3,4]</code></pre>
-<p>@param {Object} item
-@emits &quot;change&quot; with new array</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyArray.prototype.unshift' href='#IvyArray.prototype.unshift'>IvyArray.prototype.unshift(item)</a>
       </h4>
       
-      <p>Pushes an item onto the front of the array.
+      <p>Pushes an <code>item</code> onto the front of the array.
 </p>
 <pre><code>var array = Ivy.array([1,2,3]);
 array.unshift(4);
 array.get(); //=&gt; [4,1,2,3]</code></pre>
-<p>@param {Object} item
-@emits &quot;change&quot; with new array</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyArray.prototype.pop' href='#IvyArray.prototype.pop'>IvyArray.prototype.pop()</a>
       </h4>
       
-      <p>Pops an item off the end of the array.
+      <p>Pops an item off the end of the array, and returns it.
 </p>
 <pre><code>var array = Ivy.array([1,2,3]);
 array.pop(); //=&gt; 3
 array.get(); //=&gt; [1,2]</code></pre>
-<p>@param {Object} item
-@emits &quot;change&quot; with new array</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyArray.prototype.shift' href='#IvyArray.prototype.shift'>IvyArray.prototype.shift()</a>
       </h4>
       
-      <p>Shifts an item off the front of the array.
+      <p>Shifts an item off the front of the array, and returns it.
 </p>
 <pre><code>var array = Ivy.array([1,2,3]);
 array.shift(); //=&gt; 1
 array.get(); //=&gt; [2,3]</code></pre>
-<p>@param {Object} item
-@emits &quot;change&quot; with new array</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
-        <a name='IvyArray.prototype.replace' href='#IvyArray.prototype.replace'>IvyArray.prototype.replace(items)</a>
+        <a name='IvyArray.prototype.replace' href='#IvyArray.prototype.replace'>IvyArray.prototype.replace(array)</a>
       </h4>
       
-      <p>Replaces the array contents with a new array.
+      <p>Replaces the array contents with a new <code>array</code>.
 </p>
 <pre><code>var array = Ivy.array([1,2,3]);
 array.replace([4,5,6]);
 array.get(); //=&gt; [4,5,6]</code></pre>
-<p>@param {Array} items
-@emits &quot;change&quot; with new array</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyArray.prototype.remove' href='#IvyArray.prototype.remove'>IvyArray.prototype.remove(item)</a>
       </h4>
       
-      <p>Removes an item from the array.
+      <p>Removes an <code>item</code> from the array, and returns it.
 </p>
 <pre><code>var array = Ivy.array([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]);
 array.remove(&quot;b&quot;);
 array.get(); //=&gt; [&quot;a&quot;, &quot;c&quot;]</code></pre>
-<p>@param {Object} item
-@emits &quot;change&quot; with new array</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyArray.prototype.removeEach' href='#IvyArray.prototype.removeEach'>IvyArray.prototype.removeEach(fn)</a>
       </h4>
       
-      <p>Removes any item from the array that matches the function.
+      <p>Removes any item from the array that matches the function <code>fn</code>.
 </p>
 <pre><code>var array = Ivy.array([1,2,3,4,5]);
 array.removeEach(function(i){ return i % 2; });
 array.get(); //=&gt; [1,3,5]</code></pre>
-<p>@param {Function(Object)} predicate function
-@emits &quot;change&quot; with new array</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyArray.prototype.removeIndex' href='#IvyArray.prototype.removeIndex'>IvyArray.prototype.removeIndex(index)</a>
       </h4>
       
-      <p>Removes an item at a given index.
+      <p>Removes an item at a given <code>index</code>, and returns it.
 </p>
 <pre><code>var array = Ivy.array([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]);
 array.removeIndex(1);
 array.get(); //=&gt; [&quot;a&quot;, &quot;c&quot;]</code></pre>
-<p>@param {Object} index
-@emits &quot;change&quot; with new array</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyArray.prototype.onEach' href='#IvyArray.prototype.onEach'>IvyArray.prototype.onEach(event, callback, getter)</a>
       </h4>
       
-      <p>Registers a listener on each array item as items are added,
+      <p>Registers a <code>callback</code> for <code>event</code> on each array item as it is added,
 and unregisters listeners when items are removed from the array.
+</p>
+<p>A <code>getter</code> function can be used to bind to events on an object&#39;s properties.
 </p>
 <pre><code>function Todo(name){
   this.name = Ivy.attr(name);
@@ -296,11 +269,6 @@ todos.onEach(&#39;change&#39;, function(isDone){
 }, function(todo){ return todo.isDone });
 todos.push(new Todo(&#39;Do something great!&#39;));
 todos.get(0).isDone.set(true); //=&gt; &#39;Done state changed&#39;</code></pre>
-<p>@param {String} event to listen to
-@param {Function(Object)} callback for events
-@param {Function} optional getter for retrieving the attribute
-</p>
-<p>@emits &quot;change&quot; with new array</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
@@ -314,8 +282,10 @@ todos.get(0).isDone.set(true); //=&gt; &#39;Done state changed&#39;</code></pre>
         <a name='IvyWrap' href='#IvyWrap'>IvyWrap(attr, wrapper)</a>
       </h4>
       
-      <p>Wrap an existing attribute with custom getters and setters.
-The original attribute can still be accessed as normal.
+      <p>Wrap an existing Ivy attribue, <code>attr</code>, with a <code>wrapper</code> 
+providing custom getters and setters.
+</p>
+<p>The original attribute can still be accessed as normal.
 </p>
 <pre><code>var percent = Ivy.attr(0.1);
 var wrapped = Ivy.wrap(percent, {
@@ -325,26 +295,22 @@ var wrapped = Ivy.wrap(percent, {
 wrapped.get(); //=&gt; &quot;10%&quot;
 wrapped.set(&quot;17%&quot;);
 percent.get(); //=&gt; 0.17</code></pre>
-<p>@param {IvyAttr} attribute to be wrapped
-@param {Object} wrapper to be applied to the attribute
-@param {Function} wrapper.get custom getter for formatting the attribute
-@param {Function} wrapper.set custom setter for parsing the attribute</p>
+<p>Use this to decorate attributes for display.</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyWrap.prototype.get' href='#IvyWrap.prototype.get'>IvyWrap.prototype.get()</a>
       </h4>
       
-      <p>Gets the internal attribute&#39;s value, then passes it through the getter
-defined with <code>IvyWrap</code></p>
+      <p>Gets the internal attribute&#39;s value, then passes it through the custom
+getter.</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
         <a name='IvyWrap.prototype.set' href='#IvyWrap.prototype.set'>IvyWrap.prototype.set(value)</a>
       </h4>
       
-      <p>Passes the value through the setter, then sets the internal attribute&#39;s value.
-@param {Object} value</p>
+      <p>Passes the <code>value</code> through the custom setter, then sets the internal attribute&#39;s value.</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
@@ -362,9 +328,8 @@ changes, the function will be recomputed.
 withTax.get(); //=&gt; 16.5
 tax.set(0.05);
 withTax.get(); //=&gt; 15.75</code></pre>
-<p>@param {Object...} arguments for the function
-@param {Function} fn to be computed
-@returns an attribute that will update with the function&#39;s result.</p>
+<p>The first arguments are the arguments the function depends on, the last is
+the function to be called.  A bound Ivy attribute will be returned.</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
@@ -386,16 +351,14 @@ purchase.withTax.get(); //=&gt; 16.5
 purchase.tax.set(0.5);
 purchase.withTax.get(); //=&gt; 15.75</code></pre>
 <p>When working with complex objects, this is often simpler than using
-<code>Ivy.fn</code>.
+<code>Ivy.fn</code>.  
 </p>
-<p>@param {Object} context to bind arguments against.
-@param {Function} fn to be computed.
-@returns an attribute that will update with the function&#39;s result.</p>
+<p>This function does some <em>clever</em> stuff, so be careful if you use it with a minifier.</p>
     </div>
     </div>
   <div class='col col-3'>
     <h3>
-      Attribute API
+      Object API
     </h3>
     <ul class='toc'>
           <li>
@@ -444,7 +407,7 @@ purchase.withTax.get(); //=&gt; 15.75</code></pre>
           <a href='#IvyArray.prototype.shift' class='toc-method' title='IvyArray.prototype.shift()'>shift</a>
       </li>
           <li>
-          <a href='#IvyArray.prototype.replace' class='toc-method' title='IvyArray.prototype.replace(items)'>replace</a>
+          <a href='#IvyArray.prototype.replace' class='toc-method' title='IvyArray.prototype.replace(array)'>replace</a>
       </li>
           <li>
           <a href='#IvyArray.prototype.remove' class='toc-method' title='IvyArray.prototype.remove(item)'>remove</a>

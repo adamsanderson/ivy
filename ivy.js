@@ -14,8 +14,10 @@ Ivy = {
  *     
  *     console.log(a+b); //=> 9
  * 
- * @param {Object} value
- * @param {Function} parseFn An optional function for parsing a value when set.
+ * An optional `parseFn` may be passed in to help parse values:
+ *  
+ *      var c = Ivy.attr("7", Number)
+ *      c.valueOf(); //=> 7
  */
 function IvyAttr(value, parseFn){
   if (!(this instanceof IvyAttr)) return new IvyAttr(value, parseFn);
@@ -28,9 +30,6 @@ function IvyAttr(value, parseFn){
 
 /**
  * Sets the internal value of the attribute.
- * 
- * @param {Object} value
- * @emits "change" with value
  */
 IvyAttr.prototype.set = function(value){
   value = this.parseFn ? this.parseFn(value) : value;
@@ -51,14 +50,13 @@ IvyAttr.prototype.get = function(){
 };
 
 /**
- * Adds a listener to the attribute.
+ * Adds a listener `fn` to the attribute that will trigger on `event`.
+ * The most common event is `change`.
  * 
  *     var a = Ivy.attr(4);
  *     a.on('change', function(value){ console.log('New value is', value); });
  *     a.set(5); //=> 'New value is 5'
  * 
- * @param {String} event to listen for.
- * @param {Function(newValue)} fn
  */
 IvyAttr.prototype.on = function(event, fn){
   (this.callbacks[event] = this.callbacks[event] || [])
@@ -67,11 +65,8 @@ IvyAttr.prototype.on = function(event, fn){
 };
 
 /**
- * When given only an event type, stops all listeners for that event.
- * If a callback is given, that callback will be removed.
- * 
- * @param {String} event to remove listeners from
- * @param {Function} fn to remove
+ * When given only an `event` type, stops all listeners for that event.
+ * If `fn` is given, only that callback will be removed.
  */
 IvyAttr.prototype.off = function(event, fn){
   var callbacks = this.callbacks[event];
@@ -91,10 +86,8 @@ IvyAttr.prototype.off = function(event, fn){
 };
 
 /**
- * Emits a named event.
- * 
- * @param {String} event
- * @param {Object...} Additional objects to be passed to listeners.
+ * Emits a named `event`. Any additional arguements will be passed
+ * to the listeners.
  */
 IvyAttr.prototype.emit = function(event){
   var args = [].slice.call(arguments, 1);
@@ -153,8 +146,6 @@ IvyAttr.prototype.toJSON = function(){
  *     var array = Ivy.array([2,3,4]);
  *     array.get(1); //=> 3
  *     array.get(); //=> [2,3,4]
- *
- * @param {[Object]} array to be used for the attribute.
  */
 function IvyArray(array){
   if (!(this instanceof Ivy.array)) return new Ivy.array(array);
@@ -166,17 +157,13 @@ function IvyArray(array){
 IvyArray.prototype = new IvyAttr;
 
 /**
- * Set either the entire array to a new value, or a specific
- * array element;
+ * Sets either the entire array to a new value, or a specific
+ * array element:
  *
  *     var array = Ivy.array();
  *     array.set([2,3,4]);
  *     array.set(1, "Hello");
  *     array.get(); //=> [2,"Hello",4]
- *
- * @param {Number | Array} index to set, or new array
- * @param {Object} item to set at `index`
- * @emits "change" with new array
  */
 IvyArray.prototype.set = function(index, item){
   if (arguments.length === 1) return this.replace(items);
@@ -193,22 +180,18 @@ IvyArray.prototype.set = function(index, item){
 };
 
 /**
- * Gets either the array or an item at the given index.
- * @param {Number} index of item to get
+ * Gets either the array or an item at the given `index`.
  */
 IvyArray.prototype.get = function(index){
   return (arguments.length === 0) ? this.value : this.value[index];
 };
 
 /**
- * Pushes an item onto the end of the array.
+ * Pushes an `item` onto the end of the array.
  *
  *     var array = Ivy.array([1,2,3]);
  *     array.push(4);
  *     array.get(); //=> [1,2,3,4]
- *
- * @param {Object} item
- * @emits "change" with new array
  */
 IvyArray.prototype.push = function(item){
   var index = this.length;
@@ -217,14 +200,12 @@ IvyArray.prototype.push = function(item){
 };
 
 /**
- * Pushes an item onto the front of the array.
+ * Pushes an `item` onto the front of the array.
  *
  *     var array = Ivy.array([1,2,3]);
  *     array.unshift(4);
  *     array.get(); //=> [4,1,2,3]
  *
- * @param {Object} item
- * @emits "change" with new array
  */
 IvyArray.prototype.unshift = function(item){
   this.value.unshift(item);
@@ -232,14 +213,12 @@ IvyArray.prototype.unshift = function(item){
 };
 
 /**
- * Pops an item off the end of the array.
+ * Pops an item off the end of the array, and returns it.
  *
  *     var array = Ivy.array([1,2,3]);
  *     array.pop(); //=> 3
  *     array.get(); //=> [1,2]
  *
- * @param {Object} item
- * @emits "change" with new array
  */
 IvyArray.prototype.pop = function(){
   var index = this.length;
@@ -249,14 +228,12 @@ IvyArray.prototype.pop = function(){
 };
 
 /**
- * Shifts an item off the front of the array.
+ * Shifts an item off the front of the array, and returns it.
  *
  *     var array = Ivy.array([1,2,3]);
  *     array.shift(); //=> 1
  *     array.get(); //=> [2,3]
  *
- * @param {Object} item
- * @emits "change" with new array
  */
 IvyArray.prototype.shift = function(){
   var item = this.value.shift();
@@ -265,37 +242,33 @@ IvyArray.prototype.shift = function(){
 };
 
 /**
- * Replaces the array contents with a new array.
+ * Replaces the array contents with a new `array`.
  *
  *     var array = Ivy.array([1,2,3]);
  *     array.replace([4,5,6]);
  *     array.get(); //=> [4,5,6]
  *
- * @param {Array} items
- * @emits "change" with new array
  */
-IvyArray.prototype.replace = function(items){
+IvyArray.prototype.replace = function(array){
   var oldValues = this.value;
-  this.value = items;
+  this.value = array;
   
   this.emit('change', this.get(), 
     new Ivy.ChangeSet()
       .remove(0, oldValues)
-      .add(0, items)
+      .add(0, array)
   );
   
   return items;
 };
 
 /**
- * Removes an item from the array.
+ * Removes an `item` from the array, and returns it.
  *
  *     var array = Ivy.array(["a", "b", "c"]);
  *     array.remove("b");
  *     array.get(); //=> ["a", "c"]
  *
- * @param {Object} item
- * @emits "change" with new array
  */
 IvyArray.prototype.remove = function(item){
   var index = this.value.indexOf(item);
@@ -303,14 +276,11 @@ IvyArray.prototype.remove = function(item){
 };
 
 /**
- * Removes any item from the array that matches the function.
+ * Removes any item from the array that matches the function `fn`.
  *
  *     var array = Ivy.array([1,2,3,4,5]);
  *     array.removeEach(function(i){ return i % 2; });
  *     array.get(); //=> [1,3,5]
- *
- * @param {Function(Object)} predicate function
- * @emits "change" with new array
  */
 IvyArray.prototype.removeEach = function(fn){
   var i = this.value.length;
@@ -323,14 +293,12 @@ IvyArray.prototype.removeEach = function(fn){
 };
 
 /**
- * Removes an item at a given index.
+ * Removes an item at a given `index`, and returns it.
  *
  *     var array = Ivy.array(["a", "b", "c"]);
  *     array.removeIndex(1);
  *     array.get(); //=> ["a", "c"]
  *
- * @param {Object} index
- * @emits "change" with new array
  */
 IvyArray.prototype.removeIndex = function(index){
   if (index === -1) return;
@@ -343,8 +311,10 @@ IvyArray.prototype.removeIndex = function(index){
 };
 
 /**
- * Registers a listener on each array item as items are added,
+ * Registers a `callback` for `event` on each array item as it is added,
  * and unregisters listeners when items are removed from the array.
+ * 
+ * A `getter` function can be used to bind to events on an object's properties.
  *
  *     function Todo(name){
  *       this.name = Ivy.attr(name);
@@ -358,12 +328,6 @@ IvyArray.prototype.removeIndex = function(index){
  *     
  *     todos.push(new Todo('Do something great!'));
  *     todos.get(0).isDone.set(true); //=> 'Done state changed'
- *
- * @param {String} event to listen to
- * @param {Function(Object)} callback for events
- * @param {Function} optional getter for retrieving the attribute
- * 
- * @emits "change" with new array
  */
 IvyArray.prototype.onEach = function(event, callback, getter){
   var changeSet;
@@ -406,7 +370,9 @@ Ivy.ChangeSet.prototype.remove = function(index, items){
 };
 
 /**
- * Wrap an existing attribute with custom getters and setters.
+ * Wrap an existing Ivy attribue, `attr`, with a `wrapper` 
+ * providing custom getters and setters.
+ *
  * The original attribute can still be accessed as normal.
  *
  *     var percent = Ivy.attr(0.1);
@@ -419,10 +385,7 @@ Ivy.ChangeSet.prototype.remove = function(index, items){
  *     wrapped.set("17%");
  *     percent.get(); //=> 0.17
  *
- * @param {IvyAttr} attribute to be wrapped
- * @param {Object} wrapper to be applied to the attribute
- * @param {Function} wrapper.get custom getter for formatting the attribute
- * @param {Function} wrapper.set custom setter for parsing the attribute
+ * Use this to decorate attributes for display.
  */
 function IvyWrap(attr, wrapper){
   if (!(this instanceof IvyWrap)) return new IvyWrap(attr, wrapper);
@@ -448,8 +411,8 @@ function IvyWrap(attr, wrapper){
 IvyWrap.prototype = new IvyAttr;
 
 /**
- * Gets the internal attribute's value, then passes it through the getter
- * defined with `IvyWrap`
+ * Gets the internal attribute's value, then passes it through the custom
+ * getter.
  */
 IvyWrap.prototype.get = function(){
   var value = this.attr.get();
@@ -457,8 +420,7 @@ IvyWrap.prototype.get = function(){
 };
 
 /**
- * Passes the value through the setter, then sets the internal attribute's value.
- * @param {Object} value
+ * Passes the `value` through the custom setter, then sets the internal attribute's value.
  */
 IvyWrap.prototype.set = function(value){
   value = this.wrapper.set(value);
@@ -480,9 +442,8 @@ IvyWrap.prototype.set = function(value){
  *     tax.set(0.05);
  *     withTax.get(); //=> 15.75
  *
- * @param {Object...} arguments for the function
- * @param {Function} fn to be computed
- * @returns an attribute that will update with the function's result.
+ * The first arguments are the arguments the function depends on, the last is
+ * the function to be called.  A bound Ivy attribute will be returned.
  */
 Ivy.fn = function(){
   var args = Array.prototype.slice.call(arguments),
@@ -519,11 +480,9 @@ Ivy.fn = function(){
  *     purchase.withTax.get(); //=> 15.75
  *
  * When working with complex objects, this is often simpler than using
- * `Ivy.fn`.
- *
- * @param {Object} context to bind arguments against.
- * @param {Function} fn to be computed.
- * @returns an attribute that will update with the function's result.
+ * `Ivy.fn`.  
+ * 
+ * This function does some _clever_ stuff, so be careful if you use it with a minifier.
  */
 Ivy.fnWith = function(context, fn){
   var names = Ivy.util.argumentNames(fn),
