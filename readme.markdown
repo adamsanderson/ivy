@@ -1,7 +1,7 @@
 Ivy.js
 ======
 Ivy ties JavaScript objects to the DOM, allowing you to focus on the 
-relationships of your data.  
+relationships of your data.
 
 Using Ivy
 ---------
