@@ -104,11 +104,47 @@ describe('IvyAttr', function(){
         JSON.stringify(objectWithAttr)
       );
     });
+  });  
+});
+
+describe('IvyArray', function(){
+  describe('constructor', function(){
+    it('should initalize with an empty array', function(){
+      var attr = Ivy.array();
+      assert.deepEqual(attr.get(), []);
+    });
     
-    it('should allow coercion', function(){
-      var value = Ivy.attr(5) + 1;
-      assert.equal(value, 6);
+    it('should accept an array', function(){
+      var array = [1,2,3];
+      var attr = Ivy.array(array);
+      assert.deepEqual(attr.get(), array);
+    });
+    
+    it('should be an IvyAttr', function(){
+      assert.instanceOf(Ivy.array(), IvyAttr);
     });
   });
   
+  describe('#set', function(){
+    it('should replace the array if no index is given', function(){
+      var attr = Ivy.array([1,2,3]);
+      var newArray = [4,5,6];
+      attr.set(newArray);
+      assert.deepEqual(attr.get(), newArray);
+    });
+    
+    it('should set a given index', function(){
+      var attr = Ivy.array([1,2,3]);
+      attr.set(1, "x");
+      assert.deepEqual(attr.get(), [1,"x",3]);
+    });
+    
+    it('should emit the new array', function(done){
+      var attr = Ivy.array([1,2,3]).on('change', function(value){
+        assert.deepEqual(value, [1,"x",3]);
+        done();
+      });
+      attr.set(1, "x");
+    });
+  });
 });

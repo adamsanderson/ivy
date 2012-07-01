@@ -166,14 +166,14 @@ IvyArray.prototype = new IvyAttr;
  *     array.get(); //=> [2,"Hello",4]
  */
 IvyArray.prototype.set = function(index, item){
-  if (arguments.length === 1) return this.replace(items);
+  if (arguments.length === 1) return this.replace(index);
   
   var oldValue = this.value[index];
   this.value[index] = item;
   this.emit('change', this.get(), 
     new Ivy.ChangeSet()
       .remove(index, [oldValue])
-      .add(index, [value])
+      .add(index, [item])
   );
   
   return this;
@@ -259,7 +259,7 @@ IvyArray.prototype.replace = function(array){
       .add(0, array)
   );
   
-  return items;
+  return array;
 };
 
 /**
