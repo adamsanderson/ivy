@@ -390,8 +390,8 @@ Ivy.ChangeSet.prototype.remove = function(index, items){
  *
  *     var percent = Ivy.attr(0.1);
  *     var wrapped = Ivy.wrap(percent, {
- *       get: function(num){ return (num * 10) + '%'; },
- *       set: function(val){ return parseFloat(val) / 10; }
+ *       get: function(num){ return (num * 100) + '%'; },
+ *       set: function(val){ return parseFloat(val) / 100; }
  *     });
  *     
  *     wrapped.get(); //=> "10%"

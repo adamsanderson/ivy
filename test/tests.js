@@ -318,3 +318,68 @@ describe('IvyArray', function(){
     });
   });
 });
+
+describe('IvyWrap', function(){
+  function toPercent(num){ return (num * 100) + '%'; }
+  function fromPercent(val){ return parseFloat(val) / 100; }
+  
+  describe('constructor', function(){
+    it('create a new IvyAttr', function(){
+      var inner = Ivy.attr(),
+          wrap = Ivy.wrap(inner, {});
+      
+      assert.notStrictEqual(inner, wrap);
+      assert.instanceOf(wrap, IvyAttr);
+    });
+  });
+  
+  describe('#get', function(){
+    it('returns the wrapped value when a getter is not present', function(){
+      var inner = Ivy.attr(3),
+          wrap = Ivy.wrap(inner, {});
+      
+      assert.equal(wrap.get(), 3);
+    });
+    
+    it('returns a decorated value when a getter is present', function(){
+      var inner = Ivy.attr(0.3),
+          wrap = Ivy.wrap(inner, {get: toPercent});
+      
+      assert.equal(wrap.get(), '30%');
+    });
+    
+    it('does not modify the wrapped value', function(){
+      var inner = Ivy.attr(0.3),
+          wrap = Ivy.wrap(inner, {get: toPercent});
+      
+      assert.equal(inner.get(), 0.3);
+    });
+  });
+  
+  describe('#set', function(){
+    it('sets the internal value when a setter is not present', function(){
+      var inner = Ivy.attr(3),
+          wrap = Ivy.wrap(inner, {})
+                    .set(4);
+
+      assert.equal(wrap.get(), 4);
+    });
+    
+    it('converts the value when a setter is present', function(){
+      var inner = Ivy.attr(),
+          wrap = Ivy.wrap(inner, {set: fromPercent})
+                    .set('30%');
+      
+      assert.equal(inner.get(), 0.3);
+    });
+    
+    it('can roundtrip a value when a getter is present', function(){
+      var inner = Ivy.attr(),
+          wrap = Ivy.wrap(inner, {get: toPercent, set: fromPercent})
+                    .set('30%');
+      
+      assert.equal(inner.get(), 0.3);
+      assert.equal(wrap.get(), '30%');
+    });
+  });
+});
