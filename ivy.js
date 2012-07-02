@@ -197,6 +197,7 @@ IvyArray.prototype.push = function(item){
   var index = this.length;
   this.value.push(item);
   this.emit('change', this.get(), new Ivy.ChangeSet().add(index, [item]) );
+  return this;
 };
 
 /**
@@ -210,6 +211,7 @@ IvyArray.prototype.push = function(item){
 IvyArray.prototype.unshift = function(item){
   this.value.unshift(item);
   this.emit('change', this.get(), new Ivy.ChangeSet().add(0, [item]) );
+  return this;
 };
 
 /**
@@ -259,7 +261,7 @@ IvyArray.prototype.replace = function(array){
       .add(0, array)
   );
   
-  return array;
+  return this;
 };
 
 /**
@@ -281,15 +283,23 @@ IvyArray.prototype.remove = function(item){
  *     var array = Ivy.array([1,2,3,4,5]);
  *     array.removeEach(function(i){ return i % 2; });
  *     array.get(); //=> [1,3,5]
+ *
+ * Returns an array of the items removed. The order of the items
+ * is should not be relied upon.
  */
 IvyArray.prototype.removeEach = function(fn){
-  var i = this.value.length;
+  var i = this.value.length,
+      items = [],
+      item;
   
   while (i--){
-    if (fn(this.value[i])){
-      this.removeIndex(i);
+    item = this.value[i];
+    if (fn(item)){
+      items.push(this.removeIndex(i));
     }
   }
+  
+  return items;
 };
 
 /**
@@ -298,7 +308,8 @@ IvyArray.prototype.removeEach = function(fn){
  *     var array = Ivy.array(["a", "b", "c"]);
  *     array.removeIndex(1);
  *     array.get(); //=> ["a", "c"]
- *
+ * 
+ * Returns the removed item if any.
  */
 IvyArray.prototype.removeIndex = function(index){
   if (index === -1) return;
@@ -349,6 +360,8 @@ IvyArray.prototype.onEach = function(event, callback, getter){
       attr[op === 'add' ? 'on' : 'off'](event, callback);
     }
   }
+  
+  return this;
 };
 
 /**
