@@ -383,3 +383,80 @@ describe('IvyWrap', function(){
     });
   });
 });
+
+describe('Ivy.fn', function(){
+  function callback(){};
+  
+  describe('constructor', function(){
+    it('returns an IvyAttr', function(){
+      var attr = Ivy.fn(callback);
+      
+      assert.instanceOf(attr, IvyAttr);
+    });
+    
+    it('listens to changes on arguments', function(){
+      var a = Ivy.attr(),
+          b = Ivy.attr(),
+          attr = Ivy.fn(a,b,callback);
+      
+      assert.equal(a.callbacks['change'].length, 1);
+      assert.equal(b.callbacks['change'].length, 1);
+    });
+    
+    it('calls the function once immediately', function(){
+      var calls = 0,
+          attr = Ivy.fn(function(){ return calls++; });
+      
+      assert.equal(calls, 1);
+    });
+  });
+  
+  describe('observing', function(){
+    it('updates when its parameters update', function(){
+      var a = Ivy.attr(3),
+          b = Ivy.attr(4),
+          attr = Ivy.fn(a,b, function(alpha, beta){
+            return alpha + beta;
+          });
+      
+      b.set(6);
+      assert.equal(attr.get(), 9);
+    });
+    
+    it('calls the function arguments in the order they were listed', function(done){
+      var a = Ivy.attr(3),
+          b = Ivy.attr(4);
+          
+      Ivy.fn(a,b, function(alpha, beta){
+        assert.equal(alpha, a);
+        assert.equal(beta, b);
+        done();
+      });
+    });
+    
+    it('emits an event when its value changes', function(done){
+      var a = Ivy.attr(3),
+          attr = Ivy.fn(a, function(alpha){
+            return alpha + 1;
+          });
+      
+      attr.on('change',function(value){
+        assert.equal(value, 5);
+        done();
+      });
+      
+      a.set(4);
+    });
+  });
+  
+  describe('#get', function(){
+    it('returns the computed value', function(){
+      var attr = Ivy.fn(function(){ 
+        return 7; 
+      });
+      
+      assert.equal(attr.get(), 7);
+    });
+  });
+  
+});
