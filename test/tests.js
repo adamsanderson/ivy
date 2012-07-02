@@ -458,5 +458,26 @@ describe('Ivy.fn', function(){
       assert.equal(attr.get(), 7);
     });
   });
+});
+
+describe('Ivy.fnWith', function(){
+  function callback(){};
   
+  describe('constructor', function(){
+    it('returns an IvyAttr', function(){
+      var attr = Ivy.fnWith({}, callback);
+      
+      assert.instanceOf(attr, IvyAttr);
+    });
+    
+    it('listens to changes on arguments', function(){
+      var a = Ivy.attr(),
+          b = Ivy.attr(),
+          obj = {alpha: a, beta: b},
+          attr = Ivy.fnWith(obj,function(alpha, beta){});
+      
+      assert.equal(a.callbacks['change'].length, 1);
+      assert.equal(b.callbacks['change'].length, 1);
+    });
+  });
 });
