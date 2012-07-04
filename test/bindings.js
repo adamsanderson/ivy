@@ -333,5 +333,59 @@ describe('Event binding', function(){
     assert.isFalse(called);
   });
   
+});
+
+describe('BindingRule', function(){
+  describe('constructor', function(){
+    it('returns a BindingRule', function(){
+      var rule = new Ivy.BindingRule('a:',{});
+      assert.instanceOf(rule, Ivy.BindingRule);
+    });
+    
+    it('throws an error when malformed', function(){
+      assert['throws'](function(){
+        new Ivy.BindingRule('show x',{});
+      });
+    });
+  });
+  
+  describe('#atPath', function(){
+    it('returns the named variable from the context', function(){
+      var context = {a: 1, b: 2};
+      var rule    = new Ivy.BindingRule('a: x', context);
+      
+      assert.equal(rule.atPath('a'), 1);
+    });
+    
+    it('returns the current context when path is ""', function(){
+      var context = {a: 1, b: 2};
+      var rule    = new Ivy.BindingRule('a:', context);
+      
+      assert.equal(rule.atPath(''), context);
+    });
+    
+    it('returns the current context when path is "."', function(){
+      var context = {a: 1, b: 2};
+      var rule    = new Ivy.BindingRule('a:', context);
+      
+      assert.equal(rule.atPath('.'), context);
+    });
+    
+    it('returns the parent context when path is ".."', function(){
+      var parent = {a: 1, b: 2};
+      var child  = {'..': parent};
+      var rule   = new Ivy.BindingRule('a:', child);
+      
+      assert.equal(rule.atPath('../'), parent);
+    });
+    
+    it('returns values from the parent context', function(){
+      var parent = {a: 1, b: 2};
+      var child  = {'..': parent};
+      var rule   = new Ivy.BindingRule('a:', child);
+      
+      assert.equal(rule.atPath('../a'), 1);
+    });
+  });
   
 });

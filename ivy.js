@@ -775,7 +775,7 @@ Ivy.BindingRule = function(str, context){
   var options = str.trim().split(/\s+/),
       name = options.shift();
   
-  if (!name.charAt(name.length - 1) === ':'){
+  if (name[name.length-1] != ':'){
     throw new Error("Invalid syntax for binding name.\n\t"+str);
   }
   
