@@ -589,7 +589,9 @@ Ivy.bindAttrToClassName = function(el, attrName, trueClass, falseClass){
     for (var i=0, len = oldClasses.length, cls; i< len; i++){
       cls = oldClasses[i];
       seenAdd |= (cls === addClass);
-      if (cls != removeClass) newClasses.push(cls);
+      if (cls != removeClass && cls != ""){ 
+        newClasses.push(cls); 
+      }
     }
     if (!seenAdd) newClasses.push(addClass);
     el.className = newClasses.join(' ');
