@@ -247,3 +247,47 @@ describe('Each binding', function(){
   });
   
 });
+
+describe('With binding', function(){
+  var snippet = '<div data-bind="with: x"><div data-bind="attr: y title"/></div>';
+  it('sets the context for children', function(){
+    var x  = Ivy.attr({y: 'Hello'});
+    var el = bindHTML(snippet, {x: x});
+    
+    assert(el.children[0].title, "Hello");
+  });
+  
+  it('updates the context of children', function(){
+    var x  = Ivy.attr({y: 'Hello'});
+    var el = bindHTML(snippet, {x: x});
+    x.set({y: 'Bye'});
+    
+    assert.equal(el.children[0].title, "Bye");
+  });
+});
+
+describe('Show binding', function(){
+  var snippet = '<div data-bind="show: x"></div>';
+  
+  it('sets the visibility of the element', function(){
+    var el = bindHTML(snippet, {x: false});
+    
+    assert.equal(el.style.display, "none");
+  });
+  
+  it('updates the visibility of the element', function(){
+    var x  = Ivy.attr(false);
+    var el = bindHTML(snippet, {x: x});
+    x.set(true);
+    
+    assert.equal(el.style.display, "");
+  });
+  
+  it('retains the initial style of the element', function(){
+    var x  = Ivy.attr(false);
+    var el = bindHTML('<div style="display: inline" data-bind="show: x"></div>', {x: x});
+    x.set(true);
+    
+    assert.equal(el.style.display, "inline");
+  });
+});
