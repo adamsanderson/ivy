@@ -291,3 +291,47 @@ describe('Show binding', function(){
     assert.equal(el.style.display, "inline");
   });
 });
+
+describe('Event binding', function(){
+  var snippet = '<a data-bind="on: click x"></a>';
+  
+  it('calls the listener when the bound event fires', function(done){
+    var el = bindHTML(snippet, {x: callback});
+    simulate(el, 'click');
+    
+    function callback(){ done(); }
+  });
+  
+  it('calls the listener with the current context as this', function(done){
+    var obj   = {x: {}, y: callback};
+    var el = bindHTML('<div data-bind="with: x"><a data-bind="on: click ../y"></a></div>', obj);
+    simulate(el.children[0], 'click');
+    
+    function callback(){
+      assert.equal(this, obj);
+      done();
+    }
+  });
+  
+  it('calls the listener with the context of the bound function as the argument', function(done){
+    var obj   = {x: {}, y: callback};
+    var el = bindHTML('<div data-bind="with: x"><a data-bind="on: click ../y"></a></div>', obj);
+    simulate(el.children[0], 'click');
+    
+    function callback(arg){
+      assert.equal(arg, obj.x);
+      done();
+    }
+  });
+  
+  it('does nothing when an unbound event fires', function(){
+    var called = false;
+    function callback(){ called = true; }
+    var el = bindHTML(snippet, {x: callback});
+    simulate(el, 'mouseover');
+    
+    assert.isFalse(called);
+  });
+  
+  
+});

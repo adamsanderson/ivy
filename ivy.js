@@ -674,7 +674,7 @@ Ivy.bindAttrToShow = function(el, attrName){
 
 Ivy.bindFnToEvent = function(el, eventName, fnPath){
   var fn = this.atPath(fnPath),
-      receiver = this.atPath(fnPath.split('/').slice(0,-1).join('/'));
+      receiver = this.atPath(fnPath.split('/').slice(0,-1).join('/')),
       subject  = this.context; // should be a 2nd param at some point
 
   if (subject['ivy:proto']){ 
