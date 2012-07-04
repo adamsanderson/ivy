@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>Ivy Tests</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="../ivy.js"></script>
+    <script src="mocha.js"></script>
+    <script src="chai.js"></script>
+    <script src="simulate.js"></script>
+    
+    <script>
+      mocha.setup('bdd');
+      assert = chai.assert;
+    </script>
+    <script src="bindings.js"></script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>
