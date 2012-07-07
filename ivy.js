@@ -78,7 +78,7 @@ IvyAttr.prototype.off = function(event, fn){
     delete this.callbacks[event];
   } else {
     // remove specific handler
-    var i = callbacks.indexOf(fn);
+    var i = Ivy.util.indexOf(callbacks, fn);
     callbacks.splice(i, 1);
   }
 
@@ -273,7 +273,7 @@ IvyArray.prototype.replace = function(array){
  *
  */
 IvyArray.prototype.remove = function(item){
-  var index = this.value.indexOf(item);
+  var index = Ivy.util.indexOf(this.value, item);
   return this.removeIndex(index);
 };
 
@@ -547,7 +547,7 @@ Ivy.bindAttrToChecked = function(el, attrName, domEvent){
   var attr = this.atPath(attrName),
       isRadio = el.type === 'radio';
   
-  domEvent = domEvent || 'change';
+  domEvent = domEvent || 'click';
   
   Ivy.watchAttr(attr, 'change', updateEl);
   if (attr.set){ Ivy.dom.on(el, domEvent, updateAttr); }
@@ -852,6 +852,17 @@ Ivy.util.argumentNames = function(fn){
   var names = fn.toString().match(/^[\s\(]*function[^(]*\(([^\)]*)\)/)[1]
     .replace(/\s+/g, '').split(',');
   return names.length == 1 && !names[0] ? [] : names;
+};
+
+// `indexOf` for arrays.
+Ivy.util.indexOf = function(array, obj, start){
+  if (array.indexOf) return array.indexOf(obj, start);
+  
+  // IE8
+  for (var i = (start || 0), len = array.length; i < len; i++) {
+    if (array[i] === obj) { return i; }
+  }
+  return -1;
 };
 
 // From Crockford -- modified to include the prototype for environments 

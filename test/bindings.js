@@ -73,8 +73,9 @@ describe('Checked binding', function(){
     it('updates the state of a attr', function(){
       var x = Ivy.attr(false);
       var input = bindHTML(snippet, {x: x});
-      input.checked = true;
-      simulate(input, 'change');
+
+      assert.isFalse(x.get());
+      simulate(input, 'click');
       assert.isTrue(x.get());
     });
     
@@ -107,7 +108,7 @@ describe('Checked binding', function(){
       var b = root.children[1];
       
       b.checked = true;
-      simulate(b, 'change');
+      simulate(b, 'click');
       assert.equal(x.get(), 'b');
     });    
   });
