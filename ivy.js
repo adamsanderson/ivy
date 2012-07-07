@@ -520,7 +520,7 @@ Ivy.bindAttrToValue = function(el, attrName, domEvent){
   domEvent = domEvent || 'change';
   
   Ivy.watchAttr(attr, 'change', updateEl);
-  if (attr.set){ el.addEventListener(domEvent, updateAttr); }
+  if (attr.set){ Ivy.dom.on(el, domEvent, updateAttr); }
 
   function updateEl(value){
     if (document.activeElement === el){
@@ -528,10 +528,10 @@ Ivy.bindAttrToValue = function(el, attrName, domEvent){
         
       delayedCallback = function(event){
         updateEl(attr.valueOf());
-        el.removeEventListener('blur',delayedCallback);
+        Ivy.dom.off(el, 'blur', delayedCallback);
         delayedCallback = null;
       };
-      el.addEventListener('blur', delayedCallback);
+      Ivy.dom.on(el, 'blur', delayedCallback);
       
     } else {
       el.value = value;
@@ -550,7 +550,7 @@ Ivy.bindAttrToChecked = function(el, attrName, domEvent){
   domEvent = domEvent || 'change';
   
   Ivy.watchAttr(attr, 'change', updateEl);
-  if (attr.set){ el.addEventListener(domEvent, updateAttr); }
+  if (attr.set){ Ivy.dom.on(el, domEvent, updateAttr); }
 
   function updateEl(value){
     el.checked = isRadio ? (value == el.value) : (!!value);
@@ -570,7 +570,7 @@ Ivy.bindAttrToText = function(el, attrName){
   
   Ivy.watchAttr(attr, 'change', updateEl);
   function updateEl(value){ 
-    Ivy.util.clearChildren(el);
+    Ivy.dom.clear(el);
     el.appendChild(document.createTextNode(value));
   }
 };
@@ -628,14 +628,14 @@ Ivy.bindAttrToFocused = function(el, attrName){
 
 Ivy.bindAttrToEach = function(el, attrName){
   var attr     = this.atPath(attrName),
-      fragment = Ivy.util.detachChildren(el),
+      fragment = Ivy.dom.detachChildren(el),
       context  = this.context;
       
   el.__managed = true; // this is a managed node
   Ivy.watchAttr(attr, 'change', updateEl);
   
   function updateEl(val){
-    Ivy.util.clearChildren(el);
+    Ivy.dom.clear(el);
     for(var i=0, len=val.length; i < len; i++){
       var childNode = fragment.cloneNode(true);
       Ivy.bindDom(childNode, val[i], context);
@@ -647,7 +647,7 @@ Ivy.bindAttrToEach = function(el, attrName){
 
 Ivy.bindAttrToWith = function(el, attrName){
   var attr     = this.atPath(attrName),
-      fragment = Ivy.util.detachChildren(el),
+      fragment = Ivy.dom.detachChildren(el),
       context  = this.context;
       
   el.__managed = true; // this is a managed node
@@ -655,7 +655,7 @@ Ivy.bindAttrToWith = function(el, attrName){
   
   function updateEl(val){
     var childNode = fragment.cloneNode(true);
-    Ivy.util.clearChildren(el);
+    Ivy.dom.clear(el);
     Ivy.bindDom(childNode, val, context);
     el.appendChild(childNode);
   }
@@ -681,7 +681,7 @@ Ivy.bindFnToEvent = function(el, eventName, fnPath){
     subject = subject['ivy:proto'];
   }
   
-  el.addEventListener(eventName, makeListener(receiver,subject));
+  Ivy.dom.on(el, eventName, makeListener(receiver,subject));
   
   function makeListener(receiver, subject){
     return function(event){
@@ -725,7 +725,7 @@ Ivy.bindDom = function(el, context, parent){
     context['..'] = parent;
   }
   
-  if (el.nodeType === Node.ELEMENT_NODE){
+  if (el.nodeType === Ivy.dom.ELEMENT_NODE){
     bindings = Ivy.getBindings(el,context);
     if (bindings){
       for(var i=0, len=bindings.length; i < len; i++){
@@ -748,7 +748,8 @@ Ivy.getBindings = function(el, context){
       bindings;
   
   if (!bindText) return null;
-  bindings = bindText.trim().split(/\s*;\s*/);
+  bindText = bindText.replace(/^\s*/m,'');
+  bindings = bindText.split(/\s*;\s*/);
   
   for(var i=0, len=bindings.length; i < len; i++){
     if (bindings[i].match(/^\s*$/)) continue; // ignore whitespace only rules
@@ -762,7 +763,7 @@ Ivy.bindElement = function(el, bindingRule){
   var name = bindingRule.name,
       args = [el].concat(bindingRule.options),
       bindingFn;
-
+  
   bindingFn = Ivy.bindings[name];
   if (!bindingFn){ 
     console.warn('Unkown binding: ', name, bindingRule);
@@ -772,7 +773,7 @@ Ivy.bindElement = function(el, bindingRule){
 };
 
 Ivy.BindingRule = function(str, context){
-  var options = str.trim().split(/\s+/),
+  var options = str.replace(/^\s*/m,'').split(/\s+/),
       name = options.shift();
   
   if (name[name.length-1] != ':'){
@@ -796,9 +797,34 @@ Ivy.BindingRule.prototype.atPath = function(path, context){
 };
 
 // ----------------------------------------------------------------------------
+Ivy.dom = {};
+Ivy.dom.ELEMENT_NODE = document.ELEMENT_NODE || 1; // For IE8
 
-Ivy.util = {};
-Ivy.util.detachChildren = function(el){
+if (document.addEventListener){
+  Ivy.dom.on = function(el, event, callback){
+    el.addEventListener(event, callback);
+  };
+  
+  Ivy.dom.off = function(el, event, callback){
+    el.removeEventListener(event, callback);
+  };
+} else {
+  Ivy.dom.on = function(el, event, callback){ // For IE8
+    el.attachEvent('on'+event, callback);
+  };
+  
+  Ivy.dom.off = function(el, event, callback){ // For IE8
+    el.detachEvent('on'+event, callback);
+  };
+}
+
+Ivy.dom.clear = function(el){
+  while( el.hasChildNodes() ){
+    el.removeChild( el.firstChild );
+  }
+};
+
+Ivy.dom.detachChildren = function(el){
   var df = document.createDocumentFragment(),
       children = [].slice.apply(el.children); // Convert from NodeList to Array
   
@@ -808,20 +834,21 @@ Ivy.util.detachChildren = function(el){
   
   return df;
 };
-Ivy.util.clearChildren = function(el){
-  while( el.hasChildNodes() ){
-    el.removeChild( el.firstChild );
-  }
-};
+
+// ----------------------------------------------------------------------------
+Ivy.util = {};
+
 Ivy.util.copy = function(src){
   return JSON.parse(JSON.stringify(src));
 };
+
 // From prototype.js
 Ivy.util.argumentNames = function(fn){
   var names = fn.toString().match(/^[\s\(]*function[^(]*\(([^\)]*)\)/)[1]
     .replace(/\s+/g, '').split(',');
   return names.length == 1 && !names[0] ? [] : names;
 };
+
 // From Crockford -- modified to include the prototype for environments 
 // that don't support `__proto__` or `getPrototypeOf`.
 Ivy.util.beget = function(prototype){
