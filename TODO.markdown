@@ -1,24 +1,13 @@
-Before Release
-==============
-Before releasing I need to:
-
-* Finish Documentation
-  * Some decent navigation
-  * API docs
-* Write Some Real Tests -- Most of this has been experimentation up until now, bonus points if it ties into the docs.
-
 General TODO:
 =============
 Below are an unordered list of ideas that should be addressed and assessed sometime:
 
-* Automate generate the website
 * Contexts -- How should they be managed?  The current prototype method seems sloppy.
 * Bind Each -- Currently wastefully re-renders the entire list every time.
 * Batched DOM Updates -- Would it help performance to batch updates? IE: delay updating the DOM until a setTimeout can gather multiple updates?
 * Batched change dispatching -- If I'm going to add 30 items to a table, maybe it's better to accumulate changes and then react?
 * Child Paths -- Binding to child attributes requires some extra callbacks on the intermediate children.
 * Implement Map as a function returning an attr
-* Bind Element classes to an attribute
 * Special case binding TextNodes -- Instead of requiring a lot of spans, we can split text nodes up, and interpolate values
 
 Notes

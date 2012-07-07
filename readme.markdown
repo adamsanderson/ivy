@@ -89,8 +89,13 @@ hand, it works well enough to greatly simplify a lot of client side code.
 Issues at the moment:
 
 * Changing bound arrays redraws the whole array
-* Events are not debounced, so Ivy does more work than it needs to
+* Events are not debounced, so Ivy sometimes does more work than it needs to
 * Because Ivy binds to DOM Elements, your HTML can get verbose
+
+Browser Support
+---------------
+Ivy works great in modern browsers like Firefox, and Chrome, and IE9.  IE8 is supported,
+but I am still looking into better ways to minimize its impact on the general code base.
 
 Attributions
 ------------

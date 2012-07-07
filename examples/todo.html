@@ -98,7 +98,7 @@
       TodoList.prototype.addTodo = function(){
         this.list.unshift(this.active.valueOf());
         this.active.set(new Todo);
-        this.isEditing = Ivy.attr(true);
+        this.isEditing.set(true);
       };
       
       TodoList.prototype.deleteTodo = function(todo){
