@@ -686,7 +686,11 @@ Ivy.bindFnToEvent = function(el, eventName, fnPath){
   function makeListener(receiver, subject){
     return function(event){
       fn.call(receiver, subject);
-      event.preventDefault();
+      if (event.preventDefault){
+        event.preventDefault();
+      } else {
+        event.returnValue = false; // IE8
+      }
     };
   }
 };
@@ -826,10 +830,11 @@ Ivy.dom.clear = function(el){
 
 Ivy.dom.detachChildren = function(el){
   var df = document.createDocumentFragment(),
-      children = [].slice.apply(el.children); // Convert from NodeList to Array
-  
-  for (var i=0, len=children.length, child; i < len; i++){
-    df.appendChild(el.removeChild(children[i]));
+      children = el.children,
+      count = children.length;
+      
+  while (count--){
+    df.appendChild(children[0]);
   }
   
   return df;
