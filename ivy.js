@@ -645,10 +645,18 @@ Ivy.bindAttrToEach = function(el, attrName){
   
 };
 
-Ivy.bindAttrToWith = function(el, attrName){
+Ivy.bindAttrToWith = function(el, attrName, templateId){
   var attr     = this.atPath(attrName),
-      fragment = Ivy.dom.detachChildren(el),
-      context  = this.context;
+      context  = this.context,
+      fragment;
+
+  if (templateId){
+    var parentNode = Ivy.bindAttrToWith.templateParent;
+    parentNode.innerHTML = document.getElementById(templateId).innerText;
+    fragment = Ivy.dom.detachChildren(parentNode);
+  } else {
+    fragment = Ivy.dom.detachChildren(el);
+  }
       
   el.__managed = true; // this is a managed node
   Ivy.watchAttr(attr, 'change', updateEl);
@@ -660,6 +668,7 @@ Ivy.bindAttrToWith = function(el, attrName){
     el.appendChild(childNode);
   }
 };
+Ivy.bindAttrToWith.templateParent = document.createElement('div');
 
 Ivy.bindAttrToShow = function(el, attrName){
   var attr = this.atPath(attrName),

@@ -265,6 +265,26 @@ describe('With binding', function(){
     
     assert.equal(el.children[0].title, "Bye");
   });
+  
+  it('optionally uses the node with referenced by the second parameter as the template', function(){
+    var template = document.createElement('script');
+    template.setAttribute('id', 'cake');
+    template.setAttribute('type', 'text/html');
+    template.innerText = '<div data-bind="attr: y title"/>';
+    
+    try {
+      
+      document.head.appendChild(template);
+      
+      var x  = {y: "Hello"};
+      var el = bindHTML('<div data-bind="with: x cake"></div>', {x: x});
+
+      assert.equal(el.children[0].title, "Hello");
+      
+    } finally {
+      document.head.removeChild(template);
+    }
+  });
 });
 
 describe('Show binding', function(){
