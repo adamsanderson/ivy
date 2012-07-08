@@ -130,7 +130,7 @@ nested data such as `{name: "Felix", age: 5}`, then the `text` binding would be:
 `<li data-bind='text: name'>`.  If you need to access an attribute from a parent 
 context, you can use a relative path such as `../name`.
   
-with: attrName;
+with: attrName [templateId];
 ---------------
 
 When dealing with nested data, use `with` to control the context.
@@ -155,6 +155,20 @@ When dealing with nested data, use `with` to control the context.
     </script>
 
 You can nest multiple `with` bindings to descend down a deep object hierarchy.
+
+An optional second parameter can be passed to `with` to lookup a template 
+elsewhere in the document.  A common pattern is to create a `script` tag with 
+your template at the bottom of the document.
+
+    <div data-bind='with: profession description'></div>
+    <!-- ... -->
+    <script type='text/html' id='description'>
+      <span data-bind='text: title'></span>
+      (<span data-bind='text: yearsExperience'></span>)
+    </script>
+
+This can be useful when you need to render something the same way in multiple
+places.
 
 on: eventName callbackName
 --------------------------

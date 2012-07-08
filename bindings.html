@@ -135,7 +135,7 @@ nested data such as <code>{name: &quot;Felix&quot;, age: 5}</code>, then the <co
 context, you can use a relative path such as <code>../name</code>.
 
 </p>
-<h2>with: attrName;</h2>
+<h2>with: attrName [templateId];</h2>
 <p>When dealing with nested data, use <code>with</code> to control the context.
 
 </p>
@@ -158,6 +158,21 @@ context, you can use a relative path such as <code>../name</code>.
   }
 &lt;/script&gt;</code></pre>
 <p>You can nest multiple <code>with</code> bindings to descend down a deep object hierarchy.
+
+</p>
+<p>An optional second parameter can be passed to <code>with</code> to lookup a template 
+elsewhere in the document.  A common pattern is to create a <code>script</code> tag with 
+your template at the bottom of the document.
+
+</p>
+<pre><code>&lt;div data-bind=&#39;with: profession description&#39;&gt;&lt;/div&gt;
+&lt;!-- ... --&gt;
+&lt;script type=&#39;text/html&#39; id=&#39;description&#39;&gt;
+  &lt;span data-bind=&#39;text: title&#39;&gt;&lt;/span&gt;
+  (&lt;span data-bind=&#39;text: yearsExperience&#39;&gt;&lt;/span&gt;)
+&lt;/script&gt;</code></pre>
+<p>This can be useful when you need to render something the same way in multiple
+places.
 
 </p>
 <h2>on: eventName callbackName</h2>

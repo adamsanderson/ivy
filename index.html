@@ -108,9 +108,14 @@ hand, it works well enough to greatly simplify a lot of client side code.
 </p>
 <ul>
 <li>Changing bound arrays redraws the whole array</li>
-<li>Events are not debounced, so Ivy does more work than it needs to</li>
+<li>Events are not debounced, so Ivy sometimes does more work than it needs to</li>
 <li>Because Ivy binds to DOM Elements, your HTML can get verbose</li>
 </ul>
+<h2>Browser Support</h2>
+<p>Ivy works great in modern browsers like Firefox, and Chrome, and IE9.  IE8 is supported,
+but I am still looking into better ways to minimize its impact on the general code base.
+
+</p>
 <h2>Attributions</h2>
 <p>This library was inspired largely by the work of <a href="https://github.com/SteveSanderson">Steve Sanderson</a> (<em>no relation!</em>)
 on <a href="https://github.com/SteveSanderson/knockout">Knockout</a>, and the <a href="https://github.com/Shopify">Shopify</a> 
