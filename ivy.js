@@ -652,7 +652,9 @@ Ivy.bindAttrToWith = function(el, attrName, templateId){
 
   if (templateId){
     var parentNode = Ivy.bindAttrToWith.templateParent;
-    parentNode.innerHTML = document.getElementById(templateId).innerText;
+    var templateNode = document.getElementById(templateId);
+    
+    parentNode.innerHTML = templateNode.innerText || templateNode.textContent;
     fragment = Ivy.dom.detachChildren(parentNode);
   } else {
     fragment = Ivy.dom.detachChildren(el);
