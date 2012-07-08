@@ -847,7 +847,10 @@ Ivy.dom.getTemplate = function(el, templateId){
   if (templateId){
     var templateNode = document.getElementById(templateId);
     
-    Ivy.dom._template.innerHTML = templateNode.innerText || templateNode.textContent;
+    // `innerText` for Webkit
+    // `textContent` for Mozilla
+    // `innerHTML` for IE8 when dealing with script tags.
+    Ivy.dom._template.innerHTML = templateNode.innerText || templateNode.textContent || templateNode.innerHTML;
     fragment = Ivy.dom.detachChildren(Ivy.dom._template);
   } else {
     fragment = Ivy.dom.detachChildren(el);
