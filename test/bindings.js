@@ -247,6 +247,27 @@ describe('Each binding', function(){
     assert.equal(el.children.length, 6);
   });
   
+  it('optionally uses the node with referenced by the second parameter as the template', function(){
+    var template = document.createElement('script');
+    template.setAttribute('id', 'cake');
+    template.setAttribute('type', 'text/html');
+    template.innerText = '<div data-bind="attr: y title"/>';
+    
+    try {
+      
+      document.head.appendChild(template);
+      
+      var x  = Ivy.array([{y:"a"}, {y:"b"}]);
+      var el = bindHTML('<div data-bind="each: x cake"></div>', {x: x});
+
+      assert.equal(el.children[0].title, 'a');
+      assert.equal(el.children[1].title, 'b');
+      
+    } finally {
+      document.head.removeChild(template);
+    }
+  });
+  
 });
 
 describe('With binding', function(){

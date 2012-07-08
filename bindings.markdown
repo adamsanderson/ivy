@@ -108,8 +108,8 @@ To control the page's focus, use the `focussed` binding.
 Unlike other bindings, this does not synchronize back to the Ivy attribute
 when the focus changes.
 
-each: attrName;
---------------
+each: attrName [templateId];
+----------------------------
 
 Use `each` to bind to Ivy arrays.  As items are added or removed from the array,
 they will be added or removed from the page.
@@ -129,6 +129,27 @@ binding references the current item with a period.  If the array instead contain
 nested data such as `{name: "Felix", age: 5}`, then the `text` binding would be: 
 `<li data-bind='text: name'>`.  If you need to access an attribute from a parent 
 context, you can use a relative path such as `../name`.
+
+A second parameter can be passed to specify the ID of template elsewhere in the 
+document.  A common pattern is to create a `script` tag with your template at the 
+bottom of the document.  The previous example might look like this:
+
+    <!-- Bind the array cats, with a template -->
+    <ul data-bind='each: cats cat-template'>
+    </ul>
+    
+    <!-- Cat template, notice the type and id -->
+    <script type='text/html' id='cat-template'>
+      <li data-bind='text: .'>
+    </script>
+    
+    <script>
+      var cats = ["Felix", "Nyan", "Horace"];
+      Ivy.bindDom({cats: Ivy.array(cats)});
+    </script>
+
+This can be useful when you need to render something the same way in multiple
+places.
   
 with: attrName [templateId];
 ---------------
@@ -156,19 +177,8 @@ When dealing with nested data, use `with` to control the context.
 
 You can nest multiple `with` bindings to descend down a deep object hierarchy.
 
-An optional second parameter can be passed to `with` to lookup a template 
-elsewhere in the document.  A common pattern is to create a `script` tag with 
-your template at the bottom of the document.
-
-    <div data-bind='with: profession description'></div>
-    <!-- ... -->
-    <script type='text/html' id='description'>
-      <span data-bind='text: title'></span>
-      (<span data-bind='text: yearsExperience'></span>)
-    </script>
-
-This can be useful when you need to render something the same way in multiple
-places.
+An optional second parameter can be passed to `with` to lookup a template, this
+behaves the same as the `each` binding's template support.
 
 on: eventName callbackName
 --------------------------

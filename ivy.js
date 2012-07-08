@@ -626,9 +626,9 @@ Ivy.bindAttrToFocused = function(el, attrName){
   }
 };
 
-Ivy.bindAttrToEach = function(el, attrName){
+Ivy.bindAttrToEach = function(el, attrName, templateId){
   var attr     = this.atPath(attrName),
-      fragment = Ivy.dom.detachChildren(el),
+      fragment = Ivy.dom.getTemplate(el, templateId),
       context  = this.context;
       
   el.__managed = true; // this is a managed node
@@ -648,18 +648,8 @@ Ivy.bindAttrToEach = function(el, attrName){
 Ivy.bindAttrToWith = function(el, attrName, templateId){
   var attr     = this.atPath(attrName),
       context  = this.context,
-      fragment;
-
-  if (templateId){
-    var parentNode = Ivy.bindAttrToWith.templateParent;
-    var templateNode = document.getElementById(templateId);
+      fragment = Ivy.dom.getTemplate(el, templateId);
     
-    parentNode.innerHTML = templateNode.innerText || templateNode.textContent;
-    fragment = Ivy.dom.detachChildren(parentNode);
-  } else {
-    fragment = Ivy.dom.detachChildren(el);
-  }
-      
   el.__managed = true; // this is a managed node
   Ivy.watchAttr(attr, 'change', updateEl);
   
@@ -850,6 +840,22 @@ Ivy.dom.detachChildren = function(el){
   
   return df;
 };
+
+Ivy.dom.getTemplate = function(el, templateId){
+  var fragment;
+  
+  if (templateId){
+    var templateNode = document.getElementById(templateId);
+    
+    Ivy.dom._template.innerHTML = templateNode.innerText || templateNode.textContent;
+    fragment = Ivy.dom.detachChildren(Ivy.dom._template);
+  } else {
+    fragment = Ivy.dom.detachChildren(el);
+  }
+  
+  return fragment;
+};
+Ivy.dom._template = document.createElement('div');
 
 // ----------------------------------------------------------------------------
 Ivy.util = {};
