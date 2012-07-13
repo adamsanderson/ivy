@@ -620,9 +620,17 @@ Ivy.bindAttrToFocused = function(el, attrName){
 
   Ivy.watchAttr(attr, 'change', updateEl);  
   function updateEl(value){
-    if (value){ 
-      setTimeout(function(){ el.focus(); });
-    }
+    setTimeout(function(){ 
+      value ? el.focus() : el.blur(); 
+    });
+  }
+
+  if (attr.set){ 
+    Ivy.dom.on(el, 'blur',  updateAttr); 
+    Ivy.dom.on(el, 'focus', updateAttr); 
+  }
+  function updateAttr(){
+    attr.set(document.activeElement === el);
   }
 };
 

@@ -199,9 +199,51 @@ describe('DOM Attribute binding', function(){
 });
 
 describe('Focused binding', function(){
-  var snippet = '<div data-bind="focused: x"/>';
-  it('focuses when set to true');
-  it('blurs when set to false');
+  var snippet = '<input data-bind="focused: x"/>';
+  var el, x;
+
+  beforeEach(function(){
+    x = Ivy.attr();
+    el = bindHTML(snippet, {x:x});
+    document.body.appendChild(el);
+  });
+
+  afterEach(function(){
+    document.body.removeChild(el);
+  });
+
+  it('focuses when set to true', function(done){
+    Ivy.dom.on(el, 'focus', callback);
+    x.set(true);
+
+    function callback(){
+      Ivy.dom.off(el, 'focus', callback);
+      done();
+    }
+  });
+
+  it('blurs when set to false', function(done){
+    Ivy.dom.on(el, 'blur', callback);
+
+    el.focus();
+    x.set(false); // blur it
+
+    function callback(){
+      Ivy.dom.off(el, 'blur', callback);
+      done();
+    }
+  });
+
+  it('sets the attr to true when focused', function(){
+    el.focus();
+    assert.isTrue(x.get());
+  });
+
+  it('sets the attr to false when blurred', function(){
+    el.focus(); el.blur(); // Force a blur event
+    assert.isFalse(x.get());
+  });
+
 });
 
 describe('Each binding', function(){

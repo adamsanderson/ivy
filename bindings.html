@@ -110,8 +110,8 @@ true, the element will be displayed, otherwise it will be hidden.
 &lt;script&gt;
   Ivy.bindDom({isEditing: Ivy.attr(true)});
 &lt;/script&gt;</code></pre>
-<p>Unlike other bindings, this does not synchronize back to the Ivy attribute
-when the focus changes.
+<p>When the element has focus, the attribute will be set to true, and when it loses
+focus, the attribute will be set to false.
 
 </p>
 <h2>each: attrName [templateId];</h2>

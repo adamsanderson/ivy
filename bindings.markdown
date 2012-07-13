@@ -10,7 +10,7 @@ and user input will update your data model.  Ivy's bindings are declared in your
 Take a look at the examples to see these bindings in action.
 
 value: attrName [event = 'change'];
--------------------------------
+-----------------------------------
 
 The `value` binding will bind an input's value with an Ivy attribute.  Use this to let your users
 edit forms.
@@ -26,7 +26,7 @@ The event parameter is optional, and can be used to specify which form event Ivy
 event works well when the data needs to be validated.
 
 checked: attrName [event = 'change'];
----------------------------------
+-------------------------------------
 
 Bind a checkbox, or group of radio buttons, with the `checked` binding.  When binding a checkbox
 the bound attribute will be a boolean value.  When binding radio buttons, the bound value will be
@@ -105,8 +105,8 @@ To control the page's focus, use the `focussed` binding.
       Ivy.bindDom({isEditing: Ivy.attr(true)});
     </script>
 
-Unlike other bindings, this does not synchronize back to the Ivy attribute
-when the focus changes.
+When the element has focus, the attribute will be set to true, and when it loses
+focus, the attribute will be set to false.
 
 each: attrName [templateId];
 ----------------------------

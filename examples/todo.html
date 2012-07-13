@@ -19,6 +19,14 @@
 	  .todo-pending {
 	    
 	  }
+
+    .todo-form > .add {
+      margin-left: 10px;
+    }
+
+    .todo-form.active > .add {
+      background-color: #ffc;
+    }
 	</style>
 	<script src="../ivy.js" type="text/javascript" charset="utf-8"></script>
 	<script src="example_source.js" type="text/javascript" charset="utf-8"></script>
@@ -32,7 +40,7 @@
   <hr/>
   
   <div id='example-html'>
-    <form action="#" data-bind='with: active edit-todo; on: submit addTodo'>
+    <form action="#" data-bind='with: active edit-todo; on: submit addTodo; class: ../isEditing active' class='todo-form'>
       <!-- As an example, this is bound to templated item below -->
     </form>
     <ul data-bind='each: list'>
@@ -67,7 +75,7 @@
   
   <script type='text/html' id='edit-todo'>
     <input placeholder='I need to...' type='text' data-bind='value: name; focused: ../isEditing'/>
-    <input type='submit' value='Add' />
+    <input type='submit' value='Add' class='add'/>
   </script>
   
   
