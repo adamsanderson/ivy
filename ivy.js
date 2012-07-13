@@ -615,7 +615,7 @@ Ivy.bindAttrToDomAttr.booleanProperties = {
   'disabled': true
 };
 
-Ivy.bindAttrToFocused = function(el, attrName){
+Ivy.bindAttrToFocus = function(el, attrName){
   var attr = this.atPath(attrName);
 
   Ivy.watchAttr(attr, 'change', updateEl);  
@@ -711,7 +711,7 @@ Ivy.bindings = {
   'attr':     Ivy.bindAttrToDomAttr,
   'class':    Ivy.bindAttrToClassName,
   'show':     Ivy.bindAttrToShow,
-  'focused':  Ivy.bindAttrToFocused,
+  'focus':    Ivy.bindAttrToFocus,
   'each':     Ivy.bindAttrToEach,
   'with':     Ivy.bindAttrToWith,
   'on':       Ivy.bindFnToEvent

@@ -95,12 +95,12 @@ true, the element will be displayed, otherwise it will be hidden.
       Click here for more details!
     </a>
     
-focussed: attrName;
+focus: attrName;
 -------------------
-To control the page's focus, use the `focussed` binding.
+To control the page's focus, use the `focus` binding.
 
     <!-- Set focus to this element: -->
-    <input data-bind='class: isEditing'/>
+    <input data-bind='focus: isEditing'/>
     <script>
       Ivy.bindDom({isEditing: Ivy.attr(true)});
     </script>

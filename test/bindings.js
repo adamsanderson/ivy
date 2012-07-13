@@ -199,7 +199,7 @@ describe('DOM Attribute binding', function(){
 });
 
 describe('Focused binding', function(){
-  var snippet = '<input data-bind="focused: x"/>';
+  var snippet = '<input data-bind="focus: x"/>';
   var el, x;
 
   beforeEach(function(){

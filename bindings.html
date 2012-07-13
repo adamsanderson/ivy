@@ -101,12 +101,12 @@ true, the element will be displayed, otherwise it will be hidden.
 &lt;a data-bind=&#39;show: promotionApplies&#39;&gt;
   Click here for more details!
 &lt;/a&gt;</code></pre>
-<h2>focussed: attrName;</h2>
-<p>To control the page&#39;s focus, use the <code>focussed</code> binding.
+<h2>focus: attrName;</h2>
+<p>To control the page&#39;s focus, use the <code>focus</code> binding.
 
 </p>
 <pre><code>&lt;!-- Set focus to this element: --&gt;
-&lt;input data-bind=&#39;class: isEditing&#39;/&gt;
+&lt;input data-bind=&#39;focus: isEditing&#39;/&gt;
 &lt;script&gt;
   Ivy.bindDom({isEditing: Ivy.attr(true)});
 &lt;/script&gt;</code></pre>
