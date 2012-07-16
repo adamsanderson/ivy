@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Ivy - Bound JavaScript</title>
+  <meta name="author" content="Adam Sanderson">
+  
+  <link rel="stylesheet" href="../css/site.css" type="text/css" media="screen" charset="utf-8">
+  <style>
+    
+  </style>
+  <script src="../ivy.js" type="text/javascript" charset="utf-8"></script>
+  <script src="example_source.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body onload='init()'>
+  <h1>Order Form</h1>
+  <p>
+    Ivy simplifies dealing with forms and data so that you can focus on the business logic.
+    Below we have a form that will let people order shirts, and choose a shipping method.  
+    Because Ivy handles the tedious parts like updating all the correct pieces of HTML when,
+    the data changes, our JavaScript can focus on the requirements of the order form. 
+  </p>
+  
+  <hr/>
+  
+  <form data-bind='on: submit sendOrder' id='example-html'>
+    <div class='control-group'>
+      <label>
+        Shirt Count: <input data-bind='value: quantity keyup'>
+      </label>
+    </div>
+
+    <div class='control-group'>
+      <label>
+        <input type='checkbox' data-bind='checked: nextDay'/>
+        Next Day Shipping
+      </label>
+    </div>
+
+    <hr/>
+
+    <dl>
+      <dt>Sub Total</dt><dd data-bind='text: subTotal'/>
+      <dt>Tax      </dt><dd data-bind='text: tax'/>
+      <dt>Total    </dt><dd data-bind='text: total'/>
+    </dl>
+    
+    <input type='submit' value='Buy Now'/>
+  </form>
+
+  <hr/>
+  
+  <div class='row' id='example-source'>
+    <div class='col col-6'>
+      <h2>HTML</h2>
+      <pre><code data-bind='text: html'></code></pre>
+    </div>
+    
+    <div class='col col-6'>
+      <h2>JavaScript</h2>
+      <pre><code data-bind='text: js'></code></pre>
+    </div>
+  </div>
+  
+  <script>
+    function init(){
+      initExample();
+      Ivy.bindDom('example-source', new ExampleSource('example-html',initExample));
+    }
+    
+    function initExample(){
+      function OrderForm(shirtCost, nextDayCost, taxRate){
+        this.quantity  = Ivy.attr(1, positiveInteger);
+        this.nextDay   = Ivy.attr(false);
+
+        // Computed Sub Total:
+        this.subTotal = Ivy.fnWith(this, function(quantity, nextDay){
+          if (this.quantity == 0) return 0;
+
+          var shipping = (nextDay.get() ? nextDayCost : 0);
+          return shirtCost * quantity + shipping;
+        });
+
+        // Computed Tax:
+        this.tax = Ivy.fnWith(this, function(subTotal){
+          return subTotal * taxRate;
+        });
+
+        // Computed Total:
+        this.total = Ivy.fnWith(this, function(subTotal, tax){
+          return subTotal + tax;
+        });
+
+        // Input Format:
+        function positiveInteger(string){
+          var integer = parseInt(string, 10);
+          return integer < 0 ? 0 : integer;
+        }
+      }
+
+      OrderForm.prototype.sendOrder = function(){
+        var orderData = {quantity: this.quantity, nextDay: this.nextDay};
+        var json = JSON.stringify(orderData);
+        alert("Sending order data: "+ json);
+      };
+
+      // Bind the form assuming shirts cost $12.00, 
+      // next day shipping is $5.00, 
+      // and the tax rate is 4%
+      Ivy.bindDom('example-html', new OrderForm(12, 5, 0.04));
+    }
+    
+  </script>
+</body>
+</html>
