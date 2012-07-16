@@ -2,7 +2,8 @@ var fs = require("fs"),
     marked = require("marked"),      // npm: marked
     Mustache = require("mustache"),  // npm: mustache
     less = require('less'),          // npm: less
-    ducks = require("./lib/ducks");
+    ducks = require("./lib/ducks"),  // My hacky little docs processor
+    Uglify = require("uglify-js");
 
 /* 
   Builds documentation
@@ -24,6 +25,8 @@ fs.readFile("templates/_navigation.html", function (err, html) {
 });
 
 renderSiteCss();
+minify();
+
 
 /**
   Render the documentation pages
@@ -94,6 +97,20 @@ function renderSiteCss(){
         fs.writeFile('css/site.css', tree.toCSS({compress: true}), function(err){
           if (err) throw err;
         });
+    });
+  });
+}
+
+function minify(){
+  var ast;
+  
+  fs.readFile('ivy.js', function (err, ivySrc) {
+    ast = Uglify.parser.parse(ivySrc.toString());
+    ast = Uglify.uglify.ast_mangle(ast);  // get a new AST with mangled names
+    ast = Uglify.uglify.ast_squeeze(ast); // get an AST with compression optimizations
+
+    fs.writeFile('ivy.min.js', Uglify.uglify.gen_code(ast), function(err){
+      if (err) throw err;
     });
   });
 }
