@@ -15,7 +15,8 @@
   <div class='col col-9'>
     <h1>Ivy.js</h1>
 <p>Ivy ties JavaScript objects to the DOM, allowing you to focus on the 
-relationships of your data.
+relationships of your data.  It does this with no external dependencies,
+and with a small footprint (9k minified).
 
 </p>
 <h2>Using Ivy</h2>
@@ -30,9 +31,9 @@ relationships of your data.
 &lt;script&gt;
   Ivy.bindDom({name: Ivy.attr(&#39;World&#39;)});
 &lt;/script&gt;</code></pre>
-<p>Ivy will fill in &quot;World&quot; both in the span, and in the input.  If you change the input, the span
-will also change.  You don&#39;t need to write event listeners, or update the HTML, Ivy does that for
-you.
+<p>Ivy will fill in &quot;World&quot; both in the span, and in the input.  If you change the 
+input, the span will also change.  You don&#39;t need to write event listeners, or 
+update the HTML, Ivy does that for you.
 
 </p>
 <p>You can also bind complex objects and functions:
@@ -56,16 +57,17 @@ you.
   Ivy.bindDom( new Calculator(20.00) );
 &lt;/script&gt;</code></pre>
 <p>Ivy plays nicely with others, and stays out of the way when it&#39;s not needed.
-In many cases you can treat the value encapsulated by an <code>Ivy.attr</code> like a normal object:
+In many cases you can treat the value encapsulated by an <code>Ivy.attr</code> like a 
+normal object:
 
 </p>
 <pre><code>Ivy.attr(3) + Ivy.attr(4); //=&gt; 7
 
 var point = {x: Ivy.attr(2.0), y: Ivy.attr(4.6)};
 JSON.stringify(point); //=&gt; &quot;{x: 2.0, y: 4.6}&quot;</code></pre>
-<p>You can use Ivy as much, or as little as you like.
-If a value like a user&#39;s id will never change, then don&#39;t wrap it.  If you only want to bind
-a model to a specific part of your HTML, pass Ivy an element or its id:
+<p>Use Ivy as much, or as little as you like.  If a value like a user&#39;s id will 
+never change, then don&#39;t wrap it.  If you only want to bind a model to a 
+specific part of your HTML, pass Ivy an element or its id:
 
 </p>
 <pre><code>&lt;h1 id=&#39;user-greeting&#39;&gt;
@@ -77,10 +79,11 @@ a model to a specific part of your HTML, pass Ivy an element or its id:
   Ivy.bindDom( {name: Ivy.attr(&#39;Mr. Monkey&#39;), id: 32}, &#39;user-greeting&#39;);
 &lt;/script&gt;</code></pre>
 <h2>Why Ivy</h2>
-<p>Ivy&#39;s design cleanly separates your HTML and JavaScript.  Ivy&#39;s bindings ensure that 
-the information about where and how your data is displayed stays in the HTML.  Your
-JavaScript does not need to keep references to the DOM since that&#39;s Ivy&#39;s job.  This
-separation lets each layer of your application focus on its immediate concern.
+<p>Ivy&#39;s design cleanly separates your HTML and JavaScript.  Ivy&#39;s bindings ensure 
+that the information about where and how your data is displayed stays in the 
+HTML.  Your JavaScript does not need to keep references to the DOM since that&#39;s 
+Ivy&#39;s job.  This separation lets each layer of your application focus on its 
+immediate concern.
 
 </p>
 <p>Writing event handling and DOM manipulation code is tedious, Ivy does most of 
@@ -112,8 +115,9 @@ hand, it works well enough to greatly simplify a lot of client side code.
 <li>Because Ivy binds to DOM Elements, your HTML can get verbose</li>
 </ul>
 <h2>Browser Support</h2>
-<p>Ivy works great in modern browsers like Firefox, and Chrome, and IE9.  IE8 is supported,
-but I am still looking into better ways to minimize its impact on the general code base.
+<p>Ivy works great in modern browsers like Firefox, and Chrome, and IE9.  IE8 is 
+supported, but I am still looking into better ways to minimize its impact on the 
+general code base.
 
 </p>
 <h2>Attributions</h2>

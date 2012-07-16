@@ -1,7 +1,8 @@
 Ivy.js
 ======
 Ivy ties JavaScript objects to the DOM, allowing you to focus on the 
-relationships of your data.
+relationships of your data.  It does this with no external dependencies,
+and with a small footprint (9k minified).
 
 Using Ivy
 ---------
@@ -16,9 +17,9 @@ Define attributes with `Ivy.attr`, and then bind them in HTML using a `data-bind
       Ivy.bindDom({name: Ivy.attr('World')});
     </script>
 
-Ivy will fill in "World" both in the span, and in the input.  If you change the input, the span
-will also change.  You don't need to write event listeners, or update the HTML, Ivy does that for
-you.
+Ivy will fill in "World" both in the span, and in the input.  If you change the 
+input, the span will also change.  You don't need to write event listeners, or 
+update the HTML, Ivy does that for you.
 
 You can also bind complex objects and functions:
 
@@ -41,16 +42,17 @@ You can also bind complex objects and functions:
     </script>
 
 Ivy plays nicely with others, and stays out of the way when it's not needed.
-In many cases you can treat the value encapsulated by an `Ivy.attr` like a normal object:
+In many cases you can treat the value encapsulated by an `Ivy.attr` like a 
+normal object:
 
     Ivy.attr(3) + Ivy.attr(4); //=> 7
     
     var point = {x: Ivy.attr(2.0), y: Ivy.attr(4.6)};
     JSON.stringify(point); //=> "{x: 2.0, y: 4.6}"
 
-You can use Ivy as much, or as little as you like.
-If a value like a user's id will never change, then don't wrap it.  If you only want to bind
-a model to a specific part of your HTML, pass Ivy an element or its id:
+Use Ivy as much, or as little as you like.  If a value like a user's id will 
+never change, then don't wrap it.  If you only want to bind a model to a 
+specific part of your HTML, pass Ivy an element or its id:
 
     <h1 id='user-greeting'>
       Greetings <span data-bind='text: name'> </span> 
@@ -63,10 +65,11 @@ a model to a specific part of your HTML, pass Ivy an element or its id:
 
 Why Ivy
 -------
-Ivy's design cleanly separates your HTML and JavaScript.  Ivy's bindings ensure that 
-the information about where and how your data is displayed stays in the HTML.  Your
-JavaScript does not need to keep references to the DOM since that's Ivy's job.  This
-separation lets each layer of your application focus on its immediate concern.
+Ivy's design cleanly separates your HTML and JavaScript.  Ivy's bindings ensure 
+that the information about where and how your data is displayed stays in the 
+HTML.  Your JavaScript does not need to keep references to the DOM since that's 
+Ivy's job.  This separation lets each layer of your application focus on its 
+immediate concern.
 
 Writing event handling and DOM manipulation code is tedious, Ivy does most of 
 this for you.  Now you can spend your time fiddling around with something more 
@@ -94,8 +97,9 @@ Issues at the moment:
 
 Browser Support
 ---------------
-Ivy works great in modern browsers like Firefox, and Chrome, and IE9.  IE8 is supported,
-but I am still looking into better ways to minimize its impact on the general code base.
+Ivy works great in modern browsers like Firefox, and Chrome, and IE9.  IE8 is 
+supported, but I am still looking into better ways to minimize its impact on the 
+general code base.
 
 Attributions
 ------------

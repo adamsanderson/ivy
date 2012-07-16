@@ -871,10 +871,6 @@ Ivy.dom._template = document.createElement('div');
 // ----------------------------------------------------------------------------
 Ivy.util = {};
 
-Ivy.util.copy = function(src){
-  return JSON.parse(JSON.stringify(src));
-};
-
 // From prototype.js
 Ivy.util.argumentNames = function(fn){
   var names = fn.toString().match(/^[\s\(]*function[^(]*\(([^\)]*)\)/)[1]
