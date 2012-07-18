@@ -65,11 +65,12 @@ describe('IvyAttr', function(){
       assert.equal(attr.get(), 5);
     });
     
-    it('emits a change event with the new value', function(done){
-      var attr = Ivy.attr();
+    it('emits a change event with the new value and the old value', function(done){
+      var attr = Ivy.attr(5);
       
-      attr.on('change', function(value){
+      attr.on('change', function(value, oldValue){
         assert.equal(value, 7);
+        assert.equal(oldValue, 5);
         done();
       });
       

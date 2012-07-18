@@ -32,12 +32,14 @@ function IvyAttr(value, parseFn){
  * Sets the internal value of the attribute.
  */
 IvyAttr.prototype.set = function(value){
+  var oldValue = this.value;
+  
   value = this.parseFn ? this.parseFn(value) : value;
   
-  if (this.value === value) return this;
+  if (oldValue === value) return this;
 
   this.value = value;
-  this.emit('change', this.get());
+  this.emit('change', this.get(), oldValue);
   
   return this;
 };
