@@ -29,11 +29,12 @@ function IvyAttr(value, parseFn){
 };
 
 /**
- * Sets the internal value of the attribute.
+ * Sets the internal value of the attribute, and emits a `change`
+ * event with the new value and the old value as the arguments.
  */
 IvyAttr.prototype.set = function(value){
   var oldValue = this.value;
-  
+
   value = this.parseFn ? this.parseFn(value) : value;
   
   if (oldValue === value) return this;
@@ -56,8 +57,11 @@ IvyAttr.prototype.get = function(){
  * The most common event is `change`.
  * 
  *     var a = Ivy.attr(4);
- *     a.on('change', function(value){ console.log('New value is', value); });
- *     a.set(5); //=> 'New value is 5'
+ *     a.on('change', function(value,oldValue){ 
+ *       console.log('New value is', value, 'old value was', oldValue); 
+ *     });
+ *
+ *     a.set(5); //=> 'New value is 5 old value was 4'
  * 
  */
 IvyAttr.prototype.on = function(event, fn){

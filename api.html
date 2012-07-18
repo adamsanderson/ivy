@@ -71,7 +71,8 @@ console.log(a+b); //=&gt; 9</code></pre>
         <a name='IvyAttr.prototype.set' href='#IvyAttr.prototype.set'>IvyAttr.prototype.set(value)</a>
       </h4>
       
-      <p>Sets the internal value of the attribute.</p>
+      <p>Sets the internal value of the attribute, and emits a <code>change</code>
+event with the new value and the old value as the arguments.</p>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
@@ -89,8 +90,10 @@ console.log(a+b); //=&gt; 9</code></pre>
 The most common event is <code>change</code>.
 </p>
 <pre><code>var a = Ivy.attr(4);
-a.on(&#39;change&#39;, function(value){ console.log(&#39;New value is&#39;, value); });
-a.set(5); //=&gt; &#39;New value is 5&#39;</code></pre>
+a.on(&#39;change&#39;, function(value,oldValue){ 
+  console.log(&#39;New value is&#39;, value, &#39;old value was&#39;, oldValue); 
+});
+a.set(5); //=&gt; &#39;New value is 5 old value was 4&#39;</code></pre>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
