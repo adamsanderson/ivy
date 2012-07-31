@@ -785,9 +785,17 @@ Ivy.bindElement = function(el, bindingRule){
   
   bindingFn = Ivy.bindings[name];
   if (!bindingFn){ 
-    console.warn('Unkown binding: ', name, bindingRule);
+    console.warn('Unkown binding: ', name, bindingRule, 'on element', el);
   } else {
-    bindingFn.apply(bindingRule,args);
+    try {
+      bindingFn.apply(bindingRule,args);
+    } catch(err) {
+      var bindError = Ivy.util.beget(err);
+      bindError.message = [err.message, "\n\tWhile binding ",el.tagName," '", name, ": ", bindingRule.options.join(' '), ";'"].join('');
+      bindError.element = el;
+      el.setAttribute("data-ivy-error", bindError.message);
+      throw bindError;
+    }
   }
 };
 

@@ -1,3 +1,7 @@
+Now:
+====
+Improve binding errors.
+
 General TODO:
 =============
 Below are an unordered list of ideas that should be addressed and assessed sometime:
