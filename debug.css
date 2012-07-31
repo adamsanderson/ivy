@@ -1,0 +1,17 @@
+/* Debugging */
+
+
+/*
+  This forces the element to have some content to highlight,
+  otherwise empty elements will not show up.
+*/
+[data-ivy-error]:after{
+  content: "\0000a0";
+}
+
+/*
+  Outline any binding errors in bright red.
+*/
+[data-ivy-error]{
+  outline: 1px solid red;
+}
