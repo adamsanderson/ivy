@@ -1,7 +1,13 @@
 function bindHTML(html, obj){
+  var el = toDom(html);
+  Ivy.bindDom(el, obj);
+  
+  return el;
+}
+
+function toDom(html){
   var el = document.createElement('div');
   el.innerHTML = html;
-  Ivy.bindDom(el, obj);
   
   return el.firstChild;
 }
@@ -472,4 +478,33 @@ describe('BindingRule', function(){
     });
   });
   
+});
+
+describe("Exception Handling", function(){
+  var snippet = '<input data-bind="value: x"></input>';
+  function bindWithError(el, obj){
+    try{
+      Ivy.bindDom(el, obj);
+    } catch (e) {
+      return e;
+    }
+  }
+  
+  // Only raise the exception once here because exception handling
+  // is relatively slow in JS, and we don't mutate the objects.
+  var el = toDom(snippet);
+  var error = bindWithError(el, {});
+  
+  describe("Re-raising exceptions", function(){
+    it('annotates binding exceptions with the failing element', function(){
+      assert.equal(error.element, el);
+      assert.match(error.message, /while binding INPUT/i);
+    });
+  });
+  
+  describe("Decorating failed elements", function(){
+    it('annotates the failing element', function(){
+      assert.equal(el.getAttribute('data-ivy-error'), error.message);
+    });
+  });
 });

@@ -63,6 +63,12 @@ specific part of your HTML, pass Ivy an element or its id:
       Ivy.bindDom( {name: Ivy.attr('Mr. Monkey'), id: 32}, 'user-greeting');
     </script>
 
+Debugging
+---------
+If you ever run into errors, grab the `debug.css` and add it to your page.
+Ivy will mark the element where the error occurred so you can track down issues
+more quickly.  Check out the [Exceptions](examples/exceptions.html) example to see it in action.
+
 Why Ivy
 -------
 Ivy's design cleanly separates your HTML and JavaScript.  Ivy's bindings ensure 
