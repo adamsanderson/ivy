@@ -439,26 +439,26 @@ describe('BindingRule', function(){
     });
   });
   
-  describe('#atPath', function(){
+  describe('#lookup', function(){
     it('returns the named variable from the context', function(){
       var context = {a: 1, b: 2};
       var rule    = new Ivy.BindingRule('a: x', context);
       
-      assert.equal(rule.atPath('a'), 1);
+      assert.equal(rule.lookup('a'), 1);
     });
     
     it('returns the current context when path is ""', function(){
       var context = {a: 1, b: 2};
       var rule    = new Ivy.BindingRule('a:', context);
       
-      assert.equal(rule.atPath(''), context);
+      assert.equal(rule.lookup(''), context);
     });
     
     it('returns the current context when path is "."', function(){
       var context = {a: 1, b: 2};
       var rule    = new Ivy.BindingRule('a:', context);
       
-      assert.equal(rule.atPath('.'), context);
+      assert.equal(rule.lookup('.'), context);
     });
     
     it('returns the parent context when path is ".."', function(){
@@ -466,7 +466,7 @@ describe('BindingRule', function(){
       var child  = {'..': parent};
       var rule   = new Ivy.BindingRule('a:', child);
       
-      assert.equal(rule.atPath('../'), parent);
+      assert.equal(rule.lookup('../'), parent);
     });
     
     it('returns values from the parent context', function(){
@@ -474,7 +474,7 @@ describe('BindingRule', function(){
       var child  = {'..': parent};
       var rule   = new Ivy.BindingRule('a:', child);
       
-      assert.equal(rule.atPath('../a'), 1);
+      assert.equal(rule.lookup('../a'), 1);
     });
   });
   

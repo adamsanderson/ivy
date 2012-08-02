@@ -520,7 +520,7 @@ Ivy.fnWith = function(context, fn){
 // Ivy Binding Support
 
 Ivy.bindAttrToValue = function(el, attrName, domEvent){
-  var attr = this.atPath(attrName),
+  var attr = this.lookup(attrName),
       delayedCallback;
       
   domEvent = domEvent || 'change';
@@ -550,7 +550,7 @@ Ivy.bindAttrToValue = function(el, attrName, domEvent){
 };
 
 Ivy.bindAttrToChecked = function(el, attrName, domEvent){
-  var attr = this.atPath(attrName),
+  var attr = this.lookup(attrName),
       isRadio = el.type === 'radio';
   
   domEvent = domEvent || 'click';
@@ -572,7 +572,7 @@ Ivy.bindAttrToChecked = function(el, attrName, domEvent){
 };
 
 Ivy.bindAttrToText = function(el, attrName){
-  var attr = this.atPath(attrName);
+  var attr = this.lookup(attrName);
   
   Ivy.watchAttr(attr, 'change', updateEl);
   function updateEl(value){ 
@@ -582,7 +582,7 @@ Ivy.bindAttrToText = function(el, attrName){
 };
 
 Ivy.bindAttrToClassName = function(el, attrName, trueClass, falseClass){
-  var attr = this.atPath(attrName);
+  var attr = this.lookup(attrName);
   
   Ivy.watchAttr(attr, 'change', updateEl);
   function updateEl(value){
@@ -605,7 +605,7 @@ Ivy.bindAttrToClassName = function(el, attrName, trueClass, falseClass){
 };
 
 Ivy.bindAttrToDomAttr = function(el, attrName, domAttr){
-  var attr = this.atPath(attrName),
+  var attr = this.lookup(attrName),
       booleanPropery = Ivy.bindAttrToDomAttr.booleanProperties[domAttr];
   
   Ivy.watchAttr(attr, 'change', updateEl);
@@ -622,7 +622,7 @@ Ivy.bindAttrToDomAttr.booleanProperties = {
 };
 
 Ivy.bindAttrToFocus = function(el, attrName){
-  var attr = this.atPath(attrName);
+  var attr = this.lookup(attrName);
 
   Ivy.watchAttr(attr, 'change', updateEl);  
   function updateEl(value){
@@ -641,7 +641,7 @@ Ivy.bindAttrToFocus = function(el, attrName){
 };
 
 Ivy.bindAttrToEach = function(el, attrName, templateId){
-  var attr     = this.atPath(attrName),
+  var attr     = this.lookup(attrName),
       fragment = Ivy.dom.getTemplate(el, templateId),
       context  = this.context;
       
@@ -660,7 +660,7 @@ Ivy.bindAttrToEach = function(el, attrName, templateId){
 };
 
 Ivy.bindAttrToWith = function(el, attrName, templateId){
-  var attr     = this.atPath(attrName),
+  var attr     = this.lookup(attrName),
       context  = this.context,
       fragment = Ivy.dom.getTemplate(el, templateId);
     
@@ -674,10 +674,9 @@ Ivy.bindAttrToWith = function(el, attrName, templateId){
     el.appendChild(childNode);
   }
 };
-Ivy.bindAttrToWith.templateParent = document.createElement('div');
 
 Ivy.bindAttrToShow = function(el, attrName){
-  var attr = this.atPath(attrName),
+  var attr = this.lookup(attrName),
       originalDisplayStyle = el.style.display;
       
   Ivy.watchAttr(attr, 'change', updateEl);
@@ -688,8 +687,8 @@ Ivy.bindAttrToShow = function(el, attrName){
 };
 
 Ivy.bindFnToEvent = function(el, eventName, fnPath){
-  var fn = this.atPath(fnPath),
-      receiver = this.atPath(fnPath.split('/').slice(0,-1).join('/')),
+  var fn = this.lookup(fnPath),
+      receiver = this.lookup(fnPath.split('/').slice(0,-1).join('/')),
       subject  = this.context; // should be a 2nd param at some point
 
   if (subject['ivy:proto']){ 
@@ -803,7 +802,7 @@ Ivy.BindingRule = function(str, context){
   var options = str.replace(/^\s*/m,'').split(/\s+/),
       name = options.shift();
   
-  if (name[name.length-1] != ':'){
+  if (name[name.length-1] != ':'){ // Name must end with ':'
     throw new Error("Invalid syntax for binding name.\n\t"+str);
   }
   
@@ -812,12 +811,12 @@ Ivy.BindingRule = function(str, context){
   this.context  = context;
 };
 
-Ivy.BindingRule.prototype.atPath = function(path, context){
+Ivy.BindingRule.prototype.lookup = function(path, context){
   context = context || this.context;
   if (path === '.' || path === ''){ 
     return context;
   } else if (path.indexOf('../') === 0){
-    return this.atPath(path.slice(3), context['..']);
+    return this.lookup(path.slice(3), context['..']);
   } else {
     return context[path];
   }

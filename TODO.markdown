@@ -6,7 +6,6 @@ General TODO:
 =============
 Below are an unordered list of ideas that should be addressed and assessed sometime:
 
-* Contexts -- How should they be managed?  The current prototype method seems sloppy.
 * Bind Each -- Currently wastefully re-renders the entire list every time.
 * Batched DOM Updates -- Would it help performance to batch updates? IE: delay updating the DOM until a setTimeout can gather multiple updates?
 * Batched change dispatching -- If I'm going to add 30 items to a table, maybe it's better to accumulate changes and then react?
