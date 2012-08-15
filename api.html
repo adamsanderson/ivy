@@ -133,9 +133,18 @@ Ivy.attr(&#39;Hello&#39;) + &#39; World&#39;; //=&gt; &#39;Hello World&#39;</cod
       <p><code>toJSON</code> will be called before <code>JSON.stringify</code> is called.  This lets you
 easily serialize Ivy attributes:
 </p>
-<p>   var point = {x: Ivy.attr(3), y: Ivy.attr(7)};
-   console.log(JSON.stringify(point)); //=&gt; {&quot;x&quot;:3,&quot;y&quot;:7}
+<pre><code>var point = {x: Ivy.attr(3), y: Ivy.attr(7)};
+console.log(JSON.stringify(point)); //=&gt; {&quot;x&quot;:3,&quot;y&quot;:7}</code></pre>
+    </div>
+        <div class='fn'>
+      <h4 class='fn-signature'>
+        <a name='IvyAttr.prototype.toString' href='#IvyAttr.prototype.toString'>IvyAttr.prototype.toString()</a>
+      </h4>
+      
+      <p><code>toString</code> will call <code>toString</code> on the attribute&#39;s interval value:
 </p>
+<pre><code>var name = Ivy.attr(&#39;Wally&#39;);
+console.log(name); //=&gt; &quot;Wally&quot;</code></pre>
     </div>
         <div class='fn'>
       <h4 class='fn-signature'>
@@ -395,6 +404,9 @@ purchase.withTax.get(); //=&gt; 15.75</code></pre>
       </li>
           <li>
           <a href='#IvyAttr.prototype.toJSON' class='toc-method' title='IvyAttr.prototype.toJSON()'>toJSON</a>
+      </li>
+          <li>
+          <a href='#IvyAttr.prototype.toString' class='toc-method' title='IvyAttr.prototype.toString()'>toString</a>
       </li>
           <li>
           <a href='#IvyArray' class='toc-constructor' title='IvyArray(array)'>IvyArray</a>

@@ -137,8 +137,8 @@ IvyAttr.prototype.valueOf = function(){
  * `toJSON` will be called before `JSON.stringify` is called.  This lets you
  * easily serialize Ivy attributes:
  *
- *    var point = {x: Ivy.attr(3), y: Ivy.attr(7)};
- *    console.log(JSON.stringify(point)); //=> {"x":3,"y":7}
+ *     var point = {x: Ivy.attr(3), y: Ivy.attr(7)};
+ *     console.log(JSON.stringify(point)); //=> {"x":3,"y":7}
  *
  */
 IvyAttr.prototype.toJSON = function(){ 
@@ -148,8 +148,8 @@ IvyAttr.prototype.toJSON = function(){
 /**
  * `toString` will call `toString` on the attribute's interval value:
  *
- *    var name = Ivy.attr('Wally');
- *    console.log(name); //=> "Wally"
+ *     var name = Ivy.attr('Wally');
+ *     console.log(name); //=> "Wally"
  *
  */
 IvyAttr.prototype.toString = function(){ 
