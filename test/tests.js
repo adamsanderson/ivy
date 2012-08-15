@@ -102,6 +102,13 @@ describe('IvyAttr', function(){
     });
   });
   
+  describe('#toString', function(){
+    it('delegates to the internal value', function(){
+      var value = Ivy.attr(5).toString();
+      assert.strictEqual(value, "5");
+    });
+  });
+  
   describe('#toJSON', function(){
     it('serializes its internal value', function(){
       var objectWithAttr = {x: Ivy.attr(5)};

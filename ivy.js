@@ -146,6 +146,17 @@ IvyAttr.prototype.toJSON = function(){
 };
 
 /**
+ * `toString` will call `toString` on the attribute's interval value:
+ *
+ *    var name = Ivy.attr('Wally');
+ *    console.log(name); //=> "Wally"
+ *
+ */
+IvyAttr.prototype.toString = function(){ 
+  return this.get().toString(); 
+};
+
+/**
  * An `IvyArray` supports emits events like a normal attribute, but has
  * special methods for adding and removing array elements.
  *
