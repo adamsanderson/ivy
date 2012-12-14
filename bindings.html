@@ -82,9 +82,19 @@ value of the selected radio button.
 is the most common use case.
 
 </p>
+<h2>class: attrName;</h2>
+<p>The <code>class</code> binding will inject <code>attrName</code> into the element&#39;s classes.  If <code>attrName</code>
+changes, the class will be replace with the new value.
+
+</p>
+<pre><code>&lt;!-- Bind isValid to the input&#39;s class --&gt;
+&lt;div class=&#39;bug&#39; data-bind=&#39;class: severity&#39;/&gt;</code></pre>
+<p>In this case, if <code>severity</code> were &quot;high&quot;, then the class would be <code>bug high</code>, if severity
+changed to <code>low</code>, it would become <code>bug low</code>.
+
+</p>
 <h2>class: attrName trueClass [falseClass];</h2>
-<p>The <code>class</code> binding will toggle the <code>trueClass</code> and <code>falseClass</code> on
-and off if <code>attrName</code> is true.
+<p>In the second form, the <code>class</code> binding will toggle the <code>trueClass</code> and <code>falseClass</code>.
 
 </p>
 <pre><code>&lt;!-- Bind isValid to the input&#39;s class --&gt;

@@ -71,11 +71,22 @@ The `attr` binding will bind an Ivy attribute to a DOM element's attribute.
 This can be applied to any DOM attribute, however the `disabled` attribute
 is the most common use case.
 
+class: attrName;
+---------------------------------------
+
+The `class` binding will inject `attrName` into the element's classes.  If `attrName`
+changes, the class will be replace with the new value.
+
+    <!-- Bind isValid to the input's class -->
+    <div class='bug' data-bind='class: severity'/>
+    
+In this case, if `severity` were "high", then the class would be `bug high`, if severity
+changed to `low`, it would become `bug low`.
+
 class: attrName trueClass [falseClass];
 ---------------------------------------
 
-The `class` binding will toggle the `trueClass` and `falseClass` on
-and off if `attrName` is true.
+In the second form, the `class` binding will toggle the `trueClass` and `falseClass`.
 
     <!-- Bind isValid to the input's class -->
     <input data-bind='class: isValid valid invalid'/>
