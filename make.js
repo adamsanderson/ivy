@@ -3,7 +3,7 @@ var fs = require("fs"),
     Mustache = require("mustache"),  // npm: mustache
     less = require('less'),          // npm: less
     ducks = require("./lib/ducks"),  // My hacky little docs processor
-    Uglify = require("uglify-js");
+    UglifyJS = require("uglify-js");
 
 /* 
   Builds documentation
@@ -102,15 +102,7 @@ function renderSiteCss(){
 }
 
 function minify(){
-  var ast;
-  
-  fs.readFile('ivy.js', function (err, ivySrc) {
-    ast = Uglify.parser.parse(ivySrc.toString());
-    ast = Uglify.uglify.ast_mangle(ast);  // get a new AST with mangled names
-    ast = Uglify.uglify.ast_squeeze(ast); // get an AST with compression optimizations
-
-    fs.writeFile('ivy.min.js', Uglify.uglify.gen_code(ast), function(err){
-      if (err) throw err;
-    });
+  fs.writeFile('ivy.min.js', UglifyJS.minify('ivy.js'), function(err){
+    if (err) throw err;
   });
 }
