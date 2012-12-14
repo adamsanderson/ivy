@@ -179,6 +179,21 @@ describe('ClassName binding', function(){
     
     assert.equal(el.className, "blue");
   });
+  
+  it('adds the className when initialized with just an attribute', function(){
+    var x  = Ivy.attr("lemon");
+    var el = bindHTML('<div class="orange" data-bind="class: x"/>', {x: x});
+    
+    assert.equal(el.className, "orange lemon");
+  });
+  
+  it('updates the className when initialized with just an attribute', function(){
+    var x  = Ivy.attr("lemon");
+    var el = bindHTML('<div class="orange" data-bind="class: x"/>', {x: x});
+    x.set("blue")
+    
+    assert.equal(el.className, "orange blue");
+  });
 });
 
 describe('DOM Attribute binding', function(){

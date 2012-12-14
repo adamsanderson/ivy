@@ -594,15 +594,26 @@ Ivy.bindAttrToText = function(el, attrName){
 
 Ivy.bindAttrToClassName = function(el, attrName, trueClass, falseClass){
   var attr = this.lookup(attrName);
+  var updateEl = (arguments.length === 2) ? setClass : toggleClass;
   
   Ivy.watchAttr(attr, 'change', updateEl);
-  function updateEl(value){
+  
+  function setClass(value, oldValue){
+    updateClassNames(value, oldValue);
+  }
+  
+  function toggleClass(value){
+    var addClass    = value.valueOf() ? trueClass : falseClass,
+        removeClass = value.valueOf() ? falseClass : trueClass;
+    
+    updateClassNames(addClass, removeClass);
+  }
+  
+  function updateClassNames(addClass, removeClass){
     var oldClasses  = el.className.split(/\s+/),
         newClasses  = [],
-        addClass    = value.valueOf() ? trueClass : falseClass,
-        removeClass = value.valueOf() ? falseClass : trueClass,
         seenAdd;
-    
+        
     for (var i=0, len = oldClasses.length, cls; i< len; i++){
       cls = oldClasses[i];
       seenAdd |= (cls === addClass);
